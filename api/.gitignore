@@ -1,0 +1,12 @@
+.DS_Store
+/out/
+/certs/
+/.vscode/
+/log/
+/html
+/auth-api
+/auth-api.tar
+/.task
+.env*
+!.env.example
+.history

@@ -1,0 +1,2635 @@
+basePath: /
+definitions:
+  Application:
+    properties:
+      created_at:
+        format: date-time
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      updated_at:
+        format: date-time
+        type: string
+      uri:
+        type: string
+    required:
+    - created_at
+    - description
+    - id
+    - updated_at
+    - uri
+    type: object
+  ConfirmEmail:
+    properties:
+      token:
+        type: string
+    required:
+    - token
+    type: object
+  ConfirmPhoneNumber:
+    properties:
+      token:
+        type: string
+    required:
+    - token
+    type: object
+  CreateApplication:
+    properties:
+      description:
+        type: string
+      uri:
+        type: string
+    required:
+    - description
+    - uri
+    type: object
+  CreateEmail:
+    properties:
+      email:
+        type: string
+    required:
+    - email
+    type: object
+  CreatePermission:
+    properties:
+      description:
+        type: string
+      uri:
+        type: string
+    required:
+    - description
+    - uri
+    type: object
+  CreatePhoneNumber:
+    properties:
+      phone_number:
+        type: string
+    required:
+    - phone_number
+    type: object
+  CreateTenent:
+    properties:
+      algorithm:
+        type: string
+      client_id:
+        type: string
+      description:
+        type: string
+      expires_in_seconds:
+        type: integer
+      private_key:
+        type: string
+      public_key:
+        type: string
+      refresh_expires_in_seconds:
+        type: integer
+      reset_expires_in_seconds:
+        type: integer
+      uri:
+        type: string
+    required:
+    - description
+    - uri
+    type: object
+  CreateUser:
+    properties:
+      username:
+        type: string
+    required:
+    - username
+    type: object
+  Email:
+    properties:
+      application_id:
+        type: integer
+      confirmed:
+        type: boolean
+      created_at:
+        format: date-time
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      updated_at:
+        format: date-time
+        type: string
+    required:
+    - application_id
+    - confirmed
+    - created_at
+    - email
+    - id
+    - updated_at
+    type: object
+  ErrorMessage:
+    properties:
+      error:
+        type: string
+      parameters:
+        items: {}
+        type: array
+    required:
+    - error
+    - parameters
+    type: object
+  Errors:
+    properties:
+      errors:
+        additionalProperties:
+          items:
+            $ref: '#/definitions/ErrorMessage'
+          type: array
+        type: object
+    required:
+    - errors
+    type: object
+  Health:
+    properties:
+      date:
+        format: date-time
+        type: string
+      db:
+        type: boolean
+    required:
+    - date
+    - db
+    type: object
+  OpenIDConfiguration:
+    properties:
+      authorization_endpoint:
+        type: string
+      claims_supported:
+        items:
+          type: string
+        type: array
+      code_challenge_methods_supported:
+        items:
+          type: string
+        type: array
+      grant_types_supported:
+        items:
+          type: string
+        type: array
+      id_token_signing_alg_values_supported:
+        items:
+          type: string
+        type: array
+      issuer:
+        type: string
+      jwks_uri:
+        type: string
+      registration_endpoint:
+        type: string
+      response_types_supported:
+        items:
+          type: string
+        type: array
+      scopes_supported:
+        items:
+          type: string
+        type: array
+      subject_types_supported:
+        items:
+          type: string
+        type: array
+      token_endpoint:
+        type: string
+      token_endpoint_auth_methods_supported:
+        items:
+          type: string
+        type: array
+      userinfo_endpoint:
+        type: string
+    required:
+    - claims_supported
+    - code_challenge_methods_supported
+    - grant_types_supported
+    - id_token_signing_alg_values_supported
+    - issuer
+    - response_types_supported
+    - scopes_supported
+    - subject_types_supported
+    - token_endpoint
+    - token_endpoint_auth_methods_supported
+    - userinfo_endpoint
+    type: object
+  Pagination-Application:
+    properties:
+      has_more:
+        type: boolean
+      items:
+        items:
+          $ref: '#/definitions/Application'
+        type: array
+    required:
+    - has_more
+    - items
+    type: object
+  Pagination-Tenent:
+    properties:
+      has_more:
+        type: boolean
+      items:
+        items:
+          $ref: '#/definitions/Tenent'
+        type: array
+    required:
+    - has_more
+    - items
+    type: object
+  Pagination-User:
+    properties:
+      has_more:
+        type: boolean
+      items:
+        items:
+          $ref: '#/definitions/User'
+        type: array
+    required:
+    - has_more
+    - items
+    type: object
+  Permission:
+    properties:
+      application_id:
+        type: integer
+      created_at:
+        format: date-time
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      updated_at:
+        format: date-time
+        type: string
+      uri:
+        type: string
+    required:
+    - application_id
+    - created_at
+    - description
+    - id
+    - updated_at
+    - uri
+    type: object
+  PhoneNumber:
+    properties:
+      application_id:
+        type: integer
+      confirmed:
+        type: boolean
+      created_at:
+        format: date-time
+        type: string
+      id:
+        type: integer
+      phone_number:
+        type: string
+      updated_at:
+        format: date-time
+        type: string
+    required:
+    - application_id
+    - confirmed
+    - created_at
+    - id
+    - phone_number
+    - updated_at
+    type: object
+  RegistrationRequest:
+    properties:
+      password:
+        type: string
+      password_confirmation:
+        type: string
+      username:
+        type: string
+    type: object
+  ResetPassword:
+    properties:
+      password:
+        type: string
+      password_confirmation:
+        type: string
+    required:
+    - password
+    - password_confirmation
+    type: object
+  Tenent:
+    properties:
+      algorithm:
+        type: string
+      application_id:
+        type: integer
+      client_id:
+        type: string
+      created_at:
+        format: date-time
+        type: string
+      description:
+        type: string
+      expires_in_seconds:
+        type: integer
+      id:
+        type: integer
+      public_key:
+        type: string
+      public_uri:
+        type: string
+      refresh_expires_in_seconds:
+        type: integer
+      updated_at:
+        format: date-time
+        type: string
+      uri:
+        type: string
+    required:
+    - algorithm
+    - application_id
+    - client_id
+    - created_at
+    - description
+    - expires_in_seconds
+    - id
+    - refresh_expires_in_seconds
+    - updated_at
+    - uri
+    type: object
+  Token:
+    properties:
+      access_token:
+        type: string
+      expires_in:
+        type: integer
+      id_token:
+        type: string
+      issued_token_type:
+        type: string
+      refresh_token:
+        type: string
+      refresh_token_expires_in:
+        type: integer
+      scope:
+        items:
+          type: string
+        type: array
+      token_type:
+        type: string
+    required:
+    - access_token
+    - expires_in
+    - issued_token_type
+    - refresh_token
+    - refresh_token_expires_in
+    - scope
+    - token_type
+    type: object
+  TokenRequest:
+    properties:
+      actor_token:
+        type: string
+      actor_token_type:
+        type: string
+      assertion:
+        type: string
+      audience:
+        type: string
+      code:
+        type: string
+      code_verifier:
+        type: string
+      grant_type:
+        type: string
+      key:
+        type: string
+      password:
+        type: string
+      refresh_token:
+        type: string
+      requested_token_type:
+        type: string
+      resource:
+        type: string
+      scope:
+        type: string
+      secret:
+        type: string
+      subject_token:
+        type: string
+      subject_token_type:
+        type: string
+      username:
+        type: string
+    required:
+    - grant_type
+    type: object
+  UpdateApplication:
+    properties:
+      description:
+        type: string
+      uri:
+        type: string
+    type: object
+  UpdatePermission:
+    properties:
+      description:
+        type: string
+      uri:
+        type: string
+    type: object
+  UpdateTenent:
+    properties:
+      algorithm:
+        type: string
+      client_id:
+        type: string
+      description:
+        type: string
+      expires_in_seconds:
+        type: integer
+      private_key:
+        type: string
+      public_key:
+        type: string
+      refresh_expires_in_seconds:
+        type: integer
+      reset_expires_in_seconds:
+        type: integer
+      uri:
+        type: string
+    required:
+    - description
+    - uri
+    type: object
+  UpdateUser:
+    properties:
+      username:
+        type: string
+    required:
+    - username
+    type: object
+  UpdateUserInfoRequest:
+    properties:
+      address:
+        $ref: '#/definitions/UserInfoAddress'
+      birthdate:
+        type: string
+      family_name:
+        type: string
+      gender:
+        type: string
+      given_name:
+        type: string
+      locale:
+        type: string
+      middle_name:
+        type: string
+      name:
+        type: string
+      nickname:
+        type: string
+      picture:
+        type: string
+      profile:
+        type: string
+      website:
+        type: string
+      zoneinfo:
+        type: string
+    type: object
+  User:
+    properties:
+      application_id:
+        type: integer
+      created_at:
+        format: date-time
+        type: string
+      email:
+        $ref: '#/definitions/Email'
+      emails:
+        items:
+          $ref: '#/definitions/Email'
+        type: array
+      id:
+        type: integer
+      phone_number:
+        $ref: '#/definitions/PhoneNumber'
+      phone_numbers:
+        items:
+          $ref: '#/definitions/PhoneNumber'
+        type: array
+      updated_at:
+        format: date-time
+        type: string
+      username:
+        type: string
+    required:
+    - application_id
+    - created_at
+    - emails
+    - id
+    - phone_numbers
+    - updated_at
+    - username
+    type: object
+  UserInfo:
+    properties:
+      address:
+        $ref: '#/definitions/UserInfoAddress'
+      birthdate:
+        format: date-time
+        type: string
+      created_at:
+        format: date-time
+        type: string
+      family_name:
+        type: string
+      gender:
+        type: string
+      given_name:
+        type: string
+      locale:
+        type: string
+      middle_name:
+        type: string
+      name:
+        type: string
+      nickname:
+        type: string
+      picture:
+        type: string
+      preferred_username:
+        type: string
+      profile:
+        type: string
+      updated_at:
+        format: date-time
+        type: string
+      user_id:
+        type: integer
+      website:
+        type: string
+      zoneinfo:
+        type: string
+    required:
+    - created_at
+    - preferred_username
+    - updated_at
+    - user_id
+    type: object
+  UserInfoAddress:
+    properties:
+      country:
+        type: string
+      locality:
+        type: string
+      postal_code:
+        type: string
+      region:
+        type: string
+      street_address:
+        type: string
+    type: object
+  UserWithPermissions:
+    properties:
+      application_id:
+        type: integer
+      created_at:
+        format: date-time
+        type: string
+      email:
+        $ref: '#/definitions/Email'
+      emails:
+        items:
+          $ref: '#/definitions/Email'
+        type: array
+      id:
+        type: integer
+      permissions:
+        items:
+          type: string
+        type: array
+      phone_number:
+        $ref: '#/definitions/PhoneNumber'
+      phone_numbers:
+        items:
+          $ref: '#/definitions/PhoneNumber'
+        type: array
+      updated_at:
+        format: date-time
+        type: string
+      username:
+        type: string
+    required:
+    - application_id
+    - created_at
+    - emails
+    - id
+    - permissions
+    - phone_numbers
+    - updated_at
+    - username
+    type: object
+  Version:
+    properties:
+      build:
+        type: string
+      version:
+        type: string
+    required:
+    - build
+    - version
+    type: object
+  model.PasswordResetST:
+    properties:
+      password:
+        type: string
+      password_confirmation:
+        type: string
+      token:
+        type: string
+    required:
+    - password
+    - password_confirmation
+    - token
+    type: object
+  model.RequestPasswordResetST:
+    properties:
+      email:
+        type: string
+    required:
+    - email
+    type: object
+info:
+  contact:
+    email: nathanfaucett@gmail.com
+    name: Nathan Faucett
+  description: Auth API API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Auth API
+paths:
+  /.well-known/openid-configuration:
+    get:
+      consumes:
+      - application/json
+      operationId: openid-configuration
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/OpenIDConfiguration'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - TenentId: []
+      summary: Get openid configuration
+      tags:
+      - well-known
+  /applications:
+    get:
+      consumes:
+      - application/json
+      operationId: applications
+      parameters:
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Pagination-Application'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Get applications
+      tags:
+      - application
+    post:
+      consumes:
+      - application/json
+      operationId: create-application
+      parameters:
+      - description: create application
+        in: body
+        name: application
+        required: true
+        schema:
+          $ref: '#/definitions/CreateApplication'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/Application'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Create application
+      tags:
+      - application
+  /applications/{applicationId}/permissions:
+    get:
+      consumes:
+      - application/json
+      operationId: application-permissions
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/Permission'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Get application permissions
+      tags:
+      - permission
+    post:
+      consumes:
+      - application/json
+      operationId: create-application-permission
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: create application
+        in: body
+        name: application
+        required: true
+        schema:
+          $ref: '#/definitions/CreatePermission'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/Permission'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Create application permission
+      tags:
+      - permission
+  /applications/{applicationId}/permissions/{id}:
+    delete:
+      consumes:
+      - application/json
+      operationId: delete-application-permission
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: application permission id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Delete application permission
+      tags:
+      - permission
+    get:
+      consumes:
+      - application/json
+      operationId: application-permission-by-id
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: application permission id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Permission'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Get application permission by id
+      tags:
+      - permission
+    patch:
+      consumes:
+      - application/json
+      operationId: update-application-permission
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: application permission id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: update application
+        in: body
+        name: application
+        required: true
+        schema:
+          $ref: '#/definitions/UpdatePermission'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Permission'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Update application permission
+      tags:
+      - permission
+  /applications/{applicationId}/permissions/{id}/add-user/{userId}:
+    patch:
+      consumes:
+      - application/json
+      operationId: add-application-permission-to-user
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: application permission id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: user id
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Add permission to user
+      tags:
+      - permission
+  /applications/{applicationId}/permissions/{id}/remove-user/{userId}:
+    delete:
+      consumes:
+      - application/json
+      operationId: remove-application-permission-from-user
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: application permission id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: user id
+        in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Remove permission from user
+      tags:
+      - permission
+  /applications/{applicationId}/tenents:
+    get:
+      consumes:
+      - application/json
+      operationId: application-tenents
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Pagination-Tenent'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Get application tenents
+      tags:
+      - tenent
+    post:
+      consumes:
+      - application/json
+      operationId: create-application-tenent
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: create application
+        in: body
+        name: application
+        required: true
+        schema:
+          $ref: '#/definitions/CreateTenent'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/Tenent'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Create application tenent
+      tags:
+      - tenent
+  /applications/{applicationId}/tenents/{id}:
+    delete:
+      consumes:
+      - application/json
+      operationId: delete-application-tenent
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: application tenent id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Delete application tenent
+      tags:
+      - tenent
+    get:
+      consumes:
+      - application/json
+      operationId: application-tenent-by-id
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: application tenent id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Tenent'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Get application tenent by id
+      tags:
+      - tenent
+    patch:
+      consumes:
+      - application/json
+      operationId: update-application-tenent
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: application tenent id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: update application
+        in: body
+        name: application
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateTenent'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Tenent'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Update application tenent
+      tags:
+      - tenent
+  /applications/{applicationId}/users:
+    get:
+      consumes:
+      - application/json
+      operationId: users
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Pagination-User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Get users
+      tags:
+      - user
+    post:
+      consumes:
+      - application/json
+      operationId: create-user
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: create user
+        in: body
+        name: createUser
+        required: true
+        schema:
+          $ref: '#/definitions/CreateUser'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Create user
+      tags:
+      - user
+  /applications/{applicationId}/users/{id}:
+    delete:
+      consumes:
+      - application/json
+      operationId: delete-user-by-id
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Delets a user by id
+      tags:
+      - user
+    get:
+      consumes:
+      - application/json
+      operationId: user-by-id
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Get user by id
+      tags:
+      - user
+    patch:
+      consumes:
+      - application/json
+      operationId: update-user-by-id
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: update user
+        in: body
+        name: updateUser
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Updates a user's username
+      tags:
+      - user
+  /applications/{applicationId}/users/{id}/info:
+    get:
+      consumes:
+      - application/json
+      operationId: get-user-info
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/UserInfo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Get user info
+      tags:
+      - user
+    patch:
+      consumes:
+      - application/json
+      operationId: update-user-info
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: user id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: User info updates
+        in: body
+        name: userinfoUpdates
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateUserInfoRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/UserInfo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Updates the user's info
+      tags:
+      - user
+  /applications/{id}:
+    delete:
+      consumes:
+      - application/json
+      operationId: delete-application
+      parameters:
+      - description: application id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Delete application
+      tags:
+      - application
+    get:
+      consumes:
+      - application/json
+      operationId: application-by-id
+      parameters:
+      - description: application id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Application'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Get application by id
+      tags:
+      - application
+    patch:
+      consumes:
+      - application/json
+      operationId: update-application
+      parameters:
+      - description: application id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: update application
+        in: body
+        name: application
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateApplication'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Application'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Update application
+      tags:
+      - application
+  /health:
+    get:
+      consumes:
+      - application/json
+      operationId: healthCheck
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Health'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Health'
+      summary: Get Health Check
+      tags:
+      - app
+  /password-reset:
+    post:
+      consumes:
+      - application/json
+      operationId: password-reset
+      parameters:
+      - description: request password reset body
+        in: body
+        name: passwordReset
+        required: true
+        schema:
+          $ref: '#/definitions/model.PasswordResetST'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Token'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Locale: []
+      - Timezone: []
+      summary: Request Password Reset
+      tags:
+      - password-reset
+  /password-reset/request:
+    post:
+      consumes:
+      - application/json
+      operationId: request-password-reset
+      parameters:
+      - description: request password reset body
+        in: body
+        name: requestPasswordReset
+        required: true
+        schema:
+          $ref: '#/definitions/model.RequestPasswordResetST'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      summary: Request Password Reset
+      tags:
+      - password-reset
+  /register:
+    post:
+      consumes:
+      - application/json
+      operationId: register-user
+      parameters:
+      - description: token request body
+        in: body
+        name: registrationRequest
+        required: true
+        schema:
+          $ref: '#/definitions/RegistrationRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/Token'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - TenentId: []
+      summary: Registration as a new user
+      tags:
+      - registration
+  /token:
+    post:
+      consumes:
+      - application/json
+      operationId: create-token
+      parameters:
+      - description: token request body
+        in: body
+        name: tokenRequest
+        required: true
+        schema:
+          $ref: '#/definitions/TokenRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Token'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - TenentId: []
+      summary: Create JWT Token
+      tags:
+      - token
+  /user:
+    get:
+      consumes:
+      - application/json
+      operationId: current-user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/UserWithPermissions'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Get current user
+      tags:
+      - current-user
+    patch:
+      consumes:
+      - application/json
+      operationId: update-username
+      parameters:
+      - description: update user
+        in: body
+        name: updateUser
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateUser'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Updates current user's username
+      tags:
+      - current-user
+  /user/info:
+    get:
+      consumes:
+      - application/json
+      operationId: get-current-user-info
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/UserInfo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Get user info
+      tags:
+      - current-user
+    patch:
+      consumes:
+      - application/json
+      operationId: update-current-user-info
+      parameters:
+      - description: User info updates
+        in: body
+        name: userinfoUpdates
+        required: true
+        schema:
+          $ref: '#/definitions/UpdateUserInfoRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/UserInfo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Updates the user's info
+      tags:
+      - current-user
+  /user/reset-password:
+    patch:
+      consumes:
+      - application/json
+      operationId: reset-password
+      parameters:
+      - description: reset user's password
+        in: body
+        name: resetPassword
+        required: true
+        schema:
+          $ref: '#/definitions/ResetPassword'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Resets a user's password
+      tags:
+      - current-user
+  /users/{userId}/emails:
+    post:
+      consumes:
+      - application/json
+      operationId: create-email
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: user id
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: update email
+        in: body
+        name: createEmail
+        required: true
+        schema:
+          $ref: '#/definitions/CreateEmail'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/Email'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Create user email
+      tags:
+      - user
+  /users/{userId}/emails/{id}:
+    delete:
+      consumes:
+      - application/json
+      operationId: delete-email
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: user id
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: email id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Delete user email
+      tags:
+      - user
+  /users/{userId}/emails/{id}/confirm:
+    patch:
+      consumes:
+      - application/json
+      operationId: confirm-email
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: user id
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: email id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: email confirmation
+        in: body
+        name: confirmEmail
+        required: true
+        schema:
+          $ref: '#/definitions/ConfirmEmail'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Email'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Confirm email with token
+      tags:
+      - user
+  /users/{userId}/emails/{id}/send-confirmation:
+    patch:
+      consumes:
+      - application/json
+      operationId: send-confirmation-to-email
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: user id
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: email id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Send confirmation token to user email
+      tags:
+      - user
+  /users/{userId}/emails/{id}/set-primary:
+    patch:
+      consumes:
+      - application/json
+      operationId: set-primary-email
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: user id
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: email id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Set a confirmed email to primary
+      tags:
+      - user
+  /users/{userId}/phone-numbers:
+    post:
+      consumes:
+      - application/json
+      operationId: create-phone-number
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: user id
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: update phone_number
+        in: body
+        name: createPhoneNumber
+        required: true
+        schema:
+          $ref: '#/definitions/CreatePhoneNumber'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/PhoneNumber'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Create user phone number
+      tags:
+      - user
+  /users/{userId}/phone-numbers/{id}:
+    delete:
+      consumes:
+      - application/json
+      operationId: delete-phone-number
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: user id
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: phone_number id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Delete user phone number
+      tags:
+      - user
+  /users/{userId}/phone-numbers/{id}/confirm:
+    patch:
+      consumes:
+      - application/json
+      operationId: confirm-phone-number
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: user id
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: phone_number id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: phone_number confirmation
+        in: body
+        name: confirmPhoneNumber
+        required: true
+        schema:
+          $ref: '#/definitions/ConfirmPhoneNumber'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/PhoneNumber'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Confirm phone_number with token
+      tags:
+      - user
+  /users/{userId}/phone-numbers/{id}/send-confirmation:
+    patch:
+      consumes:
+      - application/json
+      operationId: send-confirmation-to-phone-number
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: user id
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: phone_number id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Send confirmation token to user phone_number
+      tags:
+      - user
+  /users/{userId}/phone-numbers/{id}/set-primary:
+    patch:
+      consumes:
+      - application/json
+      operationId: set-primary-phone-number
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: user id
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: email id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Set a confirmed phone to primary
+      tags:
+      - user
+  /version:
+    get:
+      consumes:
+      - application/json
+      operationId: version
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Version'
+      summary: Get Version
+      tags:
+      - app
+securityDefinitions:
+  Authorization:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+  TenentId:
+    in: header
+    name: Tenent-Id
+    type: apiKey
+swagger: "2.0"

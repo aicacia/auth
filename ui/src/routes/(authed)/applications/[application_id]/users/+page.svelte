@@ -5,6 +5,7 @@
 	import ArrowLeft from 'lucide-svelte/icons/arrow-left';
 	import LL from '$lib/i18n/i18n-svelte';
 	import { base } from '$app/paths';
+	import Users from '$lib/components/Users/Users.svelte';
 
 	export let data: PageData;
 
@@ -28,4 +29,10 @@
 			</div>
 		</div>
 	</div>
+</div>
+
+<div
+	class="flex flex-col flex-grow w-full max-w-6xl mx-auto mt-4 bg-white dark:bg-gray-800 shadow p-4 mb-16"
+>
+	<Users bind:application />
 </div>

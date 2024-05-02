@@ -8,18 +8,20 @@ import (
 )
 
 type TenentST struct {
-	Id                      int32     `json:"id" validate:"required"`
-	ApplicationId           int32     `json:"application_id" validate:"required"`
-	Description             string    `json:"description" validate:"required"`
-	Uri                     string    `json:"uri" validate:"required"`
-	PublicUri               *string   `json:"public_uri"`
-	ClientId                uuid.UUID `json:"client_id" validate:"required"`
-	Algorithm               string    `json:"algorithm" validate:"required"`
-	PublicKey               *string   `json:"public_key"`
-	ExpiresInSeconds        int64     `json:"expires_in_seconds" validate:"required"`
-	RefreshExpiresInSeconds int64     `json:"refresh_expires_in_seconds" validate:"required"`
-	UpdatedAt               time.Time `json:"updated_at" validate:"required" format:"date-time"`
-	CreatedAt               time.Time `json:"created_at" validate:"required" format:"date-time"`
+	Id                            int32     `json:"id" validate:"required"`
+	ApplicationId                 int32     `json:"application_id" validate:"required"`
+	Description                   string    `json:"description" validate:"required"`
+	Uri                           string    `json:"uri" validate:"required"`
+	AuthorizationWebsite          string    `json:"authorization_website" validate:"required"`
+	RegistrationWebsite           *string   `json:"registration_website"`
+	ClientId                      uuid.UUID `json:"client_id" validate:"required"`
+	Algorithm                     string    `json:"algorithm" validate:"required"`
+	PublicKey                     *string   `json:"public_key"`
+	ExpiresInSeconds              int64     `json:"expires_in_seconds" validate:"required"`
+	RefreshExpiresInSeconds       int64     `json:"refresh_expires_in_seconds" validate:"required"`
+	PasswordResetExpiresInSeconds int64     `json:"password_reset_expires_in_seconds" validate:"required"`
+	UpdatedAt                     time.Time `json:"updated_at" validate:"required" format:"date-time"`
+	CreatedAt                     time.Time `json:"created_at" validate:"required" format:"date-time"`
 } // @name Tenent
 
 type TenentWithSecretsST struct {
@@ -30,18 +32,20 @@ type TenentWithSecretsST struct {
 
 func TenentFromTenentRow(row repository.TenentRowST) TenentST {
 	return TenentST{
-		Id:                      row.Id,
-		ApplicationId:           row.ApplicationId,
-		Description:             row.Description,
-		Uri:                     row.Uri,
-		PublicUri:               repository.StringFromSQLNullString(row.PublicUri),
-		Algorithm:               row.Algorithm,
-		ClientId:                row.ClientId,
-		PublicKey:               repository.StringFromSQLNullString(row.PublicKey),
-		ExpiresInSeconds:        row.ExpiresInSeconds,
-		RefreshExpiresInSeconds: row.RefreshExpiresInSeconds,
-		UpdatedAt:               row.UpdatedAt,
-		CreatedAt:               row.CreatedAt,
+		Id:                            row.Id,
+		ApplicationId:                 row.ApplicationId,
+		Description:                   row.Description,
+		Uri:                           row.Uri,
+		AuthorizationWebsite:          row.AuthorizationWebsite,
+		RegistrationWebsite:           row.RegistrationWebsite,
+		Algorithm:                     row.Algorithm,
+		ClientId:                      row.ClientId,
+		PublicKey:                     row.PublicKey,
+		ExpiresInSeconds:              row.ExpiresInSeconds,
+		RefreshExpiresInSeconds:       row.RefreshExpiresInSeconds,
+		PasswordResetExpiresInSeconds: row.PasswordResetExpiresInSeconds,
+		UpdatedAt:                     row.UpdatedAt,
+		CreatedAt:                     row.CreatedAt,
 	}
 }
 

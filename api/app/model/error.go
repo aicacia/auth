@@ -8,6 +8,9 @@ type ErrorMessageST struct {
 } // @name ErrorMessage
 
 func NewErrorMessage(message string, parameters ...interface{}) *ErrorMessageST {
+	if parameters == nil {
+		parameters = make([]interface{}, 0)
+	}
 	return &ErrorMessageST{
 		Message:    message,
 		Parameters: parameters,

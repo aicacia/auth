@@ -28,8 +28,8 @@ import (
 //
 //	@Security		TenentId
 func PostRegistration(c *fiber.Ctx) error {
-	applicationConfig := middleware.GetApplicationConfig(c)
-	if !applicationConfig.SignUp.Enabled || !applicationConfig.SignUp.Password.Enabled {
+	tenent := middleware.GetTenent(c)
+	if tenent.RegistrationWebsite == nil {
 		return model.NewError(http.StatusForbidden).AddError("signup", "disabled", "application").Send(c)
 	}
 	var registrationRequest model.RegistrationRequestST
@@ -61,6 +61,5 @@ func PostRegistration(c *fiber.Ctx) error {
 		log.Printf("failed to add user to application: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
 	}
-	applicationTenent := middleware.GetTenent(c)
-	return sendToken(c, model.PasswordGrantType, "openid", applicationConfig, applicationTenent, &createResult.User, nil)
+	return sendToken(c, model.PasswordGrantType, "openid", application, tenent, &createResult.User, nil)
 }

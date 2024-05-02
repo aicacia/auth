@@ -34,9 +34,15 @@ var (
 	ServiceAccountSubject = "service-account"
 )
 
+var (
+	BearerTokenType  = "bearer"
+	RefreshTokenType = "refresh-token"
+)
+
 type Claims struct {
 	Subject          int32     `json:"sub" validate:"required"`
-	SubjectType      string    `json:"type" validate:"required"`
+	SubjectType      string    `json:"sub_type" validate:"required"`
+	Type             string    `json:"type" validate:"required"`
 	ClientId         uuid.UUID `json:"client_id" validate:"required"`
 	Audiences        []string  `json:"aud" validate:"required"`
 	NotBeforeSeconds int64     `json:"nbf" validate:"required"`
@@ -50,9 +56,9 @@ func (claims *Claims) ToMapClaims() (jwt.MapClaims, error) {
 	return anyToMapClaims(claims)
 }
 
-func (claims *Claims) ToRefreshClaims(expiresInSeconds int64) *Claims {
-	claims.ExpiresAtSeconds = expiresInSeconds
-	claims.Scope = append(claims.Scope, "refresh_token")
+func (claims *Claims) ToRefreshClaims(application *repository.ApplicationRowST, tenent *repository.TenentRowST) *Claims {
+	claims.ExpiresAtSeconds = claims.IssuedAtSeconds + tenent.RefreshExpiresInSeconds
+	claims.Type = RefreshTokenType
 	return claims
 }
 
@@ -155,12 +161,12 @@ func ParseScopes(scope string) []string {
 	return scopes
 }
 
-func ParseClaimsFromToken[C Claims](tokenString string, applicationTenent *repository.TenentRowST) (*C, error) {
+func ParseClaimsFromToken[C Claims](tokenString string, tenent *repository.TenentRowST) (*C, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method %v", token.Header["alg"])
 		}
-		return []byte(applicationTenent.PrivateKey), nil
+		return []byte(tenent.PrivateKey), nil
 	}, jwt.WithoutAudienceValidation())
 	if err != nil {
 		return nil, err
@@ -196,13 +202,13 @@ func ParseClaimsFromTokenNoValidation[C Claims](tokenString string) (*C, error) 
 	return &claims, nil
 }
 
-func CreateToken[C ToMapClaims](claims C, applicationTenent *repository.TenentRowST) (string, error) {
+func CreateToken[C ToMapClaims](claims C, tenent *repository.TenentRowST) (string, error) {
 	mapClaims, err := claims.ToMapClaims()
 	if err != nil {
 		return "", err
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, mapClaims)
-	tokenString, err := token.SignedString([]byte(applicationTenent.PrivateKey))
+	tokenString, err := token.SignedString([]byte(tenent.PrivateKey))
 	if err != nil {
 		return "", err
 	}

@@ -68,8 +68,7 @@ func passwordToken(c *fiber.Ctx, tokenRequest model.TokenRequestST) error {
 		}
 		return model.NewError(http.StatusUnauthorized).AddError("username", "invalid").AddError("password", "invalid").Send(c)
 	}
-	applicationTenent := middleware.GetTenent(c)
-	return sendToken(c, tokenRequest.GrantType, tokenRequest.Scope, middleware.GetApplicationConfig(c), applicationTenent, user, nil)
+	return sendToken(c, tokenRequest.GrantType, tokenRequest.Scope, application, middleware.GetTenent(c), user, nil)
 }
 
 func serviceAccountToken(c *fiber.Ctx, tokenRequest model.TokenRequestST) error {
@@ -90,13 +89,12 @@ func serviceAccountToken(c *fiber.Ctx, tokenRequest model.TokenRequestST) error 
 		}
 		return model.NewError(http.StatusUnauthorized).AddError("key", "invalid").AddError("secret", "invalid").Send(c)
 	}
-	applicationTenent := middleware.GetTenent(c)
-	return sendToken(c, tokenRequest.GrantType, tokenRequest.Scope, middleware.GetApplicationConfig(c), applicationTenent, nil, serviceAccount)
+	return sendToken(c, tokenRequest.GrantType, tokenRequest.Scope, middleware.GetApplication(c), middleware.GetTenent(c), nil, serviceAccount)
 }
 
 func refreshToken(c *fiber.Ctx, tokenRequest model.TokenRequestST) error {
-	applicationTenent := middleware.GetTenent(c)
-	claims, err := jwt.ParseClaimsFromToken(tokenRequest.RefreshToken, applicationTenent)
+	tenent := middleware.GetTenent(c)
+	claims, err := jwt.ParseClaimsFromToken(tokenRequest.RefreshToken, tenent)
 	if err != nil {
 		log.Printf("failed to get refresh token claims: %v\n", err)
 		return model.NewError(http.StatusUnauthorized).AddError("refresh_token", "invalid").Send(c)
@@ -106,22 +104,24 @@ func refreshToken(c *fiber.Ctx, tokenRequest model.TokenRequestST) error {
 		log.Printf("failed to get user: %v\n", err)
 		return model.NewError(http.StatusUnauthorized).AddError("refresh_token", "invalid").Send(c)
 	}
-	return sendToken(c, tokenRequest.GrantType, tokenRequest.Scope, middleware.GetApplicationConfig(c), applicationTenent, user, nil)
+	return sendToken(c, tokenRequest.GrantType, tokenRequest.Scope, middleware.GetApplication(c), tenent, user, nil)
 }
 
 func sendToken(
 	c *fiber.Ctx,
 	issuedTokenType, scope string,
-	applicationConfig *model.ApplicationConfigST,
-	applicationTenent *repository.TenentRowST,
+	application *repository.ApplicationRowST,
+	tenent *repository.TenentRowST,
 	user *repository.UserRowST,
 	serviceAccount *repository.ServiceAccountRowST,
 ) error {
 	now := time.Now().UTC()
 	scopes := jwt.ParseScopes(scope)
-	audiences := make([]string, 0)
-	if len(applicationConfig.Website) >= 0 {
-		audiences = append(audiences, applicationConfig.Website)
+	audiences := []string{
+		application.Uri,
+	}
+	if application.Website != nil {
+		audiences = append(audiences, *application.Website)
 	}
 	var subject int32
 	var subjectType string
@@ -135,20 +135,21 @@ func sendToken(
 	claims := jwt.Claims{
 		Subject:          subject,
 		SubjectType:      subjectType,
-		ClientId:         applicationTenent.ClientId,
+		Type:             jwt.BearerTokenType,
+		ClientId:         tenent.ClientId,
 		Audiences:        audiences,
 		NotBeforeSeconds: now.Unix(),
 		IssuedAtSeconds:  now.Unix(),
-		ExpiresAtSeconds: now.Unix() + int64(applicationTenent.ExpiresInSeconds),
+		ExpiresAtSeconds: now.Unix() + int64(tenent.ExpiresInSeconds),
 		Issuer:           config.Get().URL,
 		Scope:            scopes,
 	}
-	accessToken, err := jwt.CreateToken(&claims, applicationTenent)
+	accessToken, err := jwt.CreateToken(&claims, tenent)
 	if err != nil {
 		log.Printf("failed to create access token: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
 	}
-	refreshToken, err := jwt.CreateToken(claims.ToRefreshClaims(now.Unix()+int64(applicationTenent.RefreshExpiresInSeconds)), applicationTenent)
+	refreshToken, err := jwt.CreateToken(claims.ToRefreshClaims(application, tenent), tenent)
 	if err != nil {
 		log.Printf("failed to create refresh token: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
@@ -161,7 +162,7 @@ func sendToken(
 				log.Printf("failed to create id claims: %v\n", err)
 				return model.NewError(http.StatusInternalServerError).Send(c)
 			}
-			token, err := jwt.CreateToken(openIdClaims, applicationTenent)
+			token, err := jwt.CreateToken(openIdClaims, tenent)
 			if err != nil {
 				log.Printf("failed to create id token: %v\n", err)
 				return model.NewError(http.StatusInternalServerError).Send(c)
@@ -173,12 +174,12 @@ func sendToken(
 	}
 	return c.JSON(model.TokenST{
 		AccessToken:           accessToken,
-		TokenType:             "Bearer",
+		TokenType:             jwt.BearerTokenType,
 		IssuedTokenType:       issuedTokenType,
-		ExpiresIn:             applicationTenent.ExpiresInSeconds,
+		ExpiresIn:             tenent.ExpiresInSeconds,
 		Scope:                 scopes,
 		RefreshToken:          refreshToken,
-		RefreshTokenExpiresIn: applicationTenent.RefreshExpiresInSeconds,
+		RefreshTokenExpiresIn: tenent.RefreshExpiresInSeconds,
 		IdToken:               idToken,
 	})
 }

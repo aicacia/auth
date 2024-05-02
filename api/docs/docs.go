@@ -1728,127 +1728,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/password-reset": {
-            "post": {
-                "security": [
-                    {
-                        "Locale": []
-                    },
-                    {
-                        "Timezone": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "password-reset"
-                ],
-                "summary": "Request Password Reset",
-                "operationId": "password-reset",
-                "parameters": [
-                    {
-                        "description": "request password reset body",
-                        "name": "passwordReset",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.PasswordResetST"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/Token"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/Errors"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/Errors"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/Errors"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/Errors"
-                        }
-                    }
-                }
-            }
-        },
-        "/password-reset/request": {
-            "post": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "password-reset"
-                ],
-                "summary": "Request Password Reset",
-                "operationId": "request-password-reset",
-                "parameters": [
-                    {
-                        "description": "request password reset body",
-                        "name": "requestPasswordReset",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.RequestPasswordResetST"
-                        }
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "No Content"
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/Errors"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "schema": {
-                            "$ref": "#/definitions/Errors"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/Errors"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/Errors"
-                        }
-                    }
-                }
-            }
-        },
         "/register": {
             "post": {
                 "security": [
@@ -3063,6 +2942,9 @@ const docTemplate = `{
                 },
                 "uri": {
                     "type": "string"
+                },
+                "website": {
+                    "type": "string"
                 }
             }
         },
@@ -3150,14 +3032,23 @@ const docTemplate = `{
                 "algorithm": {
                     "type": "string"
                 },
+                "authorization_website": {
+                    "type": "string"
+                },
                 "client_id": {
                     "type": "string"
                 },
                 "description": {
                     "type": "string"
                 },
+                "email_endpoint": {
+                    "type": "string"
+                },
                 "expires_in_seconds": {
                     "type": "integer"
+                },
+                "phone_number_endpoint": {
+                    "type": "string"
                 },
                 "private_key": {
                     "type": "string"
@@ -3167,6 +3058,9 @@ const docTemplate = `{
                 },
                 "refresh_expires_in_seconds": {
                     "type": "integer"
+                },
+                "registration_website": {
+                    "type": "string"
                 },
                 "reset_expires_in_seconds": {
                     "type": "integer"
@@ -3507,11 +3401,13 @@ const docTemplate = `{
             "required": [
                 "algorithm",
                 "application_id",
+                "authorization_website",
                 "client_id",
                 "created_at",
                 "description",
                 "expires_in_seconds",
                 "id",
+                "password_reset_expires_in_seconds",
                 "refresh_expires_in_seconds",
                 "updated_at",
                 "uri"
@@ -3522,6 +3418,9 @@ const docTemplate = `{
                 },
                 "application_id": {
                     "type": "integer"
+                },
+                "authorization_website": {
+                    "type": "string"
                 },
                 "client_id": {
                     "type": "string"
@@ -3539,14 +3438,17 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
-                "public_key": {
-                    "type": "string"
+                "password_reset_expires_in_seconds": {
+                    "type": "integer"
                 },
-                "public_uri": {
+                "public_key": {
                     "type": "string"
                 },
                 "refresh_expires_in_seconds": {
                     "type": "integer"
+                },
+                "registration_website": {
+                    "type": "string"
                 },
                 "updated_at": {
                     "type": "string",
@@ -3689,14 +3591,23 @@ const docTemplate = `{
                 "algorithm": {
                     "type": "string"
                 },
+                "authorization_website": {
+                    "type": "string"
+                },
                 "client_id": {
                     "type": "string"
                 },
                 "description": {
                     "type": "string"
                 },
+                "email_endpoint": {
+                    "type": "string"
+                },
                 "expires_in_seconds": {
                     "type": "integer"
+                },
+                "phone_number_endpoint": {
+                    "type": "string"
                 },
                 "private_key": {
                     "type": "string"
@@ -3706,6 +3617,9 @@ const docTemplate = `{
                 },
                 "refresh_expires_in_seconds": {
                     "type": "integer"
+                },
+                "registration_website": {
+                    "type": "string"
                 },
                 "reset_expires_in_seconds": {
                     "type": "integer"
@@ -3971,36 +3885,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "version": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.PasswordResetST": {
-            "type": "object",
-            "required": [
-                "password",
-                "password_confirmation",
-                "token"
-            ],
-            "properties": {
-                "password": {
-                    "type": "string"
-                },
-                "password_confirmation": {
-                    "type": "string"
-                },
-                "token": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.RequestPasswordResetST": {
-            "type": "object",
-            "required": [
-                "email"
-            ],
-            "properties": {
-                "email": {
                     "type": "string"
                 }
             }

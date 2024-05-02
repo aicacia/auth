@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/aicacia/auth/api/app/config"
+	"github.com/aicacia/auth/api/app/jwt"
 	"github.com/aicacia/auth/api/app/middleware"
 	"github.com/aicacia/auth/api/app/model"
 	"github.com/gofiber/fiber/v2"
@@ -23,22 +24,16 @@ import (
 //	@Security		TenentId
 func GetOpenIDConfiguration(c *fiber.Ctx) error {
 	tenent := middleware.GetTenent(c)
-	applicationConfig := middleware.GetApplicationConfig(c)
 	url := config.Get().URL
-	var registrationEndpoint *string
-	if applicationConfig.SignUp.Enabled {
-		registrationEndpointValue := url + "/register"
-		registrationEndpoint = &registrationEndpointValue
-	}
 	grantTypesSupported := []string{"refresh_token"}
-	if applicationConfig.SignUp.Enabled && applicationConfig.SignUp.Password.Enabled {
+	if tenent.RegistrationWebsite != nil {
 		grantTypesSupported = append(grantTypesSupported, "password")
 	}
 	return c.JSON(model.OpenIDConfigurationST{
 		Issuer:                url,
 		JwksUri:               url + "/.well-known/jwks.json",
-		RegistrationEndpoint:  registrationEndpoint,
-		AuthorizationEndpoint: url + "/authentication",
+		RegistrationEndpoint:  tenent.RegistrationWebsite,
+		AuthorizationEndpoint: tenent.AuthorizationWebsite,
 		TokenEndpoint:         url + "/token",
 		UserInfoEndpoint:      url + "/userinfo",
 		ScopesSupported: []string{
@@ -51,8 +46,8 @@ func GetOpenIDConfiguration(c *fiber.Ctx) error {
 			"refresh_token",
 		},
 		SubjectTypesSupported: []string{
-			"user",
-			"service_account",
+			jwt.UserSubject,
+			jwt.ServiceAccountSubject,
 		},
 		IdTokenSigningAlgValuesSupported: []string{
 			tenent.Algorithm,

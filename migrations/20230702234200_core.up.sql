@@ -52,6 +52,7 @@ CREATE TABLE "applications" (
 	"id" SERIAL PRIMARY KEY,
 	"description" VARCHAR(255) NOT NULL,
 	"uri" VARCHAR(255) NOT NULL,
+	"website" VARCHAR(255),
 	"is_admin" BOOLEAN NOT NULL DEFAULT false,
 	"updated_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	"created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -59,25 +60,8 @@ CREATE TABLE "applications" (
 CREATE UNIQUE INDEX "applications_uri_unique_idx" ON "applications" ("uri");
 CREATE TRIGGER "applications_updated_at_tgr" BEFORE UPDATE ON "applications" FOR EACH ROW EXECUTE PROCEDURE "trigger_updated_at"();
 
-INSERT INTO "applications" ("description", "uri", "is_admin") VALUES
-  ('Admin', 'admin', true);
-
-
-CREATE TABLE "application_configs" (
-	"application_id" INT4 NOT NULL,
-	"key" VARCHAR(255) NOT NULL,
-	"value" JSONB NOT NULL DEFAULT 'null',
-	"created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	"updated_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	PRIMARY KEY("application_id", "key"),
-	CONSTRAINT "application_configs_application_id_fk" FOREIGN KEY("application_id") REFERENCES "applications"("id") ON DELETE CASCADE
-);
-CREATE TRIGGER "application_configs_updated_at_tgr" BEFORE UPDATE ON "application_configs" FOR EACH ROW EXECUTE PROCEDURE "trigger_updated_at"();
-
-INSERT INTO "application_configs" ("application_id", "key", "value") VALUES
-	((SELECT id FROM "applications" WHERE uri='admin' LIMIT 1), 'signup.enabled', 'false'),
-	((SELECT id FROM "applications" WHERE uri='admin' LIMIT 1), 'signup.password.enabled', 'false'),
-	((SELECT id FROM "applications" WHERE uri='admin' LIMIT 1), 'website', '"http://localhost:5173"');
+INSERT INTO "applications" ("description", "uri", "is_admin", "website") VALUES
+  ('Admin', 'admin', true, 'http://localhost:5173');
 
 
 CREATE TABLE "tenents" (
@@ -85,15 +69,18 @@ CREATE TABLE "tenents" (
 	"application_id" INT4 NOT NULL,
 	"description" VARCHAR(255) NOT NULL,
 	"uri" VARCHAR(255) NOT NULL,
-	"public_uri" VARCHAR(255),
-	"client_id" UUID DEFAULT gen_random_uuid(),
+	"authorization_website" VARCHAR(255) NOT NULL,
+	"registration_website" VARCHAR(255),
+	"email_endpoint" VARCHAR(255),
+	"phone_number_endpoint" VARCHAR(255),
+	"client_id" UUID NOT NULL DEFAULT gen_random_uuid(),
 	"client_secret" VARCHAR(255) NOT NULL DEFAULT encode(gen_random_bytes(32), 'hex'),
 	"algorithm" VARCHAR(255) NOT NULL DEFAULT 'HMAC',
 	"public_key" TEXT,
 	"private_key" TEXT NOT NULL DEFAULT encode(public.gen_random_bytes(255), 'base64'),
 	"expires_in_seconds" INT8 NOT NULL DEFAULT 86400,
 	"refresh_expires_in_seconds" INT8 NOT NULL DEFAULT 604800,
-	"reset_expires_in_seconds" INT8 NOT NULL DEFAULT 86400,
+	"password_reset_expires_in_seconds" INT8 NOT NULL DEFAULT 86400,
 	"updated_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	"created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   	CONSTRAINT "tenents_application_id_fk" FOREIGN KEY("application_id") REFERENCES "applications"("id") ON DELETE CASCADE
@@ -102,7 +89,7 @@ CREATE UNIQUE INDEX "tenents_application_id_uri_unique_idx" ON "tenents" ("appli
 CREATE UNIQUE INDEX "tenents_client_id_unique_idx" ON "tenents" ("client_id");
 CREATE TRIGGER "tenents_updated_at_tgr" BEFORE UPDATE ON "tenents" FOR EACH ROW EXECUTE PROCEDURE "trigger_updated_at"();
 
-INSERT INTO "tenents" ("client_id", "application_id", "description", "uri", "public_uri") 
+INSERT INTO "tenents" ("client_id", "application_id", "description", "uri", "authorization_website") 
 	VALUES
 	('cbf7bbef-5132-4b2c-8622-06e28359c291', (SELECT id FROM "applications" WHERE uri='admin' LIMIT 1), 'Admin', 'admin', 'http://localhost:5173/signin');
 

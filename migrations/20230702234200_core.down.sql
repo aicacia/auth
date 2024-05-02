@@ -10,7 +10,6 @@ DROP TABLE IF EXISTS "user_infos" cascade;
 
 DROP TABLE IF EXISTS "permissions" cascade;
 DROP TABLE IF EXISTS "tenents" cascade;
-DROP TABLE IF EXISTS "application_configs" cascade;
 DROP TABLE IF EXISTS "applications" cascade;
 
 DROP FUNCTION IF EXISTS "configs_notify" cascade;

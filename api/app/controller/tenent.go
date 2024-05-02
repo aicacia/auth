@@ -45,14 +45,14 @@ func GetTenents(c *fiber.Ctx) error {
 		}
 		return err
 	}
-	applicationTenents, err := repository.GetTenents(int32(applicationId), limit, offset)
+	tenents, err := repository.GetTenents(int32(applicationId), limit, offset)
 	if err != nil {
 		log.Printf("failed to get applications: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
 	}
 	return c.JSON(model.PaginationST[model.TenentST]{
-		HasMore: len(applicationTenents) == limit,
-		Items:   util.Map(applicationTenents, model.TenentFromTenentRow),
+		HasMore: len(tenents) == limit,
+		Items:   util.Map(tenents, model.TenentFromTenentRow),
 	})
 }
 

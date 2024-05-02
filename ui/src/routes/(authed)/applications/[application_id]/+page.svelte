@@ -32,21 +32,21 @@
 			</div>
 			<div class="flex flex-row">
 				<a
-					class="btn icon primary flex flex-row me-2"
+					class="btn primary flex flex-row me-2"
 					href={`${base}/applications/${application.id}/users`}
 				>
 					<Users class="me-2" />
 					{$LL.users.title()}
 				</a>
 				<a
-					class="btn icon primary flex flex-row me-2"
+					class="btn primary flex flex-row me-2"
 					href={`${base}/applications/${application.id}/tenents`}
 				>
 					<KeySquare class="me-2" />
 					{$LL.tenents.title()}
 				</a>
 				<a
-					class="btn icon primary flex flex-row me-2"
+					class="btn primary flex flex-row me-2"
 					href={`${base}/applications/${application.id}/permissions`}
 				>
 					<Lock class="me-2" />

@@ -19,7 +19,8 @@ const en = {
 			required: 'Required',
 			noChange: 'No change',
 			mismatch: 'Passwords do not match',
-			alreayUsed: 'Already used'
+			alreayUsed: 'Already used',
+			cannotDeleteAdmin: 'Can not delete Admin Application.'
 		}
 	},
 	auth: {

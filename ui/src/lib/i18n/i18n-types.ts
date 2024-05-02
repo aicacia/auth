@@ -79,6 +79,10 @@ type RootTranslation = {
 			 * A​l​r​e​a​d​y​ ​u​s​e​d
 			 */
 			alreayUsed: string
+			/**
+			 * C​a​n​ ​n​o​t​ ​d​e​l​e​t​e​ ​A​d​m​i​n​ ​A​p​p​l​i​c​a​t​i​o​n​.
+			 */
+			cannotDeleteAdmin: string
 		}
 	}
 	auth: {
@@ -391,6 +395,10 @@ export type TranslationFunctions = {
 			 * Already used
 			 */
 			alreayUsed: () => LocalizedString
+			/**
+			 * Can not delete Admin Application.
+			 */
+			cannotDeleteAdmin: () => LocalizedString
 		}
 	}
 	auth: {

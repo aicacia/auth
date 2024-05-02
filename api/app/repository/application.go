@@ -9,6 +9,7 @@ type ApplicationRowST struct {
 	Description string    `db:"description"`
 	Uri         string    `db:"uri"`
 	IsAdmin     bool      `db:"is_admin"`
+	Website     *string   `db:"website"`
 	UpdatedAt   time.Time `db:"updated_at"`
 	CreatedAt   time.Time `db:"created_at"`
 }

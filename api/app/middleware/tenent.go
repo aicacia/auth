@@ -11,8 +11,7 @@ import (
 )
 
 var applicationLocalKey = "application"
-var applicationTenentLocalKey = "application.tenent"
-var applicationConfigLocalKey = "application.config"
+var tenentLocalKey = "tenent"
 
 func TenentMiddleware() fiber.Handler {
 	return func(c *fiber.Ctx) error {
@@ -22,29 +21,26 @@ func TenentMiddleware() fiber.Handler {
 			log.Printf("invalid tenent id %s: %v\n", tenentIdString, err)
 			return model.NewError(http.StatusBadRequest).AddError("Tenent-Id", "invalid").Send(c)
 		}
-		applicationTenent, err := repository.GetTenentByClientId(tenentId)
+		tenent, err := repository.GetTenentByClientId(tenentId)
 		if err != nil {
 			log.Printf("failed to fetch application tenent: %v\n", err)
 			return model.NewError(http.StatusNotFound).AddError("Tenent-Id", "invalid").Send(c)
 		}
-		application, err := repository.GetApplicationById(applicationTenent.ApplicationId)
+		if tenent == nil {
+			log.Printf("tenent not found: %v\n", err)
+			return model.NewError(http.StatusNotFound).AddError("Tenent-Id", "invalid").Send(c)
+		}
+		application, err := repository.GetApplicationById(tenent.ApplicationId)
 		if err != nil {
 			log.Printf("failed to fetch application: %v\n", err)
 			return model.NewError(http.StatusBadRequest).AddError("Tenent-Id", "invalid").Send(c)
 		}
-		applicationConfigRows, err := repository.GetApplicationConfigs(applicationTenent.ApplicationId)
-		if err != nil {
-			log.Printf("failed to fetch application config rows: %v\n", err)
-			return model.NewError(http.StatusBadRequest).AddError("Tenent-Id", "invalid").Send(c)
-		}
-		applicationConfig, err := model.ApplicationConfigFromApplicationConfigRows(applicationConfigRows)
-		if err != nil {
-			log.Printf("failed to convert application config rows to application config: %v\n", err)
+		if application == nil {
+			log.Printf("application not found: %v\n", err)
 			return model.NewError(http.StatusBadRequest).AddError("Tenent-Id", "invalid").Send(c)
 		}
 		c.Locals(applicationLocalKey, application)
-		c.Locals(applicationTenentLocalKey, applicationTenent)
-		c.Locals(applicationConfigLocalKey, applicationConfig)
+		c.Locals(tenentLocalKey, tenent)
 		return c.Next()
 	}
 }
@@ -55,11 +51,6 @@ func GetApplication(c *fiber.Ctx) *repository.ApplicationRowST {
 }
 
 func GetTenent(c *fiber.Ctx) *repository.TenentRowST {
-	applicationTenent := c.Locals(applicationTenentLocalKey)
-	return applicationTenent.(*repository.TenentRowST)
-}
-
-func GetApplicationConfig(c *fiber.Ctx) *model.ApplicationConfigST {
-	applicationConfig := c.Locals(applicationConfigLocalKey)
-	return applicationConfig.(*model.ApplicationConfigST)
+	tenent := c.Locals(tenentLocalKey)
+	return tenent.(*repository.TenentRowST)
 }

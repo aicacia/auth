@@ -185,6 +185,17 @@ func DeleteApplication(c *fiber.Ctx) error {
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("id", "invalid").Send(c)
 	}
+	application, err := repository.GetApplicationById(int32(id))
+	if err != nil {
+		log.Printf("failed to get application: %v\n", err)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+	}
+	if application == nil {
+		return model.NewError(http.StatusNotFound).AddError("id", "invalid").Send(c)
+	}
+	if application.IsAdmin {
+		return model.NewError(http.StatusForbidden).AddError("internal", "cannotDeleteAdmin").Send(c)
+	}
 	deleted, err := repository.DeleteApplication(int32(id))
 	if err != nil {
 		log.Printf("failed to delete application: %v\n", err)

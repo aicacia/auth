@@ -19,32 +19,32 @@ var permissionsMapLocalKey = "permissions.map"
 
 func AuthorizedMiddleware() fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		tokenString := GetAuthorizationFromContext(c)
+		_, tokenString := GetAuthorizationFromContext(c)
 		unvalidatedClaims, err := jwt.ParseClaimsFromTokenNoValidation(tokenString)
 		if err != nil {
 			log.Printf("failed to get authorization header: %v", err)
 			return model.NewError(http.StatusUnauthorized).AddError("authorization", "invalid").Send(c)
 		}
-		if slices.Contains(unvalidatedClaims.Scope, "refresh_token") {
-			return model.NewError(http.StatusForbidden).AddError("authorization", "invalid").Send(c)
+		if unvalidatedClaims.Type != jwt.BearerTokenType {
+			return model.NewError(http.StatusUnauthorized).AddError("authorization", "invalid").Send(c)
 		}
-		applicationTenent, err := repository.GetTenentByClientId(unvalidatedClaims.ClientId)
+		tenent, err := repository.GetTenentByClientId(unvalidatedClaims.ClientId)
 		if err != nil {
 			log.Printf("failed to fetch application tenent: %v", err)
 			return model.NewError(http.StatusUnauthorized).AddError("authorization", "invalid").Send(c)
 		}
-		claims, err := jwt.ParseClaimsFromToken(tokenString, applicationTenent)
+		claims, err := jwt.ParseClaimsFromToken(tokenString, tenent)
 		if err != nil {
 			log.Printf("failed to parse claims from token: %v", err)
 			return model.NewError(http.StatusUnauthorized).AddError("authorization", "invalid").Send(c)
 		}
-		application, err := repository.GetApplicationById(applicationTenent.ApplicationId)
+		application, err := repository.GetApplicationById(tenent.ApplicationId)
 		if err != nil {
 			log.Printf("failed to fetch application: %v", err)
 			return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
 		}
 		c.Locals(applicationLocalKey, application)
-		c.Locals(applicationTenentLocalKey, applicationTenent)
+		c.Locals(tenentLocalKey, tenent)
 		c.Locals(baseClaimsLocalKey, claims)
 
 		switch claims.SubjectType {

@@ -36,6 +36,12 @@ export interface Tenent {
      * @type {string}
      * @memberof Tenent
      */
+    authorization_website: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Tenent
+     */
     client_id: string;
     /**
      * 
@@ -63,22 +69,28 @@ export interface Tenent {
     id: number;
     /**
      * 
+     * @type {number}
+     * @memberof Tenent
+     */
+    password_reset_expires_in_seconds: number;
+    /**
+     * 
      * @type {string}
      * @memberof Tenent
      */
     public_key?: string;
     /**
      * 
-     * @type {string}
-     * @memberof Tenent
-     */
-    public_uri?: string;
-    /**
-     * 
      * @type {number}
      * @memberof Tenent
      */
     refresh_expires_in_seconds: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Tenent
+     */
+    registration_website?: string;
     /**
      * 
      * @type {Date}
@@ -99,11 +111,13 @@ export interface Tenent {
 export function instanceOfTenent(value: object): boolean {
     if (!('algorithm' in value)) return false;
     if (!('application_id' in value)) return false;
+    if (!('authorization_website' in value)) return false;
     if (!('client_id' in value)) return false;
     if (!('created_at' in value)) return false;
     if (!('description' in value)) return false;
     if (!('expires_in_seconds' in value)) return false;
     if (!('id' in value)) return false;
+    if (!('password_reset_expires_in_seconds' in value)) return false;
     if (!('refresh_expires_in_seconds' in value)) return false;
     if (!('updated_at' in value)) return false;
     if (!('uri' in value)) return false;
@@ -122,14 +136,16 @@ export function TenentFromJSONTyped(json: any, ignoreDiscriminator: boolean): Te
         
         'algorithm': json['algorithm'],
         'application_id': json['application_id'],
+        'authorization_website': json['authorization_website'],
         'client_id': json['client_id'],
         'created_at': (new Date(json['created_at'])),
         'description': json['description'],
         'expires_in_seconds': json['expires_in_seconds'],
         'id': json['id'],
+        'password_reset_expires_in_seconds': json['password_reset_expires_in_seconds'],
         'public_key': json['public_key'] == null ? undefined : json['public_key'],
-        'public_uri': json['public_uri'] == null ? undefined : json['public_uri'],
         'refresh_expires_in_seconds': json['refresh_expires_in_seconds'],
+        'registration_website': json['registration_website'] == null ? undefined : json['registration_website'],
         'updated_at': (new Date(json['updated_at'])),
         'uri': json['uri'],
     };
@@ -143,14 +159,16 @@ export function TenentToJSON(value?: Tenent | null): any {
         
         'algorithm': value['algorithm'],
         'application_id': value['application_id'],
+        'authorization_website': value['authorization_website'],
         'client_id': value['client_id'],
         'created_at': ((value['created_at']).toISOString()),
         'description': value['description'],
         'expires_in_seconds': value['expires_in_seconds'],
         'id': value['id'],
+        'password_reset_expires_in_seconds': value['password_reset_expires_in_seconds'],
         'public_key': value['public_key'],
-        'public_uri': value['public_uri'],
         'refresh_expires_in_seconds': value['refresh_expires_in_seconds'],
+        'registration_website': value['registration_website'],
         'updated_at': ((value['updated_at']).toISOString()),
         'uri': value['uri'],
     };

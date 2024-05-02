@@ -30,6 +30,12 @@ export interface CreateTenent {
      * @type {string}
      * @memberof CreateTenent
      */
+    authorization_website?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTenent
+     */
     client_id?: string;
     /**
      * 
@@ -39,10 +45,22 @@ export interface CreateTenent {
     description: string;
     /**
      * 
+     * @type {string}
+     * @memberof CreateTenent
+     */
+    email_endpoint?: string;
+    /**
+     * 
      * @type {number}
      * @memberof CreateTenent
      */
     expires_in_seconds?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTenent
+     */
+    phone_number_endpoint?: string;
     /**
      * 
      * @type {string}
@@ -61,6 +79,12 @@ export interface CreateTenent {
      * @memberof CreateTenent
      */
     refresh_expires_in_seconds?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateTenent
+     */
+    registration_website?: string;
     /**
      * 
      * @type {number}
@@ -95,12 +119,16 @@ export function CreateTenentFromJSONTyped(json: any, ignoreDiscriminator: boolea
     return {
         
         'algorithm': json['algorithm'] == null ? undefined : json['algorithm'],
+        'authorization_website': json['authorization_website'] == null ? undefined : json['authorization_website'],
         'client_id': json['client_id'] == null ? undefined : json['client_id'],
         'description': json['description'],
+        'email_endpoint': json['email_endpoint'] == null ? undefined : json['email_endpoint'],
         'expires_in_seconds': json['expires_in_seconds'] == null ? undefined : json['expires_in_seconds'],
+        'phone_number_endpoint': json['phone_number_endpoint'] == null ? undefined : json['phone_number_endpoint'],
         'private_key': json['private_key'] == null ? undefined : json['private_key'],
         'public_key': json['public_key'] == null ? undefined : json['public_key'],
         'refresh_expires_in_seconds': json['refresh_expires_in_seconds'] == null ? undefined : json['refresh_expires_in_seconds'],
+        'registration_website': json['registration_website'] == null ? undefined : json['registration_website'],
         'reset_expires_in_seconds': json['reset_expires_in_seconds'] == null ? undefined : json['reset_expires_in_seconds'],
         'uri': json['uri'],
     };
@@ -113,12 +141,16 @@ export function CreateTenentToJSON(value?: CreateTenent | null): any {
     return {
         
         'algorithm': value['algorithm'],
+        'authorization_website': value['authorization_website'],
         'client_id': value['client_id'],
         'description': value['description'],
+        'email_endpoint': value['email_endpoint'],
         'expires_in_seconds': value['expires_in_seconds'],
+        'phone_number_endpoint': value['phone_number_endpoint'],
         'private_key': value['private_key'],
         'public_key': value['public_key'],
         'refresh_expires_in_seconds': value['refresh_expires_in_seconds'],
+        'registration_website': value['registration_website'],
         'reset_expires_in_seconds': value['reset_expires_in_seconds'],
         'uri': value['uri'],
     };

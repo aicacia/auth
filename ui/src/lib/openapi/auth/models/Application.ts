@@ -49,6 +49,12 @@ export interface Application {
      * @memberof Application
      */
     uri: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Application
+     */
+    website?: string;
 }
 
 /**
@@ -78,6 +84,7 @@ export function ApplicationFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'id': json['id'],
         'updated_at': (new Date(json['updated_at'])),
         'uri': json['uri'],
+        'website': json['website'] == null ? undefined : json['website'],
     };
 }
 
@@ -92,6 +99,7 @@ export function ApplicationToJSON(value?: Application | null): any {
         'id': value['id'],
         'updated_at': ((value['updated_at']).toISOString()),
         'uri': value['uri'],
+        'website': value['website'],
     };
 }
 

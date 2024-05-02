@@ -47,7 +47,7 @@ func GetApplications(c *fiber.Ctx) error {
 	}
 	return c.JSON(model.PaginationST[model.ApplicationST]{
 		HasMore: len(applications) == limit,
-		Items:   util.Map(applications, model.ApplicationFromApplicationRow),
+		Items:   util.Map(applications, model.ApplicationFromRow),
 	})
 }
 
@@ -83,7 +83,7 @@ func GetApplicationById(c *fiber.Ctx) error {
 	if application == nil {
 		return model.NewError(http.StatusNotFound).AddError("id", "invalid").Send(c)
 	}
-	return c.JSON(model.ApplicationFromApplicationRow(*application))
+	return c.JSON(model.ApplicationFromRow(*application))
 }
 
 // PostCreateApplication
@@ -117,7 +117,7 @@ func PostCreateApplication(c *fiber.Ctx) error {
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
 	}
 	c.Status(http.StatusCreated)
-	return c.JSON(model.ApplicationFromApplicationRow(application))
+	return c.JSON(model.ApplicationFromRow(application))
 }
 
 // PatchUpdateApplication
@@ -158,7 +158,7 @@ func PatchUpdateApplication(c *fiber.Ctx) error {
 	if application == nil {
 		return model.NewError(http.StatusNotFound).AddError("id", "invalid").Send(c)
 	}
-	return c.JSON(model.ApplicationFromApplicationRow(*application))
+	return c.JSON(model.ApplicationFromRow(*application))
 }
 
 // DeleteApplication

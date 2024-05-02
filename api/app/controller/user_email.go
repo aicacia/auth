@@ -106,7 +106,7 @@ func PatchUserEmailConfirm(c *fiber.Ctx) error {
 	if err != nil {
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
 	}
-	return c.JSON(model.EmailFromEmailRow(email))
+	return c.JSON(model.EmailFromRow(email))
 }
 
 // PatchUserEmailSetPrimary
@@ -200,7 +200,7 @@ func PostUserCreateEmail(c *fiber.Ctx) error {
 	// TODO: send to email
 	log.Printf("userId=%d, emailId=%d, token=%s\n", userId, emailRow.Id, emailRow.ConfirmationToken)
 	c.Status(http.StatusCreated)
-	return c.JSON(model.EmailFromEmailRow(emailRow))
+	return c.JSON(model.EmailFromRow(emailRow))
 }
 
 // DeleteUserEmail

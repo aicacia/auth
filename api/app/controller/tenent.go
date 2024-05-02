@@ -52,7 +52,7 @@ func GetTenents(c *fiber.Ctx) error {
 	}
 	return c.JSON(model.PaginationST[model.TenentST]{
 		HasMore: len(tenents) == limit,
-		Items:   util.Map(tenents, model.TenentFromTenentRow),
+		Items:   util.Map(tenents, model.TenentFromRow),
 	})
 }
 
@@ -93,7 +93,7 @@ func GetTenentById(c *fiber.Ctx) error {
 	if application == nil {
 		return model.NewError(http.StatusNotFound).AddError("id", "invalid").Send(c)
 	}
-	return c.JSON(model.TenentFromTenentRow(*application))
+	return c.JSON(model.TenentFromRow(*application))
 }
 
 // PostCreateTenent
@@ -132,7 +132,7 @@ func PostCreateTenent(c *fiber.Ctx) error {
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
 	}
 	c.Status(http.StatusCreated)
-	return c.JSON(model.TenentFromTenentRow(application))
+	return c.JSON(model.TenentFromRow(application))
 }
 
 // PatchUpdateTenent
@@ -178,7 +178,7 @@ func PatchUpdateTenent(c *fiber.Ctx) error {
 	if application == nil {
 		return model.NewError(http.StatusNotFound).AddError("id", "invalid").Send(c)
 	}
-	return c.JSON(model.TenentFromTenentRow(*application))
+	return c.JSON(model.TenentFromRow(*application))
 }
 
 // DeleteTenent

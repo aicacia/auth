@@ -44,7 +44,7 @@ func GetCurrentUser(c *fiber.Ctx) error {
 		permissions = append(permissions, permissionRow.Uri)
 	}
 	userWithPermissions := model.UserWithPermissionsST{
-		UserST:      model.UserFromUserRow(*user, emails, phoneNumbers),
+		UserST:      model.UserFromRow(*user, emails, phoneNumbers),
 		Permissions: permissions,
 	}
 	return c.JSON(userWithPermissions)

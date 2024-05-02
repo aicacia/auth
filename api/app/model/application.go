@@ -15,7 +15,7 @@ type ApplicationST struct {
 	CreatedAt   time.Time `json:"created_at" validate:"required" format:"date-time"`
 } // @name Application
 
-func ApplicationFromApplicationRow(row repository.ApplicationRowST) ApplicationST {
+func ApplicationFromRow(row repository.ApplicationRowST) ApplicationST {
 	return ApplicationST{
 		Id:          row.Id,
 		Description: row.Description,

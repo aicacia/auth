@@ -30,7 +30,7 @@ type TenentWithSecretsST struct {
 	PrivateKey   string `json:"private_key" validate:"required"`
 } // @name TenentWithSecrets
 
-func TenentFromTenentRow(row repository.TenentRowST) TenentST {
+func TenentFromRow(row repository.TenentRowST) TenentST {
 	return TenentST{
 		Id:                            row.Id,
 		ApplicationId:                 row.ApplicationId,
@@ -49,9 +49,9 @@ func TenentFromTenentRow(row repository.TenentRowST) TenentST {
 	}
 }
 
-func TenentWithSecretsFromTenentRow(row repository.TenentRowST) TenentWithSecretsST {
+func TenentWithSecretsFromRow(row repository.TenentRowST) TenentWithSecretsST {
 	return TenentWithSecretsST{
-		TenentST:     TenentFromTenentRow(row),
+		TenentST:     TenentFromRow(row),
 		ClientSecret: row.ClientSecret,
 		PrivateKey:   row.PrivateKey,
 	}

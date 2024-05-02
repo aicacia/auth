@@ -41,7 +41,7 @@ func GetPermissions(c *fiber.Ctx) error {
 		log.Printf("failed to get applications: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
 	}
-	return c.JSON(util.Map(applications, model.PermissionFromPermissionRow))
+	return c.JSON(util.Map(applications, model.PermissionFromRow))
 }
 
 // GetPermissionById
@@ -81,7 +81,7 @@ func GetPermissionById(c *fiber.Ctx) error {
 	if application == nil {
 		return model.NewError(http.StatusNotFound).AddError("id", "invalid").Send(c)
 	}
-	return c.JSON(model.PermissionFromPermissionRow(*application))
+	return c.JSON(model.PermissionFromRow(*application))
 }
 
 // PostCreatePermission
@@ -120,7 +120,7 @@ func PostCreatePermission(c *fiber.Ctx) error {
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
 	}
 	c.Status(http.StatusCreated)
-	return c.JSON(model.PermissionFromPermissionRow(application))
+	return c.JSON(model.PermissionFromRow(application))
 }
 
 // PatchUpdatePermission
@@ -166,7 +166,7 @@ func PatchUpdatePermission(c *fiber.Ctx) error {
 	if application == nil {
 		return model.NewError(http.StatusNotFound).AddError("id", "invalid").Send(c)
 	}
-	return c.JSON(model.PermissionFromPermissionRow(*application))
+	return c.JSON(model.PermissionFromRow(*application))
 }
 
 // DeletePermission

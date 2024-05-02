@@ -41,11 +41,11 @@ type UserWithPermissionsST struct {
 	Permissions []string `json:"permissions" validate:"required"`
 } // @name UserWithPermissions
 
-func UserFromUserRow(userRow repository.UserRowST, emailRows []repository.EmailRowST, phoneNumberRows []repository.PhoneNumberRowST) UserST {
+func UserFromRow(userRow repository.UserRowST, emailRows []repository.EmailRowST, phoneNumberRows []repository.PhoneNumberRowST) UserST {
 	var primaryEmail *EmailST
 	emails := make([]EmailST, 0, len(emailRows))
 	for _, emailRow := range emailRows {
-		email := EmailFromEmailRow(emailRow)
+		email := EmailFromRow(emailRow)
 		if userRow.EmailId.Valid && userRow.EmailId.Int32 == emailRow.Id {
 			primaryEmail = &email
 		} else {
@@ -55,7 +55,7 @@ func UserFromUserRow(userRow repository.UserRowST, emailRows []repository.EmailR
 	var primaryPhoneNumber *PhoneNumberST
 	phoneNumbers := make([]PhoneNumberST, 0, len(phoneNumberRows))
 	for _, phoneNumberRow := range phoneNumberRows {
-		phoneNumber := PhoneNumberFromPhoneNumberRow(phoneNumberRow)
+		phoneNumber := PhoneNumberFromRow(phoneNumberRow)
 		if userRow.PhoneNumberId.Valid && userRow.PhoneNumberId.Int32 == phoneNumberRow.Id {
 			primaryPhoneNumber = &phoneNumber
 		} else {
@@ -75,7 +75,7 @@ func UserFromUserRow(userRow repository.UserRowST, emailRows []repository.EmailR
 	}
 }
 
-func EmailFromEmailRow(row repository.EmailRowST) EmailST {
+func EmailFromRow(row repository.EmailRowST) EmailST {
 	return EmailST{
 		Id:            row.Id,
 		ApplicationId: row.ApplicationId,
@@ -86,7 +86,7 @@ func EmailFromEmailRow(row repository.EmailRowST) EmailST {
 	}
 }
 
-func PhoneNumberFromPhoneNumberRow(row repository.PhoneNumberRowST) PhoneNumberST {
+func PhoneNumberFromRow(row repository.PhoneNumberRowST) PhoneNumberST {
 	return PhoneNumberST{
 		Id:            row.Id,
 		ApplicationId: row.ApplicationId,

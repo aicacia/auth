@@ -106,7 +106,7 @@ func PatchUserPhoneNumberConfirm(c *fiber.Ctx) error {
 	if err != nil {
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
 	}
-	return c.JSON(model.PhoneNumberFromPhoneNumberRow(phone_number))
+	return c.JSON(model.PhoneNumberFromRow(phone_number))
 }
 
 // PatchUserPhoneNumberSetPrimary
@@ -200,7 +200,7 @@ func PostUserCreatePhoneNumber(c *fiber.Ctx) error {
 	// TODO: send to phone number
 	log.Printf("userId=%d, emailId=%d, token=%s\n", userId, phoneNumberRow.Id, phoneNumberRow.ConfirmationToken)
 	c.Status(http.StatusCreated)
-	return c.JSON(model.PhoneNumberFromPhoneNumberRow(phoneNumberRow))
+	return c.JSON(model.PhoneNumberFromRow(phoneNumberRow))
 }
 
 // DeleteUserPhoneNumber

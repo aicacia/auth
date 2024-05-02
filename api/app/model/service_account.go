@@ -15,7 +15,7 @@ type ServiceAccountST struct {
 	CreatedAt time.Time `json:"created_at" validate:"required" format:"date-time"`
 } // @name ServiceAccount
 
-func ServiceAccountFromServiceAccountRow(row repository.ServiceAccountRowST) ServiceAccountST {
+func ServiceAccountFromRow(row repository.ServiceAccountRowST) ServiceAccountST {
 	return ServiceAccountST{
 		Id:        row.Id,
 		Name:      row.Name,

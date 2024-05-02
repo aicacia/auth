@@ -15,7 +15,7 @@ type PermissionST struct {
 	CreatedAt     time.Time `json:"created_at" validate:"required" format:"date-time"`
 } // @name Permission
 
-func PermissionFromPermissionRow(row repository.PermissionRowST) PermissionST {
+func PermissionFromRow(row repository.PermissionRowST) PermissionST {
 	return PermissionST{
 		Id:            row.Id,
 		ApplicationId: row.ApplicationId,

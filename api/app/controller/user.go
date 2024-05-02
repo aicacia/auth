@@ -69,7 +69,7 @@ func GetUsers(c *fiber.Ctx) error {
 	}
 	users := make([]model.UserST, 0, len(userRows))
 	for _, userRow := range userRows {
-		users = append(users, model.UserFromUserRow(userRow, emailsByUserId[userRow.Id], phoneNumbersByUserId[userRow.Id]))
+		users = append(users, model.UserFromRow(userRow, emailsByUserId[userRow.Id], phoneNumbersByUserId[userRow.Id]))
 	}
 	return c.JSON(model.PaginationST[model.UserST]{
 		HasMore: len(users) == limit,
@@ -104,7 +104,7 @@ func GetUserById(c *fiber.Ctx) error {
 		log.Printf("failed to get user: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
 	}
-	return c.JSON(model.UserFromUserRow(*user, emails, phoneNumbers))
+	return c.JSON(model.UserFromRow(*user, emails, phoneNumbers))
 }
 
 // PostCreateUser
@@ -146,7 +146,7 @@ func PostCreateUser(c *fiber.Ctx) error {
 		log.Printf("failed to get user emails and phone numbers: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
 	}
-	return c.JSON(model.UserFromUserRow(result.User, emails, phoneNumbers))
+	return c.JSON(model.UserFromRow(result.User, emails, phoneNumbers))
 }
 
 // PatchUpdateUserById
@@ -189,7 +189,7 @@ func PatchUpdateUserById(c *fiber.Ctx) error {
 		log.Printf("failed to get user emails and phone numbers: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
 	}
-	return c.JSON(model.UserFromUserRow(*user, emails, phoneNumbers))
+	return c.JSON(model.UserFromRow(*user, emails, phoneNumbers))
 }
 
 // DeleteUserById

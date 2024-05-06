@@ -24,13 +24,13 @@ export interface Permission {
      * @type {number}
      * @memberof Permission
      */
-    application_id: number;
+    applicationId: number;
     /**
      * 
      * @type {Date}
      * @memberof Permission
      */
-    created_at: Date;
+    createdAt: Date;
     /**
      * 
      * @type {string}
@@ -48,7 +48,7 @@ export interface Permission {
      * @type {Date}
      * @memberof Permission
      */
-    updated_at: Date;
+    updatedAt: Date;
     /**
      * 
      * @type {string}
@@ -61,11 +61,11 @@ export interface Permission {
  * Check if a given object implements the Permission interface.
  */
 export function instanceOfPermission(value: object): boolean {
-    if (!('application_id' in value)) return false;
-    if (!('created_at' in value)) return false;
+    if (!('applicationId' in value)) return false;
+    if (!('createdAt' in value)) return false;
     if (!('description' in value)) return false;
     if (!('id' in value)) return false;
-    if (!('updated_at' in value)) return false;
+    if (!('updatedAt' in value)) return false;
     if (!('uri' in value)) return false;
     return true;
 }
@@ -80,11 +80,11 @@ export function PermissionFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'application_id': json['application_id'],
-        'created_at': (new Date(json['created_at'])),
+        'applicationId': json['application_id'],
+        'createdAt': (new Date(json['created_at'])),
         'description': json['description'],
         'id': json['id'],
-        'updated_at': (new Date(json['updated_at'])),
+        'updatedAt': (new Date(json['updated_at'])),
         'uri': json['uri'],
     };
 }
@@ -95,11 +95,11 @@ export function PermissionToJSON(value?: Permission | null): any {
     }
     return {
         
-        'application_id': value['application_id'],
-        'created_at': ((value['created_at']).toISOString()),
+        'application_id': value['applicationId'],
+        'created_at': ((value['createdAt']).toISOString()),
         'description': value['description'],
         'id': value['id'],
-        'updated_at': ((value['updated_at']).toISOString()),
+        'updated_at': ((value['updatedAt']).toISOString()),
         'uri': value['uri'],
     };
 }

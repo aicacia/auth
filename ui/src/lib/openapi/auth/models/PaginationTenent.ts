@@ -31,7 +31,7 @@ export interface PaginationTenent {
      * @type {boolean}
      * @memberof PaginationTenent
      */
-    has_more: boolean;
+    hasMore: boolean;
     /**
      * 
      * @type {Array<Tenent>}
@@ -44,7 +44,7 @@ export interface PaginationTenent {
  * Check if a given object implements the PaginationTenent interface.
  */
 export function instanceOfPaginationTenent(value: object): boolean {
-    if (!('has_more' in value)) return false;
+    if (!('hasMore' in value)) return false;
     if (!('items' in value)) return false;
     return true;
 }
@@ -59,7 +59,7 @@ export function PaginationTenentFromJSONTyped(json: any, ignoreDiscriminator: bo
     }
     return {
         
-        'has_more': json['has_more'],
+        'hasMore': json['has_more'],
         'items': ((json['items'] as Array<any>).map(TenentFromJSON)),
     };
 }
@@ -70,7 +70,7 @@ export function PaginationTenentToJSON(value?: PaginationTenent | null): any {
     }
     return {
         
-        'has_more': value['has_more'],
+        'has_more': value['hasMore'],
         'items': ((value['items'] as Array<any>).map(TenentToJSON)),
     };
 }

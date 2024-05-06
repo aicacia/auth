@@ -31,7 +31,7 @@ export interface PaginationApplication {
      * @type {boolean}
      * @memberof PaginationApplication
      */
-    has_more: boolean;
+    hasMore: boolean;
     /**
      * 
      * @type {Array<Application>}
@@ -44,7 +44,7 @@ export interface PaginationApplication {
  * Check if a given object implements the PaginationApplication interface.
  */
 export function instanceOfPaginationApplication(value: object): boolean {
-    if (!('has_more' in value)) return false;
+    if (!('hasMore' in value)) return false;
     if (!('items' in value)) return false;
     return true;
 }
@@ -59,7 +59,7 @@ export function PaginationApplicationFromJSONTyped(json: any, ignoreDiscriminato
     }
     return {
         
-        'has_more': json['has_more'],
+        'hasMore': json['has_more'],
         'items': ((json['items'] as Array<any>).map(ApplicationFromJSON)),
     };
 }
@@ -70,7 +70,7 @@ export function PaginationApplicationToJSON(value?: PaginationApplication | null
     }
     return {
         
-        'has_more': value['has_more'],
+        'has_more': value['hasMore'],
         'items': ((value['items'] as Array<any>).map(ApplicationToJSON)),
     };
 }

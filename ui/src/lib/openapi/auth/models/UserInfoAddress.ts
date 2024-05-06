@@ -36,7 +36,7 @@ export interface UserInfoAddress {
      * @type {string}
      * @memberof UserInfoAddress
      */
-    postal_code?: string;
+    postalCode?: string;
     /**
      * 
      * @type {string}
@@ -48,7 +48,7 @@ export interface UserInfoAddress {
      * @type {string}
      * @memberof UserInfoAddress
      */
-    street_address?: string;
+    streetAddress?: string;
 }
 
 /**
@@ -70,9 +70,9 @@ export function UserInfoAddressFromJSONTyped(json: any, ignoreDiscriminator: boo
         
         'country': json['country'] == null ? undefined : json['country'],
         'locality': json['locality'] == null ? undefined : json['locality'],
-        'postal_code': json['postal_code'] == null ? undefined : json['postal_code'],
+        'postalCode': json['postal_code'] == null ? undefined : json['postal_code'],
         'region': json['region'] == null ? undefined : json['region'],
-        'street_address': json['street_address'] == null ? undefined : json['street_address'],
+        'streetAddress': json['street_address'] == null ? undefined : json['street_address'],
     };
 }
 
@@ -84,9 +84,9 @@ export function UserInfoAddressToJSON(value?: UserInfoAddress | null): any {
         
         'country': value['country'],
         'locality': value['locality'],
-        'postal_code': value['postal_code'],
+        'postal_code': value['postalCode'],
         'region': value['region'],
-        'street_address': value['street_address'],
+        'street_address': value['streetAddress'],
     };
 }
 

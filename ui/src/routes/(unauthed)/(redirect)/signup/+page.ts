@@ -6,7 +6,7 @@ import { createNotification } from '$lib/stores/notifications';
 export const load: PageLoad = async (event) => {
 	const { openIDConfiguration } = await event.parent();
 
-	if (!openIDConfiguration?.grant_types_supported.includes('password')) {
+	if (!openIDConfiguration?.grantTypesSupported.includes('password')) {
 		createNotification('Sign up is not enabled.');
 		redirect(302, `${base}/signin`);
 	} else {

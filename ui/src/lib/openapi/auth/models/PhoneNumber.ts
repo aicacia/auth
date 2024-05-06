@@ -24,7 +24,7 @@ export interface PhoneNumber {
      * @type {number}
      * @memberof PhoneNumber
      */
-    application_id: number;
+    applicationId: number;
     /**
      * 
      * @type {boolean}
@@ -36,7 +36,7 @@ export interface PhoneNumber {
      * @type {Date}
      * @memberof PhoneNumber
      */
-    created_at: Date;
+    createdAt: Date;
     /**
      * 
      * @type {number}
@@ -48,25 +48,25 @@ export interface PhoneNumber {
      * @type {string}
      * @memberof PhoneNumber
      */
-    phone_number: string;
+    phoneNumber: string;
     /**
      * 
      * @type {Date}
      * @memberof PhoneNumber
      */
-    updated_at: Date;
+    updatedAt: Date;
 }
 
 /**
  * Check if a given object implements the PhoneNumber interface.
  */
 export function instanceOfPhoneNumber(value: object): boolean {
-    if (!('application_id' in value)) return false;
+    if (!('applicationId' in value)) return false;
     if (!('confirmed' in value)) return false;
-    if (!('created_at' in value)) return false;
+    if (!('createdAt' in value)) return false;
     if (!('id' in value)) return false;
-    if (!('phone_number' in value)) return false;
-    if (!('updated_at' in value)) return false;
+    if (!('phoneNumber' in value)) return false;
+    if (!('updatedAt' in value)) return false;
     return true;
 }
 
@@ -80,12 +80,12 @@ export function PhoneNumberFromJSONTyped(json: any, ignoreDiscriminator: boolean
     }
     return {
         
-        'application_id': json['application_id'],
+        'applicationId': json['application_id'],
         'confirmed': json['confirmed'],
-        'created_at': (new Date(json['created_at'])),
+        'createdAt': (new Date(json['created_at'])),
         'id': json['id'],
-        'phone_number': json['phone_number'],
-        'updated_at': (new Date(json['updated_at'])),
+        'phoneNumber': json['phone_number'],
+        'updatedAt': (new Date(json['updated_at'])),
     };
 }
 
@@ -95,12 +95,12 @@ export function PhoneNumberToJSON(value?: PhoneNumber | null): any {
     }
     return {
         
-        'application_id': value['application_id'],
+        'application_id': value['applicationId'],
         'confirmed': value['confirmed'],
-        'created_at': ((value['created_at']).toISOString()),
+        'created_at': ((value['createdAt']).toISOString()),
         'id': value['id'],
-        'phone_number': value['phone_number'],
-        'updated_at': ((value['updated_at']).toISOString()),
+        'phone_number': value['phoneNumber'],
+        'updated_at': ((value['updatedAt']).toISOString()),
     };
 }
 

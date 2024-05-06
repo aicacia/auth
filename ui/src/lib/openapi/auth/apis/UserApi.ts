@@ -502,7 +502,7 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
         }
 
         const response = await this.request({
-            path: `/users/{userId}/emails/{id}/confirm`.replace(`{${"applicationId"}}`, encodeURIComponent(String(requestParameters['applicationId']))).replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/applications/{applicationId}/users/{userId}/emails/{id}/confirm`.replace(`{${"applicationId"}}`, encodeURIComponent(String(requestParameters['applicationId']))).replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
@@ -563,7 +563,7 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
         }
 
         const response = await this.request({
-            path: `/users/{userId}/phone-numbers/{id}/confirm`.replace(`{${"applicationId"}}`, encodeURIComponent(String(requestParameters['applicationId']))).replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/applications/{applicationId}/users/{userId}/phone-numbers/{id}/confirm`.replace(`{${"applicationId"}}`, encodeURIComponent(String(requestParameters['applicationId']))).replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
@@ -617,7 +617,7 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
         }
 
         const response = await this.request({
-            path: `/users/{userId}/emails`.replace(`{${"applicationId"}}`, encodeURIComponent(String(requestParameters['applicationId']))).replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))),
+            path: `/applications/{applicationId}/users/{userId}/emails`.replace(`{${"applicationId"}}`, encodeURIComponent(String(requestParameters['applicationId']))).replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -671,7 +671,7 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
         }
 
         const response = await this.request({
-            path: `/users/{userId}/phone-numbers`.replace(`{${"applicationId"}}`, encodeURIComponent(String(requestParameters['applicationId']))).replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))),
+            path: `/applications/{applicationId}/users/{userId}/phone-numbers`.replace(`{${"applicationId"}}`, encodeURIComponent(String(requestParameters['applicationId']))).replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -770,7 +770,7 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
         }
 
         const response = await this.request({
-            path: `/users/{userId}/emails/{id}`.replace(`{${"applicationId"}}`, encodeURIComponent(String(requestParameters['applicationId']))).replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/applications/{applicationId}/users/{userId}/emails/{id}`.replace(`{${"applicationId"}}`, encodeURIComponent(String(requestParameters['applicationId']))).replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -820,7 +820,7 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
         }
 
         const response = await this.request({
-            path: `/users/{userId}/phone-numbers/{id}`.replace(`{${"applicationId"}}`, encodeURIComponent(String(requestParameters['applicationId']))).replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/applications/{applicationId}/users/{userId}/phone-numbers/{id}`.replace(`{${"applicationId"}}`, encodeURIComponent(String(requestParameters['applicationId']))).replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -957,7 +957,7 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
         }
 
         const response = await this.request({
-            path: `/users/{userId}/emails/{id}/send-confirmation`.replace(`{${"applicationId"}}`, encodeURIComponent(String(requestParameters['applicationId']))).replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/applications/{applicationId}/users/{userId}/emails/{id}/send-confirmation`.replace(`{${"applicationId"}}`, encodeURIComponent(String(requestParameters['applicationId']))).replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
@@ -1007,7 +1007,7 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
         }
 
         const response = await this.request({
-            path: `/users/{userId}/phone-numbers/{id}/send-confirmation`.replace(`{${"applicationId"}}`, encodeURIComponent(String(requestParameters['applicationId']))).replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/applications/{applicationId}/users/{userId}/phone-numbers/{id}/send-confirmation`.replace(`{${"applicationId"}}`, encodeURIComponent(String(requestParameters['applicationId']))).replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
@@ -1057,7 +1057,7 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
         }
 
         const response = await this.request({
-            path: `/users/{userId}/emails/{id}/set-primary`.replace(`{${"applicationId"}}`, encodeURIComponent(String(requestParameters['applicationId']))).replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/applications/{applicationId}/users/{userId}/emails/{id}/set-primary`.replace(`{${"applicationId"}}`, encodeURIComponent(String(requestParameters['applicationId']))).replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,
@@ -1107,7 +1107,7 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
         }
 
         const response = await this.request({
-            path: `/users/{userId}/phone-numbers/{id}/set-primary`.replace(`{${"applicationId"}}`, encodeURIComponent(String(requestParameters['applicationId']))).replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            path: `/applications/{applicationId}/users/{userId}/phone-numbers/{id}/set-primary`.replace(`{${"applicationId"}}`, encodeURIComponent(String(requestParameters['applicationId']))).replace(`{${"userId"}}`, encodeURIComponent(String(requestParameters['userId']))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
             method: 'PATCH',
             headers: headerParameters,
             query: queryParameters,

@@ -27,7 +27,7 @@ import (
 //	@Failure		401	{object}	model.ErrorST
 //	@Failure		403	{object}	model.ErrorST
 //	@Failure		500	{object}	model.ErrorST
-//	@Router			/users/{userId}/emails/{id}/send-confirmation [patch]
+//	@Router			/applications/{applicationId}/users/{userId}/emails/{id}/send-confirmation [patch]
 //
 //	@Security		Authorization
 func PatchUserEmailSendConfirmation(c *fiber.Ctx) error {
@@ -77,7 +77,7 @@ func PatchUserEmailSendConfirmation(c *fiber.Ctx) error {
 //	@Failure		401	{object}	model.ErrorST
 //	@Failure		403	{object}	model.ErrorST
 //	@Failure		500	{object}	model.ErrorST
-//	@Router			/users/{userId}/emails/{id}/confirm [patch]
+//	@Router			/applications/{applicationId}/users/{userId}/emails/{id}/confirm [patch]
 //
 //	@Security		Authorization
 func PatchUserEmailConfirm(c *fiber.Ctx) error {
@@ -124,7 +124,7 @@ func PatchUserEmailConfirm(c *fiber.Ctx) error {
 //	@Failure		401	{object}	model.ErrorST
 //	@Failure		403	{object}	model.ErrorST
 //	@Failure		500	{object}	model.ErrorST
-//	@Router			/users/{userId}/emails/{id}/set-primary [patch]
+//	@Router			/applications/{applicationId}/users/{userId}/emails/{id}/set-primary [patch]
 //
 //	@Security		Authorization
 func PatchUserEmailSetPrimary(c *fiber.Ctx) error {
@@ -167,7 +167,7 @@ func PatchUserEmailSetPrimary(c *fiber.Ctx) error {
 //	@Failure		401	{object}	model.ErrorST
 //	@Failure		403	{object}	model.ErrorST
 //	@Failure		500	{object}	model.ErrorST
-//	@Router			/users/{userId}/emails [post]
+//	@Router			/applications/{applicationId}/users/{userId}/emails [post]
 //
 //	@Security		Authorization
 func PostUserCreateEmail(c *fiber.Ctx) error {
@@ -218,7 +218,7 @@ func PostUserCreateEmail(c *fiber.Ctx) error {
 //	@Failure		401	{object}	model.ErrorST
 //	@Failure		403	{object}	model.ErrorST
 //	@Failure		500	{object}	model.ErrorST
-//	@Router			/users/{userId}/emails/{id} [delete]
+//	@Router			/applications/{applicationId}/users/{userId}/emails/{id} [delete]
 //
 //	@Security		Authorization
 func DeleteUserEmail(c *fiber.Ctx) error {

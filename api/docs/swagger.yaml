@@ -1644,6 +1644,498 @@ paths:
       summary: Updates the user's info
       tags:
       - user
+  /applications/{applicationId}/users/{userId}/emails:
+    post:
+      consumes:
+      - application/json
+      operationId: create-email
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: user id
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: update email
+        in: body
+        name: createEmail
+        required: true
+        schema:
+          $ref: '#/definitions/CreateEmail'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/Email'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Create user email
+      tags:
+      - user
+  /applications/{applicationId}/users/{userId}/emails/{id}:
+    delete:
+      consumes:
+      - application/json
+      operationId: delete-email
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: user id
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: email id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Delete user email
+      tags:
+      - user
+  /applications/{applicationId}/users/{userId}/emails/{id}/confirm:
+    patch:
+      consumes:
+      - application/json
+      operationId: confirm-email
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: user id
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: email id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: email confirmation
+        in: body
+        name: confirmEmail
+        required: true
+        schema:
+          $ref: '#/definitions/ConfirmEmail'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Email'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Confirm email with token
+      tags:
+      - user
+  /applications/{applicationId}/users/{userId}/emails/{id}/send-confirmation:
+    patch:
+      consumes:
+      - application/json
+      operationId: send-confirmation-to-email
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: user id
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: email id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Send confirmation token to user email
+      tags:
+      - user
+  /applications/{applicationId}/users/{userId}/emails/{id}/set-primary:
+    patch:
+      consumes:
+      - application/json
+      operationId: set-primary-email
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: user id
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: email id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Set a confirmed email to primary
+      tags:
+      - user
+  /applications/{applicationId}/users/{userId}/phone-numbers:
+    post:
+      consumes:
+      - application/json
+      operationId: create-phone-number
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: user id
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: update phone_number
+        in: body
+        name: createPhoneNumber
+        required: true
+        schema:
+          $ref: '#/definitions/CreatePhoneNumber'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/PhoneNumber'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Create user phone number
+      tags:
+      - user
+  /applications/{applicationId}/users/{userId}/phone-numbers/{id}:
+    delete:
+      consumes:
+      - application/json
+      operationId: delete-phone-number
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: user id
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: phone_number id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Delete user phone number
+      tags:
+      - user
+  /applications/{applicationId}/users/{userId}/phone-numbers/{id}/confirm:
+    patch:
+      consumes:
+      - application/json
+      operationId: confirm-phone-number
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: user id
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: phone_number id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: phone_number confirmation
+        in: body
+        name: confirmPhoneNumber
+        required: true
+        schema:
+          $ref: '#/definitions/ConfirmPhoneNumber'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/PhoneNumber'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Confirm phone_number with token
+      tags:
+      - user
+  /applications/{applicationId}/users/{userId}/phone-numbers/{id}/send-confirmation:
+    patch:
+      consumes:
+      - application/json
+      operationId: send-confirmation-to-phone-number
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: user id
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: phone_number id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Send confirmation token to user phone_number
+      tags:
+      - user
+  /applications/{applicationId}/users/{userId}/phone-numbers/{id}/set-primary:
+    patch:
+      consumes:
+      - application/json
+      operationId: set-primary-phone-number
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: user id
+        in: path
+        name: userId
+        required: true
+        type: integer
+      - description: email id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Set a confirmed phone to primary
+      tags:
+      - user
   /applications/{id}:
     delete:
       consumes:
@@ -2042,498 +2534,6 @@ paths:
       summary: Resets a user's password
       tags:
       - current-user
-  /users/{userId}/emails:
-    post:
-      consumes:
-      - application/json
-      operationId: create-email
-      parameters:
-      - description: application id
-        in: path
-        name: applicationId
-        required: true
-        type: integer
-      - description: user id
-        in: path
-        name: userId
-        required: true
-        type: integer
-      - description: update email
-        in: body
-        name: createEmail
-        required: true
-        schema:
-          $ref: '#/definitions/CreateEmail'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/Email'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/Errors'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/Errors'
-        "403":
-          description: Forbidden
-          schema:
-            $ref: '#/definitions/Errors'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/Errors'
-      security:
-      - Authorization: []
-      summary: Create user email
-      tags:
-      - user
-  /users/{userId}/emails/{id}:
-    delete:
-      consumes:
-      - application/json
-      operationId: delete-email
-      parameters:
-      - description: application id
-        in: path
-        name: applicationId
-        required: true
-        type: integer
-      - description: user id
-        in: path
-        name: userId
-        required: true
-        type: integer
-      - description: email id
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/Errors'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/Errors'
-        "403":
-          description: Forbidden
-          schema:
-            $ref: '#/definitions/Errors'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/Errors'
-      security:
-      - Authorization: []
-      summary: Delete user email
-      tags:
-      - user
-  /users/{userId}/emails/{id}/confirm:
-    patch:
-      consumes:
-      - application/json
-      operationId: confirm-email
-      parameters:
-      - description: application id
-        in: path
-        name: applicationId
-        required: true
-        type: integer
-      - description: user id
-        in: path
-        name: userId
-        required: true
-        type: integer
-      - description: email id
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: email confirmation
-        in: body
-        name: confirmEmail
-        required: true
-        schema:
-          $ref: '#/definitions/ConfirmEmail'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/Email'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/Errors'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/Errors'
-        "403":
-          description: Forbidden
-          schema:
-            $ref: '#/definitions/Errors'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/Errors'
-      security:
-      - Authorization: []
-      summary: Confirm email with token
-      tags:
-      - user
-  /users/{userId}/emails/{id}/send-confirmation:
-    patch:
-      consumes:
-      - application/json
-      operationId: send-confirmation-to-email
-      parameters:
-      - description: application id
-        in: path
-        name: applicationId
-        required: true
-        type: integer
-      - description: user id
-        in: path
-        name: userId
-        required: true
-        type: integer
-      - description: email id
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/Errors'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/Errors'
-        "403":
-          description: Forbidden
-          schema:
-            $ref: '#/definitions/Errors'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/Errors'
-      security:
-      - Authorization: []
-      summary: Send confirmation token to user email
-      tags:
-      - user
-  /users/{userId}/emails/{id}/set-primary:
-    patch:
-      consumes:
-      - application/json
-      operationId: set-primary-email
-      parameters:
-      - description: application id
-        in: path
-        name: applicationId
-        required: true
-        type: integer
-      - description: user id
-        in: path
-        name: userId
-        required: true
-        type: integer
-      - description: email id
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/Errors'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/Errors'
-        "403":
-          description: Forbidden
-          schema:
-            $ref: '#/definitions/Errors'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/Errors'
-      security:
-      - Authorization: []
-      summary: Set a confirmed email to primary
-      tags:
-      - user
-  /users/{userId}/phone-numbers:
-    post:
-      consumes:
-      - application/json
-      operationId: create-phone-number
-      parameters:
-      - description: application id
-        in: path
-        name: applicationId
-        required: true
-        type: integer
-      - description: user id
-        in: path
-        name: userId
-        required: true
-        type: integer
-      - description: update phone_number
-        in: body
-        name: createPhoneNumber
-        required: true
-        schema:
-          $ref: '#/definitions/CreatePhoneNumber'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            $ref: '#/definitions/PhoneNumber'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/Errors'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/Errors'
-        "403":
-          description: Forbidden
-          schema:
-            $ref: '#/definitions/Errors'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/Errors'
-      security:
-      - Authorization: []
-      summary: Create user phone number
-      tags:
-      - user
-  /users/{userId}/phone-numbers/{id}:
-    delete:
-      consumes:
-      - application/json
-      operationId: delete-phone-number
-      parameters:
-      - description: application id
-        in: path
-        name: applicationId
-        required: true
-        type: integer
-      - description: user id
-        in: path
-        name: userId
-        required: true
-        type: integer
-      - description: phone_number id
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/Errors'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/Errors'
-        "403":
-          description: Forbidden
-          schema:
-            $ref: '#/definitions/Errors'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/Errors'
-      security:
-      - Authorization: []
-      summary: Delete user phone number
-      tags:
-      - user
-  /users/{userId}/phone-numbers/{id}/confirm:
-    patch:
-      consumes:
-      - application/json
-      operationId: confirm-phone-number
-      parameters:
-      - description: application id
-        in: path
-        name: applicationId
-        required: true
-        type: integer
-      - description: user id
-        in: path
-        name: userId
-        required: true
-        type: integer
-      - description: phone_number id
-        in: path
-        name: id
-        required: true
-        type: integer
-      - description: phone_number confirmation
-        in: body
-        name: confirmPhoneNumber
-        required: true
-        schema:
-          $ref: '#/definitions/ConfirmPhoneNumber'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/PhoneNumber'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/Errors'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/Errors'
-        "403":
-          description: Forbidden
-          schema:
-            $ref: '#/definitions/Errors'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/Errors'
-      security:
-      - Authorization: []
-      summary: Confirm phone_number with token
-      tags:
-      - user
-  /users/{userId}/phone-numbers/{id}/send-confirmation:
-    patch:
-      consumes:
-      - application/json
-      operationId: send-confirmation-to-phone-number
-      parameters:
-      - description: application id
-        in: path
-        name: applicationId
-        required: true
-        type: integer
-      - description: user id
-        in: path
-        name: userId
-        required: true
-        type: integer
-      - description: phone_number id
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/Errors'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/Errors'
-        "403":
-          description: Forbidden
-          schema:
-            $ref: '#/definitions/Errors'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/Errors'
-      security:
-      - Authorization: []
-      summary: Send confirmation token to user phone_number
-      tags:
-      - user
-  /users/{userId}/phone-numbers/{id}/set-primary:
-    patch:
-      consumes:
-      - application/json
-      operationId: set-primary-phone-number
-      parameters:
-      - description: application id
-        in: path
-        name: applicationId
-        required: true
-        type: integer
-      - description: user id
-        in: path
-        name: userId
-        required: true
-        type: integer
-      - description: email id
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/Errors'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/Errors'
-        "403":
-          description: Forbidden
-          schema:
-            $ref: '#/definitions/Errors'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/Errors'
-      security:
-      - Authorization: []
-      summary: Set a confirmed phone to primary
-      tags:
-      - user
   /version:
     get:
       consumes:

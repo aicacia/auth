@@ -30,7 +30,7 @@ export interface RegistrationRequest {
      * @type {string}
      * @memberof RegistrationRequest
      */
-    password_confirmation?: string;
+    passwordConfirmation?: string;
     /**
      * 
      * @type {string}
@@ -57,7 +57,7 @@ export function RegistrationRequestFromJSONTyped(json: any, ignoreDiscriminator:
     return {
         
         'password': json['password'] == null ? undefined : json['password'],
-        'password_confirmation': json['password_confirmation'] == null ? undefined : json['password_confirmation'],
+        'passwordConfirmation': json['password_confirmation'] == null ? undefined : json['password_confirmation'],
         'username': json['username'] == null ? undefined : json['username'],
     };
 }
@@ -69,7 +69,7 @@ export function RegistrationRequestToJSON(value?: RegistrationRequest | null): a
     return {
         
         'password': value['password'],
-        'password_confirmation': value['password_confirmation'],
+        'password_confirmation': value['passwordConfirmation'],
         'username': value['username'],
     };
 }

@@ -31,7 +31,7 @@ export interface PaginationUser {
      * @type {boolean}
      * @memberof PaginationUser
      */
-    has_more: boolean;
+    hasMore: boolean;
     /**
      * 
      * @type {Array<User>}
@@ -44,7 +44,7 @@ export interface PaginationUser {
  * Check if a given object implements the PaginationUser interface.
  */
 export function instanceOfPaginationUser(value: object): boolean {
-    if (!('has_more' in value)) return false;
+    if (!('hasMore' in value)) return false;
     if (!('items' in value)) return false;
     return true;
 }
@@ -59,7 +59,7 @@ export function PaginationUserFromJSONTyped(json: any, ignoreDiscriminator: bool
     }
     return {
         
-        'has_more': json['has_more'],
+        'hasMore': json['has_more'],
         'items': ((json['items'] as Array<any>).map(UserFromJSON)),
     };
 }
@@ -70,7 +70,7 @@ export function PaginationUserToJSON(value?: PaginationUser | null): any {
     }
     return {
         
-        'has_more': value['has_more'],
+        'has_more': value['hasMore'],
         'items': ((value['items'] as Array<any>).map(UserToJSON)),
     };
 }

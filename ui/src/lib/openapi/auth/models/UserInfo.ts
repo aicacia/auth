@@ -43,13 +43,13 @@ export interface UserInfo {
      * @type {Date}
      * @memberof UserInfo
      */
-    created_at: Date;
+    createdAt: Date;
     /**
      * 
      * @type {string}
      * @memberof UserInfo
      */
-    family_name?: string;
+    familyName?: string;
     /**
      * 
      * @type {string}
@@ -61,7 +61,7 @@ export interface UserInfo {
      * @type {string}
      * @memberof UserInfo
      */
-    given_name?: string;
+    givenName?: string;
     /**
      * 
      * @type {string}
@@ -73,7 +73,7 @@ export interface UserInfo {
      * @type {string}
      * @memberof UserInfo
      */
-    middle_name?: string;
+    middleName?: string;
     /**
      * 
      * @type {string}
@@ -97,7 +97,7 @@ export interface UserInfo {
      * @type {string}
      * @memberof UserInfo
      */
-    preferred_username: string;
+    preferredUsername: string;
     /**
      * 
      * @type {string}
@@ -109,13 +109,13 @@ export interface UserInfo {
      * @type {Date}
      * @memberof UserInfo
      */
-    updated_at: Date;
+    updatedAt: Date;
     /**
      * 
      * @type {number}
      * @memberof UserInfo
      */
-    user_id: number;
+    userId: number;
     /**
      * 
      * @type {string}
@@ -134,10 +134,10 @@ export interface UserInfo {
  * Check if a given object implements the UserInfo interface.
  */
 export function instanceOfUserInfo(value: object): boolean {
-    if (!('created_at' in value)) return false;
-    if (!('preferred_username' in value)) return false;
-    if (!('updated_at' in value)) return false;
-    if (!('user_id' in value)) return false;
+    if (!('createdAt' in value)) return false;
+    if (!('preferredUsername' in value)) return false;
+    if (!('updatedAt' in value)) return false;
+    if (!('userId' in value)) return false;
     return true;
 }
 
@@ -153,19 +153,19 @@ export function UserInfoFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         
         'address': json['address'] == null ? undefined : UserInfoAddressFromJSON(json['address']),
         'birthdate': json['birthdate'] == null ? undefined : (new Date(json['birthdate'])),
-        'created_at': (new Date(json['created_at'])),
-        'family_name': json['family_name'] == null ? undefined : json['family_name'],
+        'createdAt': (new Date(json['created_at'])),
+        'familyName': json['family_name'] == null ? undefined : json['family_name'],
         'gender': json['gender'] == null ? undefined : json['gender'],
-        'given_name': json['given_name'] == null ? undefined : json['given_name'],
+        'givenName': json['given_name'] == null ? undefined : json['given_name'],
         'locale': json['locale'] == null ? undefined : json['locale'],
-        'middle_name': json['middle_name'] == null ? undefined : json['middle_name'],
+        'middleName': json['middle_name'] == null ? undefined : json['middle_name'],
         'name': json['name'] == null ? undefined : json['name'],
         'nickname': json['nickname'] == null ? undefined : json['nickname'],
         'picture': json['picture'] == null ? undefined : json['picture'],
-        'preferred_username': json['preferred_username'],
+        'preferredUsername': json['preferred_username'],
         'profile': json['profile'] == null ? undefined : json['profile'],
-        'updated_at': (new Date(json['updated_at'])),
-        'user_id': json['user_id'],
+        'updatedAt': (new Date(json['updated_at'])),
+        'userId': json['user_id'],
         'website': json['website'] == null ? undefined : json['website'],
         'zoneinfo': json['zoneinfo'] == null ? undefined : json['zoneinfo'],
     };
@@ -179,19 +179,19 @@ export function UserInfoToJSON(value?: UserInfo | null): any {
         
         'address': UserInfoAddressToJSON(value['address']),
         'birthdate': value['birthdate'] == null ? undefined : ((value['birthdate']).toISOString()),
-        'created_at': ((value['created_at']).toISOString()),
-        'family_name': value['family_name'],
+        'created_at': ((value['createdAt']).toISOString()),
+        'family_name': value['familyName'],
         'gender': value['gender'],
-        'given_name': value['given_name'],
+        'given_name': value['givenName'],
         'locale': value['locale'],
-        'middle_name': value['middle_name'],
+        'middle_name': value['middleName'],
         'name': value['name'],
         'nickname': value['nickname'],
         'picture': value['picture'],
-        'preferred_username': value['preferred_username'],
+        'preferred_username': value['preferredUsername'],
         'profile': value['profile'],
-        'updated_at': ((value['updated_at']).toISOString()),
-        'user_id': value['user_id'],
+        'updated_at': ((value['updatedAt']).toISOString()),
+        'user_id': value['userId'],
         'website': value['website'],
         'zoneinfo': value['zoneinfo'],
     };

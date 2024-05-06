@@ -18,7 +18,7 @@
 		"android:build": "tauri android build",
 		"ios": "tauri ios dev --open",
 		"ios:build": "tauri ios build",
-		"openapi": "rm -rf src/lib/openapi/auth && openapi-generator-cli generate -i http://localhost:3000/openapi.json -g typescript-fetch -o 'src/lib/openapi/auth' --type-mappings=DateTime=Date --additional-properties=modelPropertyNaming=snake_case,supportsES6=true,withInterfaces=true,useSingleRequestParameter=false",
+		"openapi": "rm -rf src/lib/openapi/auth && openapi-generator-cli generate -i http://localhost:3000/openapi.json -g typescript-fetch -o 'src/lib/openapi/auth' --type-mappings=DateTime=Date --additional-properties=supportsES6=true,withInterfaces=true,useSingleRequestParameter=false",
 		"test": "npm run test:integration && npm run test:unit run",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",

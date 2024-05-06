@@ -99,7 +99,7 @@
 </script>
 
 <div
-	class="absolute z-[1001] max-h-full max-w-full border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 shadow-md transition-transform duration-75 focus:outline-none"
+	class="flex flex-col absolute z-[1001] max-h-full max-w-full border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 shadow-md transition-transform duration-75 focus:outline-none"
 	bind:this={child}
 	bind:offsetWidth
 	use:clickoutside={{ event: 'pointerdown', enabled: closeOnClickOutside }}

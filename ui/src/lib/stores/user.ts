@@ -50,23 +50,18 @@ export function getCurrentUser() {
 
 export async function signIn(usernameOrEmail: string, password: string) {
 	const token = await tokenApi.createToken({
-		grant_type: 'password',
+		grantType: 'password',
 		username: usernameOrEmail,
 		password
 	});
 	return signInWithToken(token);
 }
 
-export async function signUp(
-	username: string,
-	password: string,
-	passwordConfirmation: string,
-	email: string
-) {
+export async function signUp(username: string, password: string, passwordConfirmation: string) {
 	const token = await registrationApi.registerUser({
 		username,
 		password,
-		password_confirmation: passwordConfirmation
+		passwordConfirmation: passwordConfirmation
 	});
 	return signInWithToken(token);
 }

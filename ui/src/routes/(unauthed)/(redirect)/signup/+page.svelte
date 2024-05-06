@@ -91,7 +91,7 @@
 			loading = true;
 			validateAll();
 			if (result.isValid()) {
-				await signUp(username, password, passwordConfirmation, email);
+				await signUp(username, password, passwordConfirmation);
 				await goto(`${base}/`);
 			}
 		} catch (error) {

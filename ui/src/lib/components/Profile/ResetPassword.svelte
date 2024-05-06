@@ -79,7 +79,7 @@
 			if (result.isValid()) {
 				await currentUserApi.resetPassword({
 					password,
-					password_confirmation: passwordConfirmation
+					passwordConfirmation: passwordConfirmation
 				});
 				password = '';
 				passwordConfirmation = '';
@@ -95,7 +95,6 @@
 	}
 </script>
 
-<h3 class="mb-1">{$LL.auth.resetPassword()}</h3>
 <form on:submit|preventDefault={onSubmit}>
 	<div class="mb-2">
 		<input

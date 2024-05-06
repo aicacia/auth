@@ -24,7 +24,7 @@ export interface Email {
      * @type {number}
      * @memberof Email
      */
-    application_id: number;
+    applicationId: number;
     /**
      * 
      * @type {boolean}
@@ -36,7 +36,7 @@ export interface Email {
      * @type {Date}
      * @memberof Email
      */
-    created_at: Date;
+    createdAt: Date;
     /**
      * 
      * @type {string}
@@ -54,19 +54,19 @@ export interface Email {
      * @type {Date}
      * @memberof Email
      */
-    updated_at: Date;
+    updatedAt: Date;
 }
 
 /**
  * Check if a given object implements the Email interface.
  */
 export function instanceOfEmail(value: object): boolean {
-    if (!('application_id' in value)) return false;
+    if (!('applicationId' in value)) return false;
     if (!('confirmed' in value)) return false;
-    if (!('created_at' in value)) return false;
+    if (!('createdAt' in value)) return false;
     if (!('email' in value)) return false;
     if (!('id' in value)) return false;
-    if (!('updated_at' in value)) return false;
+    if (!('updatedAt' in value)) return false;
     return true;
 }
 
@@ -80,12 +80,12 @@ export function EmailFromJSONTyped(json: any, ignoreDiscriminator: boolean): Ema
     }
     return {
         
-        'application_id': json['application_id'],
+        'applicationId': json['application_id'],
         'confirmed': json['confirmed'],
-        'created_at': (new Date(json['created_at'])),
+        'createdAt': (new Date(json['created_at'])),
         'email': json['email'],
         'id': json['id'],
-        'updated_at': (new Date(json['updated_at'])),
+        'updatedAt': (new Date(json['updated_at'])),
     };
 }
 
@@ -95,12 +95,12 @@ export function EmailToJSON(value?: Email | null): any {
     }
     return {
         
-        'application_id': value['application_id'],
+        'application_id': value['applicationId'],
         'confirmed': value['confirmed'],
-        'created_at': ((value['created_at']).toISOString()),
+        'created_at': ((value['createdAt']).toISOString()),
         'email': value['email'],
         'id': value['id'],
-        'updated_at': ((value['updated_at']).toISOString()),
+        'updated_at': ((value['updatedAt']).toISOString()),
     };
 }
 

@@ -24,7 +24,7 @@
 
 	export let data: PageData;
 
-	let hasMore = data.pagination.has_more;
+	let hasMore = data.pagination.hasMore;
 	$: applications = data.pagination.items;
 
 	let filtered = new Set<number>();

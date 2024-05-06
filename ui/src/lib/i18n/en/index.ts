@@ -60,6 +60,7 @@ const en = {
 		title: 'Profile',
 		updateUsername: 'Update Username',
 		submitUpdateUsername: 'Update',
+		updateEmails: 'Update Emails',
 		notification: {
 			usernameChangedSuccess: 'Username changed',
 			passwordResetSuccess: 'Your Password has been reset.'
@@ -87,7 +88,22 @@ const en = {
 		}
 	},
 	users: {
-		title: 'Users'
+		title: 'Users',
+		id: 'Id',
+		username: 'Username',
+		email: 'Email',
+		phoneNumber: 'Phone Number',
+		edit: {
+			title: 'Edit User',
+			button: 'Edit'
+		},
+		delete: {
+			button: 'Delete',
+			confirmTitle: 'Delete User?',
+			confirmMessage:
+				'This operation is permanent and will delete evenything associated with user.',
+			confirm: 'Delete'
+		}
 	},
 	permissions: {
 		title: 'Permissions'
@@ -107,6 +123,10 @@ const en = {
 		title: 'Health',
 		header: 'Health Check',
 		body: 'Healthy'
+	},
+	common: {
+		updatedAt: 'Updated at',
+		createdAt: 'Created at'
 	}
 } satisfies BaseTranslation;
 

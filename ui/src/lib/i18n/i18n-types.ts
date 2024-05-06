@@ -201,6 +201,10 @@ type RootTranslation = {
 		 * U​p​d​a​t​e
 		 */
 		submitUpdateUsername: string
+		/**
+		 * U​p​d​a​t​e​ ​E​m​a​i​l​s
+		 */
+		updateEmails: string
 		notification: {
 			/**
 			 * U​s​e​r​n​a​m​e​ ​c​h​a​n​g​e​d
@@ -280,6 +284,50 @@ type RootTranslation = {
 		 * U​s​e​r​s
 		 */
 		title: string
+		/**
+		 * I​d
+		 */
+		id: string
+		/**
+		 * U​s​e​r​n​a​m​e
+		 */
+		username: string
+		/**
+		 * E​m​a​i​l
+		 */
+		email: string
+		/**
+		 * P​h​o​n​e​ ​N​u​m​b​e​r
+		 */
+		phoneNumber: string
+		edit: {
+			/**
+			 * E​d​i​t​ ​U​s​e​r
+			 */
+			title: string
+			/**
+			 * E​d​i​t
+			 */
+			button: string
+		}
+		'delete': {
+			/**
+			 * D​e​l​e​t​e
+			 */
+			button: string
+			/**
+			 * D​e​l​e​t​e​ ​U​s​e​r​?
+			 */
+			confirmTitle: string
+			/**
+			 * T​h​i​s​ ​o​p​e​r​a​t​i​o​n​ ​i​s​ ​p​e​r​m​a​n​e​n​t​ ​a​n​d​ ​w​i​l​l​ ​d​e​l​e​t​e​ ​e​v​e​n​y​t​h​i​n​g​ ​a​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​u​s​e​r​.
+			 */
+			confirmMessage: string
+			/**
+			 * D​e​l​e​t​e
+			 */
+			confirm: string
+		}
 	}
 	permissions: {
 		/**
@@ -327,6 +375,16 @@ type RootTranslation = {
 		 * H​e​a​l​t​h​y
 		 */
 		body: string
+	}
+	common: {
+		/**
+		 * U​p​d​a​t​e​d​ ​a​t
+		 */
+		updatedAt: string
+		/**
+		 * C​r​e​a​t​e​d​ ​a​t
+		 */
+		createdAt: string
 	}
 }
 
@@ -516,6 +574,10 @@ export type TranslationFunctions = {
 		 * Update
 		 */
 		submitUpdateUsername: () => LocalizedString
+		/**
+		 * Update Emails
+		 */
+		updateEmails: () => LocalizedString
 		notification: {
 			/**
 			 * Username changed
@@ -594,6 +656,50 @@ export type TranslationFunctions = {
 		 * Users
 		 */
 		title: () => LocalizedString
+		/**
+		 * Id
+		 */
+		id: () => LocalizedString
+		/**
+		 * Username
+		 */
+		username: () => LocalizedString
+		/**
+		 * Email
+		 */
+		email: () => LocalizedString
+		/**
+		 * Phone Number
+		 */
+		phoneNumber: () => LocalizedString
+		edit: {
+			/**
+			 * Edit User
+			 */
+			title: () => LocalizedString
+			/**
+			 * Edit
+			 */
+			button: () => LocalizedString
+		}
+		'delete': {
+			/**
+			 * Delete
+			 */
+			button: () => LocalizedString
+			/**
+			 * Delete User?
+			 */
+			confirmTitle: () => LocalizedString
+			/**
+			 * This operation is permanent and will delete evenything associated with user.
+			 */
+			confirmMessage: () => LocalizedString
+			/**
+			 * Delete
+			 */
+			confirm: () => LocalizedString
+		}
 	}
 	permissions: {
 		/**
@@ -640,6 +746,16 @@ export type TranslationFunctions = {
 		 * Healthy
 		 */
 		body: () => LocalizedString
+	}
+	common: {
+		/**
+		 * Updated at
+		 */
+		updatedAt: () => LocalizedString
+		/**
+		 * Created at
+		 */
+		createdAt: () => LocalizedString
 	}
 }
 

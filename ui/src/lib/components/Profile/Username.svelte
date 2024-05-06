@@ -30,16 +30,12 @@
 	import { handleError } from '$lib/errors';
 	import { debounce } from '@aicacia/debounce';
 	import InputResults from '$lib/components/InputResults.svelte';
-	import { createNotification } from '$lib/stores/notifications';
 	import type { User } from '$lib/openapi/auth';
-	import { currentUserApi } from '$lib/openapi';
-	import { invalidateAll } from '$app/navigation';
-	import { updateCurrentUser } from '$lib/stores/user';
 	import type { TranslationFunctions } from '$lib/i18n/i18n-types';
 	import LL from '$lib/i18n/i18n-svelte';
-	import { get } from 'svelte/store';
 
 	export let user: User;
+	export let onUpdate: (username: string) => Promise<void>;
 
 	$: initialUsername = user.username;
 	$: username = initialUsername;
@@ -79,13 +75,9 @@
 			loading = true;
 			validateAll();
 			if (result.isValid()) {
-				await currentUserApi.updateUsername({ username });
-				user.username = username;
-				updateCurrentUser(user);
+				await onUpdate(username);
 				suite.reset();
 				result = suite.get();
-				createNotification(get(LL).profile.notification.usernameChangedSuccess(), 'success');
-				await invalidateAll();
 			}
 		} catch (error) {
 			await handleError(error);
@@ -95,7 +87,6 @@
 	}
 </script>
 
-<h3 class="mb-1">{$LL.profile.updateUsername()}</h3>
 <form on:submit|preventDefault={onSubmit}>
 	<div class="mb-2">
 		<input

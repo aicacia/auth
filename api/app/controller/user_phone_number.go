@@ -27,7 +27,7 @@ import (
 //	@Failure		401	{object}	model.ErrorST
 //	@Failure		403	{object}	model.ErrorST
 //	@Failure		500	{object}	model.ErrorST
-//	@Router			/users/{userId}/phone-numbers/{id}/send-confirmation [patch]
+//	@Router			/applications/{applicationId}/users/{userId}/phone-numbers/{id}/send-confirmation [patch]
 //
 //	@Security		Authorization
 func PatchUserPhoneNumberSendConfirmation(c *fiber.Ctx) error {
@@ -77,7 +77,7 @@ func PatchUserPhoneNumberSendConfirmation(c *fiber.Ctx) error {
 //	@Failure		401	{object}	model.ErrorST
 //	@Failure		403	{object}	model.ErrorST
 //	@Failure		500	{object}	model.ErrorST
-//	@Router			/users/{userId}/phone-numbers/{id}/confirm [patch]
+//	@Router			/applications/{applicationId}/users/{userId}/phone-numbers/{id}/confirm [patch]
 //
 //	@Security		Authorization
 func PatchUserPhoneNumberConfirm(c *fiber.Ctx) error {
@@ -124,7 +124,7 @@ func PatchUserPhoneNumberConfirm(c *fiber.Ctx) error {
 //	@Failure		401	{object}	model.ErrorST
 //	@Failure		403	{object}	model.ErrorST
 //	@Failure		500	{object}	model.ErrorST
-//	@Router			/users/{userId}/phone-numbers/{id}/set-primary [patch]
+//	@Router			/applications/{applicationId}/users/{userId}/phone-numbers/{id}/set-primary [patch]
 //
 //	@Security		Authorization
 func PatchUserPhoneNumberSetPrimary(c *fiber.Ctx) error {
@@ -167,7 +167,7 @@ func PatchUserPhoneNumberSetPrimary(c *fiber.Ctx) error {
 //	@Failure		401	{object}	model.ErrorST
 //	@Failure		403	{object}	model.ErrorST
 //	@Failure		500	{object}	model.ErrorST
-//	@Router			/users/{userId}/phone-numbers [post]
+//	@Router			/applications/{applicationId}/users/{userId}/phone-numbers [post]
 //
 //	@Security		Authorization
 func PostUserCreatePhoneNumber(c *fiber.Ctx) error {
@@ -218,7 +218,7 @@ func PostUserCreatePhoneNumber(c *fiber.Ctx) error {
 //	@Failure		401	{object}	model.ErrorST
 //	@Failure		403	{object}	model.ErrorST
 //	@Failure		500	{object}	model.ErrorST
-//	@Router			/users/{userId}/phone-numbers/{id} [delete]
+//	@Router			/applications/{applicationId}/users/{userId}/phone-numbers/{id} [delete]
 //
 //	@Security		Authorization
 func DeleteUserPhoneNumber(c *fiber.Ctx) error {

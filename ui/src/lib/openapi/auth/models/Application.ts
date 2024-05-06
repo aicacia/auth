@@ -24,7 +24,7 @@ export interface Application {
      * @type {Date}
      * @memberof Application
      */
-    created_at: Date;
+    createdAt: Date;
     /**
      * 
      * @type {string}
@@ -42,7 +42,7 @@ export interface Application {
      * @type {Date}
      * @memberof Application
      */
-    updated_at: Date;
+    updatedAt: Date;
     /**
      * 
      * @type {string}
@@ -61,10 +61,10 @@ export interface Application {
  * Check if a given object implements the Application interface.
  */
 export function instanceOfApplication(value: object): boolean {
-    if (!('created_at' in value)) return false;
+    if (!('createdAt' in value)) return false;
     if (!('description' in value)) return false;
     if (!('id' in value)) return false;
-    if (!('updated_at' in value)) return false;
+    if (!('updatedAt' in value)) return false;
     if (!('uri' in value)) return false;
     return true;
 }
@@ -79,10 +79,10 @@ export function ApplicationFromJSONTyped(json: any, ignoreDiscriminator: boolean
     }
     return {
         
-        'created_at': (new Date(json['created_at'])),
+        'createdAt': (new Date(json['created_at'])),
         'description': json['description'],
         'id': json['id'],
-        'updated_at': (new Date(json['updated_at'])),
+        'updatedAt': (new Date(json['updated_at'])),
         'uri': json['uri'],
         'website': json['website'] == null ? undefined : json['website'],
     };
@@ -94,10 +94,10 @@ export function ApplicationToJSON(value?: Application | null): any {
     }
     return {
         
-        'created_at': ((value['created_at']).toISOString()),
+        'created_at': ((value['createdAt']).toISOString()),
         'description': value['description'],
         'id': value['id'],
-        'updated_at': ((value['updated_at']).toISOString()),
+        'updated_at': ((value['updatedAt']).toISOString()),
         'uri': value['uri'],
         'website': value['website'],
     };

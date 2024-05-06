@@ -37,13 +37,13 @@ export interface UserWithPermissions {
      * @type {number}
      * @memberof UserWithPermissions
      */
-    application_id: number;
+    applicationId: number;
     /**
      * 
      * @type {Date}
      * @memberof UserWithPermissions
      */
-    created_at: Date;
+    createdAt: Date;
     /**
      * 
      * @type {Email}
@@ -73,19 +73,19 @@ export interface UserWithPermissions {
      * @type {PhoneNumber}
      * @memberof UserWithPermissions
      */
-    phone_number?: PhoneNumber;
+    phoneNumber?: PhoneNumber;
     /**
      * 
      * @type {Array<PhoneNumber>}
      * @memberof UserWithPermissions
      */
-    phone_numbers: Array<PhoneNumber>;
+    phoneNumbers: Array<PhoneNumber>;
     /**
      * 
      * @type {Date}
      * @memberof UserWithPermissions
      */
-    updated_at: Date;
+    updatedAt: Date;
     /**
      * 
      * @type {string}
@@ -98,13 +98,13 @@ export interface UserWithPermissions {
  * Check if a given object implements the UserWithPermissions interface.
  */
 export function instanceOfUserWithPermissions(value: object): boolean {
-    if (!('application_id' in value)) return false;
-    if (!('created_at' in value)) return false;
+    if (!('applicationId' in value)) return false;
+    if (!('createdAt' in value)) return false;
     if (!('emails' in value)) return false;
     if (!('id' in value)) return false;
     if (!('permissions' in value)) return false;
-    if (!('phone_numbers' in value)) return false;
-    if (!('updated_at' in value)) return false;
+    if (!('phoneNumbers' in value)) return false;
+    if (!('updatedAt' in value)) return false;
     if (!('username' in value)) return false;
     return true;
 }
@@ -119,15 +119,15 @@ export function UserWithPermissionsFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
-        'application_id': json['application_id'],
-        'created_at': (new Date(json['created_at'])),
+        'applicationId': json['application_id'],
+        'createdAt': (new Date(json['created_at'])),
         'email': json['email'] == null ? undefined : EmailFromJSON(json['email']),
         'emails': ((json['emails'] as Array<any>).map(EmailFromJSON)),
         'id': json['id'],
         'permissions': json['permissions'],
-        'phone_number': json['phone_number'] == null ? undefined : PhoneNumberFromJSON(json['phone_number']),
-        'phone_numbers': ((json['phone_numbers'] as Array<any>).map(PhoneNumberFromJSON)),
-        'updated_at': (new Date(json['updated_at'])),
+        'phoneNumber': json['phone_number'] == null ? undefined : PhoneNumberFromJSON(json['phone_number']),
+        'phoneNumbers': ((json['phone_numbers'] as Array<any>).map(PhoneNumberFromJSON)),
+        'updatedAt': (new Date(json['updated_at'])),
         'username': json['username'],
     };
 }
@@ -138,15 +138,15 @@ export function UserWithPermissionsToJSON(value?: UserWithPermissions | null): a
     }
     return {
         
-        'application_id': value['application_id'],
-        'created_at': ((value['created_at']).toISOString()),
+        'application_id': value['applicationId'],
+        'created_at': ((value['createdAt']).toISOString()),
         'email': EmailToJSON(value['email']),
         'emails': ((value['emails'] as Array<any>).map(EmailToJSON)),
         'id': value['id'],
         'permissions': value['permissions'],
-        'phone_number': PhoneNumberToJSON(value['phone_number']),
-        'phone_numbers': ((value['phone_numbers'] as Array<any>).map(PhoneNumberToJSON)),
-        'updated_at': ((value['updated_at']).toISOString()),
+        'phone_number': PhoneNumberToJSON(value['phoneNumber']),
+        'phone_numbers': ((value['phoneNumbers'] as Array<any>).map(PhoneNumberToJSON)),
+        'updated_at': ((value['updatedAt']).toISOString()),
         'username': value['username'],
     };
 }

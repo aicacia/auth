@@ -24,13 +24,13 @@ export interface TokenRequest {
      * @type {string}
      * @memberof TokenRequest
      */
-    actor_token?: string;
+    actorToken?: string;
     /**
      * 
      * @type {string}
      * @memberof TokenRequest
      */
-    actor_token_type?: string;
+    actorTokenType?: string;
     /**
      * 
      * @type {string}
@@ -54,13 +54,13 @@ export interface TokenRequest {
      * @type {string}
      * @memberof TokenRequest
      */
-    code_verifier?: string;
+    codeVerifier?: string;
     /**
      * 
      * @type {string}
      * @memberof TokenRequest
      */
-    grant_type: string;
+    grantType: string;
     /**
      * 
      * @type {string}
@@ -78,13 +78,13 @@ export interface TokenRequest {
      * @type {string}
      * @memberof TokenRequest
      */
-    refresh_token?: string;
+    refreshToken?: string;
     /**
      * 
      * @type {string}
      * @memberof TokenRequest
      */
-    requested_token_type?: string;
+    requestedTokenType?: string;
     /**
      * 
      * @type {string}
@@ -108,13 +108,13 @@ export interface TokenRequest {
      * @type {string}
      * @memberof TokenRequest
      */
-    subject_token?: string;
+    subjectToken?: string;
     /**
      * 
      * @type {string}
      * @memberof TokenRequest
      */
-    subject_token_type?: string;
+    subjectTokenType?: string;
     /**
      * 
      * @type {string}
@@ -127,7 +127,7 @@ export interface TokenRequest {
  * Check if a given object implements the TokenRequest interface.
  */
 export function instanceOfTokenRequest(value: object): boolean {
-    if (!('grant_type' in value)) return false;
+    if (!('grantType' in value)) return false;
     return true;
 }
 
@@ -141,22 +141,22 @@ export function TokenRequestFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
-        'actor_token': json['actor_token'] == null ? undefined : json['actor_token'],
-        'actor_token_type': json['actor_token_type'] == null ? undefined : json['actor_token_type'],
+        'actorToken': json['actor_token'] == null ? undefined : json['actor_token'],
+        'actorTokenType': json['actor_token_type'] == null ? undefined : json['actor_token_type'],
         'assertion': json['assertion'] == null ? undefined : json['assertion'],
         'audience': json['audience'] == null ? undefined : json['audience'],
         'code': json['code'] == null ? undefined : json['code'],
-        'code_verifier': json['code_verifier'] == null ? undefined : json['code_verifier'],
-        'grant_type': json['grant_type'],
+        'codeVerifier': json['code_verifier'] == null ? undefined : json['code_verifier'],
+        'grantType': json['grant_type'],
         'key': json['key'] == null ? undefined : json['key'],
         'password': json['password'] == null ? undefined : json['password'],
-        'refresh_token': json['refresh_token'] == null ? undefined : json['refresh_token'],
-        'requested_token_type': json['requested_token_type'] == null ? undefined : json['requested_token_type'],
+        'refreshToken': json['refresh_token'] == null ? undefined : json['refresh_token'],
+        'requestedTokenType': json['requested_token_type'] == null ? undefined : json['requested_token_type'],
         'resource': json['resource'] == null ? undefined : json['resource'],
         'scope': json['scope'] == null ? undefined : json['scope'],
         'secret': json['secret'] == null ? undefined : json['secret'],
-        'subject_token': json['subject_token'] == null ? undefined : json['subject_token'],
-        'subject_token_type': json['subject_token_type'] == null ? undefined : json['subject_token_type'],
+        'subjectToken': json['subject_token'] == null ? undefined : json['subject_token'],
+        'subjectTokenType': json['subject_token_type'] == null ? undefined : json['subject_token_type'],
         'username': json['username'] == null ? undefined : json['username'],
     };
 }
@@ -167,22 +167,22 @@ export function TokenRequestToJSON(value?: TokenRequest | null): any {
     }
     return {
         
-        'actor_token': value['actor_token'],
-        'actor_token_type': value['actor_token_type'],
+        'actor_token': value['actorToken'],
+        'actor_token_type': value['actorTokenType'],
         'assertion': value['assertion'],
         'audience': value['audience'],
         'code': value['code'],
-        'code_verifier': value['code_verifier'],
-        'grant_type': value['grant_type'],
+        'code_verifier': value['codeVerifier'],
+        'grant_type': value['grantType'],
         'key': value['key'],
         'password': value['password'],
-        'refresh_token': value['refresh_token'],
-        'requested_token_type': value['requested_token_type'],
+        'refresh_token': value['refreshToken'],
+        'requested_token_type': value['requestedTokenType'],
         'resource': value['resource'],
         'scope': value['scope'],
         'secret': value['secret'],
-        'subject_token': value['subject_token'],
-        'subject_token_type': value['subject_token_type'],
+        'subject_token': value['subjectToken'],
+        'subject_token_type': value['subjectTokenType'],
         'username': value['username'],
     };
 }

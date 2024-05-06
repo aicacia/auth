@@ -43,7 +43,7 @@ export interface UpdateUserInfoRequest {
      * @type {string}
      * @memberof UpdateUserInfoRequest
      */
-    family_name?: string;
+    familyName?: string;
     /**
      * 
      * @type {string}
@@ -55,7 +55,7 @@ export interface UpdateUserInfoRequest {
      * @type {string}
      * @memberof UpdateUserInfoRequest
      */
-    given_name?: string;
+    givenName?: string;
     /**
      * 
      * @type {string}
@@ -67,7 +67,7 @@ export interface UpdateUserInfoRequest {
      * @type {string}
      * @memberof UpdateUserInfoRequest
      */
-    middle_name?: string;
+    middleName?: string;
     /**
      * 
      * @type {string}
@@ -125,11 +125,11 @@ export function UpdateUserInfoRequestFromJSONTyped(json: any, ignoreDiscriminato
         
         'address': json['address'] == null ? undefined : UserInfoAddressFromJSON(json['address']),
         'birthdate': json['birthdate'] == null ? undefined : json['birthdate'],
-        'family_name': json['family_name'] == null ? undefined : json['family_name'],
+        'familyName': json['family_name'] == null ? undefined : json['family_name'],
         'gender': json['gender'] == null ? undefined : json['gender'],
-        'given_name': json['given_name'] == null ? undefined : json['given_name'],
+        'givenName': json['given_name'] == null ? undefined : json['given_name'],
         'locale': json['locale'] == null ? undefined : json['locale'],
-        'middle_name': json['middle_name'] == null ? undefined : json['middle_name'],
+        'middleName': json['middle_name'] == null ? undefined : json['middle_name'],
         'name': json['name'] == null ? undefined : json['name'],
         'nickname': json['nickname'] == null ? undefined : json['nickname'],
         'picture': json['picture'] == null ? undefined : json['picture'],
@@ -147,11 +147,11 @@ export function UpdateUserInfoRequestToJSON(value?: UpdateUserInfoRequest | null
         
         'address': UserInfoAddressToJSON(value['address']),
         'birthdate': value['birthdate'],
-        'family_name': value['family_name'],
+        'family_name': value['familyName'],
         'gender': value['gender'],
-        'given_name': value['given_name'],
+        'given_name': value['givenName'],
         'locale': value['locale'],
-        'middle_name': value['middle_name'],
+        'middle_name': value['middleName'],
         'name': value['name'],
         'nickname': value['nickname'],
         'picture': value['picture'],

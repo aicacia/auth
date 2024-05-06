@@ -24,14 +24,14 @@ export interface CreatePhoneNumber {
      * @type {string}
      * @memberof CreatePhoneNumber
      */
-    phone_number: string;
+    phoneNumber: string;
 }
 
 /**
  * Check if a given object implements the CreatePhoneNumber interface.
  */
 export function instanceOfCreatePhoneNumber(value: object): boolean {
-    if (!('phone_number' in value)) return false;
+    if (!('phoneNumber' in value)) return false;
     return true;
 }
 
@@ -45,7 +45,7 @@ export function CreatePhoneNumberFromJSONTyped(json: any, ignoreDiscriminator: b
     }
     return {
         
-        'phone_number': json['phone_number'],
+        'phoneNumber': json['phone_number'],
     };
 }
 
@@ -55,7 +55,7 @@ export function CreatePhoneNumberToJSON(value?: CreatePhoneNumber | null): any {
     }
     return {
         
-        'phone_number': value['phone_number'],
+        'phone_number': value['phoneNumber'],
     };
 }
 

@@ -24,31 +24,31 @@ export interface OpenIDConfiguration {
      * @type {string}
      * @memberof OpenIDConfiguration
      */
-    authorization_endpoint?: string;
+    authorizationEndpoint?: string;
     /**
      * 
      * @type {Array<string>}
      * @memberof OpenIDConfiguration
      */
-    claims_supported: Array<string>;
+    claimsSupported: Array<string>;
     /**
      * 
      * @type {Array<string>}
      * @memberof OpenIDConfiguration
      */
-    code_challenge_methods_supported: Array<string>;
+    codeChallengeMethodsSupported: Array<string>;
     /**
      * 
      * @type {Array<string>}
      * @memberof OpenIDConfiguration
      */
-    grant_types_supported: Array<string>;
+    grantTypesSupported: Array<string>;
     /**
      * 
      * @type {Array<string>}
      * @memberof OpenIDConfiguration
      */
-    id_token_signing_alg_values_supported: Array<string>;
+    idTokenSigningAlgValuesSupported: Array<string>;
     /**
      * 
      * @type {string}
@@ -60,66 +60,66 @@ export interface OpenIDConfiguration {
      * @type {string}
      * @memberof OpenIDConfiguration
      */
-    jwks_uri?: string;
+    jwksUri?: string;
     /**
      * 
      * @type {string}
      * @memberof OpenIDConfiguration
      */
-    registration_endpoint?: string;
+    registrationEndpoint?: string;
     /**
      * 
      * @type {Array<string>}
      * @memberof OpenIDConfiguration
      */
-    response_types_supported: Array<string>;
+    responseTypesSupported: Array<string>;
     /**
      * 
      * @type {Array<string>}
      * @memberof OpenIDConfiguration
      */
-    scopes_supported: Array<string>;
+    scopesSupported: Array<string>;
     /**
      * 
      * @type {Array<string>}
      * @memberof OpenIDConfiguration
      */
-    subject_types_supported: Array<string>;
+    subjectTypesSupported: Array<string>;
     /**
      * 
      * @type {string}
      * @memberof OpenIDConfiguration
      */
-    token_endpoint: string;
+    tokenEndpoint: string;
     /**
      * 
      * @type {Array<string>}
      * @memberof OpenIDConfiguration
      */
-    token_endpoint_auth_methods_supported: Array<string>;
+    tokenEndpointAuthMethodsSupported: Array<string>;
     /**
      * 
      * @type {string}
      * @memberof OpenIDConfiguration
      */
-    userinfo_endpoint: string;
+    userinfoEndpoint: string;
 }
 
 /**
  * Check if a given object implements the OpenIDConfiguration interface.
  */
 export function instanceOfOpenIDConfiguration(value: object): boolean {
-    if (!('claims_supported' in value)) return false;
-    if (!('code_challenge_methods_supported' in value)) return false;
-    if (!('grant_types_supported' in value)) return false;
-    if (!('id_token_signing_alg_values_supported' in value)) return false;
+    if (!('claimsSupported' in value)) return false;
+    if (!('codeChallengeMethodsSupported' in value)) return false;
+    if (!('grantTypesSupported' in value)) return false;
+    if (!('idTokenSigningAlgValuesSupported' in value)) return false;
     if (!('issuer' in value)) return false;
-    if (!('response_types_supported' in value)) return false;
-    if (!('scopes_supported' in value)) return false;
-    if (!('subject_types_supported' in value)) return false;
-    if (!('token_endpoint' in value)) return false;
-    if (!('token_endpoint_auth_methods_supported' in value)) return false;
-    if (!('userinfo_endpoint' in value)) return false;
+    if (!('responseTypesSupported' in value)) return false;
+    if (!('scopesSupported' in value)) return false;
+    if (!('subjectTypesSupported' in value)) return false;
+    if (!('tokenEndpoint' in value)) return false;
+    if (!('tokenEndpointAuthMethodsSupported' in value)) return false;
+    if (!('userinfoEndpoint' in value)) return false;
     return true;
 }
 
@@ -133,20 +133,20 @@ export function OpenIDConfigurationFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
-        'authorization_endpoint': json['authorization_endpoint'] == null ? undefined : json['authorization_endpoint'],
-        'claims_supported': json['claims_supported'],
-        'code_challenge_methods_supported': json['code_challenge_methods_supported'],
-        'grant_types_supported': json['grant_types_supported'],
-        'id_token_signing_alg_values_supported': json['id_token_signing_alg_values_supported'],
+        'authorizationEndpoint': json['authorization_endpoint'] == null ? undefined : json['authorization_endpoint'],
+        'claimsSupported': json['claims_supported'],
+        'codeChallengeMethodsSupported': json['code_challenge_methods_supported'],
+        'grantTypesSupported': json['grant_types_supported'],
+        'idTokenSigningAlgValuesSupported': json['id_token_signing_alg_values_supported'],
         'issuer': json['issuer'],
-        'jwks_uri': json['jwks_uri'] == null ? undefined : json['jwks_uri'],
-        'registration_endpoint': json['registration_endpoint'] == null ? undefined : json['registration_endpoint'],
-        'response_types_supported': json['response_types_supported'],
-        'scopes_supported': json['scopes_supported'],
-        'subject_types_supported': json['subject_types_supported'],
-        'token_endpoint': json['token_endpoint'],
-        'token_endpoint_auth_methods_supported': json['token_endpoint_auth_methods_supported'],
-        'userinfo_endpoint': json['userinfo_endpoint'],
+        'jwksUri': json['jwks_uri'] == null ? undefined : json['jwks_uri'],
+        'registrationEndpoint': json['registration_endpoint'] == null ? undefined : json['registration_endpoint'],
+        'responseTypesSupported': json['response_types_supported'],
+        'scopesSupported': json['scopes_supported'],
+        'subjectTypesSupported': json['subject_types_supported'],
+        'tokenEndpoint': json['token_endpoint'],
+        'tokenEndpointAuthMethodsSupported': json['token_endpoint_auth_methods_supported'],
+        'userinfoEndpoint': json['userinfo_endpoint'],
     };
 }
 
@@ -156,20 +156,20 @@ export function OpenIDConfigurationToJSON(value?: OpenIDConfiguration | null): a
     }
     return {
         
-        'authorization_endpoint': value['authorization_endpoint'],
-        'claims_supported': value['claims_supported'],
-        'code_challenge_methods_supported': value['code_challenge_methods_supported'],
-        'grant_types_supported': value['grant_types_supported'],
-        'id_token_signing_alg_values_supported': value['id_token_signing_alg_values_supported'],
+        'authorization_endpoint': value['authorizationEndpoint'],
+        'claims_supported': value['claimsSupported'],
+        'code_challenge_methods_supported': value['codeChallengeMethodsSupported'],
+        'grant_types_supported': value['grantTypesSupported'],
+        'id_token_signing_alg_values_supported': value['idTokenSigningAlgValuesSupported'],
         'issuer': value['issuer'],
-        'jwks_uri': value['jwks_uri'],
-        'registration_endpoint': value['registration_endpoint'],
-        'response_types_supported': value['response_types_supported'],
-        'scopes_supported': value['scopes_supported'],
-        'subject_types_supported': value['subject_types_supported'],
-        'token_endpoint': value['token_endpoint'],
-        'token_endpoint_auth_methods_supported': value['token_endpoint_auth_methods_supported'],
-        'userinfo_endpoint': value['userinfo_endpoint'],
+        'jwks_uri': value['jwksUri'],
+        'registration_endpoint': value['registrationEndpoint'],
+        'response_types_supported': value['responseTypesSupported'],
+        'scopes_supported': value['scopesSupported'],
+        'subject_types_supported': value['subjectTypesSupported'],
+        'token_endpoint': value['tokenEndpoint'],
+        'token_endpoint_auth_methods_supported': value['tokenEndpointAuthMethodsSupported'],
+        'userinfo_endpoint': value['userinfoEndpoint'],
     };
 }
 

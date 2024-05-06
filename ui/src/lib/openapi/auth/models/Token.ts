@@ -24,37 +24,37 @@ export interface Token {
      * @type {string}
      * @memberof Token
      */
-    access_token: string;
+    accessToken: string;
     /**
      * 
      * @type {number}
      * @memberof Token
      */
-    expires_in: number;
+    expiresIn: number;
     /**
      * 
      * @type {string}
      * @memberof Token
      */
-    id_token?: string;
+    idToken?: string;
     /**
      * 
      * @type {string}
      * @memberof Token
      */
-    issued_token_type: string;
+    issuedTokenType: string;
     /**
      * 
      * @type {string}
      * @memberof Token
      */
-    refresh_token: string;
+    refreshToken: string;
     /**
      * 
      * @type {number}
      * @memberof Token
      */
-    refresh_token_expires_in: number;
+    refreshTokenExpiresIn: number;
     /**
      * 
      * @type {Array<string>}
@@ -66,20 +66,20 @@ export interface Token {
      * @type {string}
      * @memberof Token
      */
-    token_type: string;
+    tokenType: string;
 }
 
 /**
  * Check if a given object implements the Token interface.
  */
 export function instanceOfToken(value: object): boolean {
-    if (!('access_token' in value)) return false;
-    if (!('expires_in' in value)) return false;
-    if (!('issued_token_type' in value)) return false;
-    if (!('refresh_token' in value)) return false;
-    if (!('refresh_token_expires_in' in value)) return false;
+    if (!('accessToken' in value)) return false;
+    if (!('expiresIn' in value)) return false;
+    if (!('issuedTokenType' in value)) return false;
+    if (!('refreshToken' in value)) return false;
+    if (!('refreshTokenExpiresIn' in value)) return false;
     if (!('scope' in value)) return false;
-    if (!('token_type' in value)) return false;
+    if (!('tokenType' in value)) return false;
     return true;
 }
 
@@ -93,14 +93,14 @@ export function TokenFromJSONTyped(json: any, ignoreDiscriminator: boolean): Tok
     }
     return {
         
-        'access_token': json['access_token'],
-        'expires_in': json['expires_in'],
-        'id_token': json['id_token'] == null ? undefined : json['id_token'],
-        'issued_token_type': json['issued_token_type'],
-        'refresh_token': json['refresh_token'],
-        'refresh_token_expires_in': json['refresh_token_expires_in'],
+        'accessToken': json['access_token'],
+        'expiresIn': json['expires_in'],
+        'idToken': json['id_token'] == null ? undefined : json['id_token'],
+        'issuedTokenType': json['issued_token_type'],
+        'refreshToken': json['refresh_token'],
+        'refreshTokenExpiresIn': json['refresh_token_expires_in'],
         'scope': json['scope'],
-        'token_type': json['token_type'],
+        'tokenType': json['token_type'],
     };
 }
 
@@ -110,14 +110,14 @@ export function TokenToJSON(value?: Token | null): any {
     }
     return {
         
-        'access_token': value['access_token'],
-        'expires_in': value['expires_in'],
-        'id_token': value['id_token'],
-        'issued_token_type': value['issued_token_type'],
-        'refresh_token': value['refresh_token'],
-        'refresh_token_expires_in': value['refresh_token_expires_in'],
+        'access_token': value['accessToken'],
+        'expires_in': value['expiresIn'],
+        'id_token': value['idToken'],
+        'issued_token_type': value['issuedTokenType'],
+        'refresh_token': value['refreshToken'],
+        'refresh_token_expires_in': value['refreshTokenExpiresIn'],
         'scope': value['scope'],
-        'token_type': value['token_type'],
+        'token_type': value['tokenType'],
     };
 }
 

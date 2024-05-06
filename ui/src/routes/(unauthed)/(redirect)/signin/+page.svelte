@@ -97,7 +97,7 @@
 		class="flex flex-col flex-shrink md:w-72 w-full mx-auto my-10 bg-white dark:bg-gray-800 shadow p-4"
 	>
 		<h1 class="mb-1">{$LL.auth.signIn()}</h1>
-		{#if data.openIDConfiguration?.grant_types_supported.includes('password')}
+		{#if data.openIDConfiguration?.grantTypesSupported.includes('password')}
 			<p class="py-2">
 				<span>{$LL.auth.notAMember()}</span>
 				<a href={`${base}/signup`} class="underline text-blue-500">{$LL.auth.signUp()}</a>

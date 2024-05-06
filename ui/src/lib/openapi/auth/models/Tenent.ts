@@ -30,25 +30,25 @@ export interface Tenent {
      * @type {number}
      * @memberof Tenent
      */
-    application_id: number;
+    applicationId: number;
     /**
      * 
      * @type {string}
      * @memberof Tenent
      */
-    authorization_website: string;
+    authorizationWebsite: string;
     /**
      * 
      * @type {string}
      * @memberof Tenent
      */
-    client_id: string;
+    clientId: string;
     /**
      * 
      * @type {Date}
      * @memberof Tenent
      */
-    created_at: Date;
+    createdAt: Date;
     /**
      * 
      * @type {string}
@@ -60,7 +60,7 @@ export interface Tenent {
      * @type {number}
      * @memberof Tenent
      */
-    expires_in_seconds: number;
+    expiresInSeconds: number;
     /**
      * 
      * @type {number}
@@ -72,31 +72,31 @@ export interface Tenent {
      * @type {number}
      * @memberof Tenent
      */
-    password_reset_expires_in_seconds: number;
+    passwordResetExpiresInSeconds: number;
     /**
      * 
      * @type {string}
      * @memberof Tenent
      */
-    public_key?: string;
+    publicKey?: string;
     /**
      * 
      * @type {number}
      * @memberof Tenent
      */
-    refresh_expires_in_seconds: number;
+    refreshExpiresInSeconds: number;
     /**
      * 
      * @type {string}
      * @memberof Tenent
      */
-    registration_website?: string;
+    registrationWebsite?: string;
     /**
      * 
      * @type {Date}
      * @memberof Tenent
      */
-    updated_at: Date;
+    updatedAt: Date;
     /**
      * 
      * @type {string}
@@ -110,16 +110,16 @@ export interface Tenent {
  */
 export function instanceOfTenent(value: object): boolean {
     if (!('algorithm' in value)) return false;
-    if (!('application_id' in value)) return false;
-    if (!('authorization_website' in value)) return false;
-    if (!('client_id' in value)) return false;
-    if (!('created_at' in value)) return false;
+    if (!('applicationId' in value)) return false;
+    if (!('authorizationWebsite' in value)) return false;
+    if (!('clientId' in value)) return false;
+    if (!('createdAt' in value)) return false;
     if (!('description' in value)) return false;
-    if (!('expires_in_seconds' in value)) return false;
+    if (!('expiresInSeconds' in value)) return false;
     if (!('id' in value)) return false;
-    if (!('password_reset_expires_in_seconds' in value)) return false;
-    if (!('refresh_expires_in_seconds' in value)) return false;
-    if (!('updated_at' in value)) return false;
+    if (!('passwordResetExpiresInSeconds' in value)) return false;
+    if (!('refreshExpiresInSeconds' in value)) return false;
+    if (!('updatedAt' in value)) return false;
     if (!('uri' in value)) return false;
     return true;
 }
@@ -135,18 +135,18 @@ export function TenentFromJSONTyped(json: any, ignoreDiscriminator: boolean): Te
     return {
         
         'algorithm': json['algorithm'],
-        'application_id': json['application_id'],
-        'authorization_website': json['authorization_website'],
-        'client_id': json['client_id'],
-        'created_at': (new Date(json['created_at'])),
+        'applicationId': json['application_id'],
+        'authorizationWebsite': json['authorization_website'],
+        'clientId': json['client_id'],
+        'createdAt': (new Date(json['created_at'])),
         'description': json['description'],
-        'expires_in_seconds': json['expires_in_seconds'],
+        'expiresInSeconds': json['expires_in_seconds'],
         'id': json['id'],
-        'password_reset_expires_in_seconds': json['password_reset_expires_in_seconds'],
-        'public_key': json['public_key'] == null ? undefined : json['public_key'],
-        'refresh_expires_in_seconds': json['refresh_expires_in_seconds'],
-        'registration_website': json['registration_website'] == null ? undefined : json['registration_website'],
-        'updated_at': (new Date(json['updated_at'])),
+        'passwordResetExpiresInSeconds': json['password_reset_expires_in_seconds'],
+        'publicKey': json['public_key'] == null ? undefined : json['public_key'],
+        'refreshExpiresInSeconds': json['refresh_expires_in_seconds'],
+        'registrationWebsite': json['registration_website'] == null ? undefined : json['registration_website'],
+        'updatedAt': (new Date(json['updated_at'])),
         'uri': json['uri'],
     };
 }
@@ -158,18 +158,18 @@ export function TenentToJSON(value?: Tenent | null): any {
     return {
         
         'algorithm': value['algorithm'],
-        'application_id': value['application_id'],
-        'authorization_website': value['authorization_website'],
-        'client_id': value['client_id'],
-        'created_at': ((value['created_at']).toISOString()),
+        'application_id': value['applicationId'],
+        'authorization_website': value['authorizationWebsite'],
+        'client_id': value['clientId'],
+        'created_at': ((value['createdAt']).toISOString()),
         'description': value['description'],
-        'expires_in_seconds': value['expires_in_seconds'],
+        'expires_in_seconds': value['expiresInSeconds'],
         'id': value['id'],
-        'password_reset_expires_in_seconds': value['password_reset_expires_in_seconds'],
-        'public_key': value['public_key'],
-        'refresh_expires_in_seconds': value['refresh_expires_in_seconds'],
-        'registration_website': value['registration_website'],
-        'updated_at': ((value['updated_at']).toISOString()),
+        'password_reset_expires_in_seconds': value['passwordResetExpiresInSeconds'],
+        'public_key': value['publicKey'],
+        'refresh_expires_in_seconds': value['refreshExpiresInSeconds'],
+        'registration_website': value['registrationWebsite'],
+        'updated_at': ((value['updatedAt']).toISOString()),
         'uri': value['uri'],
     };
 }

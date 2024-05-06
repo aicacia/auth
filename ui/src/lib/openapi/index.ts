@@ -24,7 +24,7 @@ const defaultConfiguration: ConfigurationParameters = {
 			case 'Tenent-Id':
 				return env.PUBLIC_TENENT_ID as string;
 			default:
-				return `${authToken?.token_type} ${authToken?.access_token}`;
+				return `${authToken?.tokenType} ${authToken?.accessToken}`;
 		}
 	},
 	credentials: 'same-origin'

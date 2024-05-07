@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/aicacia/auth/api/app/access"
+	"github.com/aicacia/auth/api/app/middleware"
 	"github.com/aicacia/auth/api/app/model"
 	"github.com/aicacia/auth/api/app/repository"
 	"github.com/gofiber/fiber/v2"
@@ -99,7 +100,8 @@ func GetUserById(c *fiber.Ctx) error {
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("id", "invalid").Send(c)
 	}
-	user, emails, phoneNumbers, err := getUserById(int32(id))
+	application := middleware.GetApplication(c)
+	user, emails, phoneNumbers, err := getUserById(application.Id, int32(id))
 	if err != nil {
 		log.Printf("failed to get user: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
@@ -176,7 +178,8 @@ func PatchUpdateUserById(c *fiber.Ctx) error {
 	if err := c.BodyParser(&updateUser); err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("request", "invalid").Send(c)
 	}
-	user, err := repository.UpdateUsername(int32(id), updateUser.Username)
+	application := middleware.GetApplication(c)
+	user, err := repository.UpdateUsername(application.Id, int32(id), updateUser.Username)
 	if err != nil {
 		log.Printf("failed to create user: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
@@ -214,7 +217,8 @@ func DeleteUserById(c *fiber.Ctx) error {
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("id", "invalid").Send(c)
 	}
-	deleted, err := repository.DeleteUserById(int32(id))
+	application := middleware.GetApplication(c)
+	deleted, err := repository.DeleteUserById(application.Id, int32(id))
 	if err != nil {
 		log.Printf("failed to create user: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
@@ -248,7 +252,8 @@ func GetUserInfo(c *fiber.Ctx) error {
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("id", "invalid").Send(c)
 	}
-	user, err := repository.GetUserById(int32(id))
+	application := middleware.GetApplication(c)
+	user, err := repository.GetUserById(application.Id, int32(id))
 	if err != nil {
 		log.Printf("failed to get user: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
@@ -293,7 +298,8 @@ func PatchUserInfo(c *fiber.Ctx) error {
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("id", "invalid").Send(c)
 	}
-	user, err := repository.GetUserById(int32(id))
+	application := middleware.GetApplication(c)
+	user, err := repository.GetUserById(application.Id, int32(id))
 	if err != nil {
 		log.Printf("failed to get user: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
@@ -331,8 +337,8 @@ func PatchUserInfo(c *fiber.Ctx) error {
 	return c.JSON(userInfo)
 }
 
-func getUserById(userId int32) (*repository.UserRowST, []repository.EmailRowST, []repository.PhoneNumberRowST, error) {
-	user, err := repository.GetUserById(userId)
+func getUserById(applicationId, userId int32) (*repository.UserRowST, []repository.EmailRowST, []repository.PhoneNumberRowST, error) {
+	user, err := repository.GetUserById(applicationId, userId)
 	if err != nil {
 		return nil, nil, nil, err
 	}

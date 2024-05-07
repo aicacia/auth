@@ -35,8 +35,9 @@ var (
 )
 
 var (
-	BearerTokenType  = "bearer"
-	RefreshTokenType = "refresh-token"
+	BearerTokenType        = "bearer"
+	RefreshTokenType       = "refresh"
+	PasswordResetTokenType = "password-reset"
 )
 
 type Claims struct {

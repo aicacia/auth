@@ -49,7 +49,7 @@ func AuthorizedMiddleware() fiber.Handler {
 
 		switch claims.SubjectType {
 		case jwt.UserSubject:
-			user, err := repository.GetUserById(claims.Subject)
+			user, err := repository.GetUserById(application.Id, claims.Subject)
 			if err != nil {
 				log.Printf("failed to fetch user: %v", err)
 				return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)

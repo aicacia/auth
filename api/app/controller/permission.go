@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/aicacia/auth/api/app/access"
+	"github.com/aicacia/auth/api/app/middleware"
 	"github.com/aicacia/auth/api/app/model"
 	"github.com/aicacia/auth/api/app/repository"
 	"github.com/aicacia/auth/api/app/util"
@@ -236,7 +237,8 @@ func PatchAddPermissionToUser(c *fiber.Ctx) error {
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("id", "invalid").Send(c)
 	}
-	applicationPermission, err := repository.GetApplicationById(int32(id))
+	application := middleware.GetApplication(c)
+	permission, err := repository.GetPermissionById(int32(id))
 	if err != nil {
 		log.Printf("failed to get application: %v\n", err)
 		return model.NewError(http.StatusNotFound).AddError("id", "invalid").Send(c)
@@ -245,7 +247,7 @@ func PatchAddPermissionToUser(c *fiber.Ctx) error {
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid").Send(c)
 	}
-	user, err := repository.GetUserById(int32(userId))
+	user, err := repository.GetUserById(application.Id, int32(userId))
 	if err != nil {
 		log.Printf("failed to get user: %v\n", err)
 		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)
@@ -253,7 +255,7 @@ func PatchAddPermissionToUser(c *fiber.Ctx) error {
 	if user == nil {
 		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)
 	}
-	added, err := repository.AddPermissionToUser(user.Id, applicationPermission.Id)
+	added, err := repository.AddPermissionToUser(user.Id, permission.Id)
 	if err != nil {
 		log.Printf("failed to add permission to user: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
@@ -291,7 +293,8 @@ func DeleteRemovePermissionFromUser(c *fiber.Ctx) error {
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("id", "invalid").Send(c)
 	}
-	applicationPermission, err := repository.GetApplicationById(int32(id))
+	application := middleware.GetApplication(c)
+	permission, err := repository.GetPermissionById(int32(id))
 	if err != nil {
 		log.Printf("failed to get application: %v\n", err)
 		return model.NewError(http.StatusNotFound).AddError("id", "invalid").Send(c)
@@ -300,7 +303,7 @@ func DeleteRemovePermissionFromUser(c *fiber.Ctx) error {
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid").Send(c)
 	}
-	user, err := repository.GetUserById(int32(userId))
+	user, err := repository.GetUserById(application.Id, int32(userId))
 	if err != nil {
 		log.Printf("failed to get user: %v\n", err)
 		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)
@@ -308,7 +311,7 @@ func DeleteRemovePermissionFromUser(c *fiber.Ctx) error {
 	if user == nil {
 		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)
 	}
-	removed, err := repository.RemovePermissionFromUser(user.Id, applicationPermission.Id)
+	removed, err := repository.RemovePermissionFromUser(user.Id, permission.Id)
 	if err != nil {
 		log.Printf("failed to add permission to user: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)

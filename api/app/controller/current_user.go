@@ -82,7 +82,7 @@ func PatchResetPassword(c *fiber.Ctx) error {
 		return errors.Send(c)
 	}
 	user := middleware.GetUser(c)
-	_, err := repository.UpdateUserPassword(user.Id, password)
+	_, err := repository.UpdateUserPassword(user.ApplicationId, user.Id, password)
 	if err != nil {
 		log.Printf("failed to update user password: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
@@ -112,7 +112,8 @@ func PatchUpdateCurrentUser(c *fiber.Ctx) error {
 	if err := c.BodyParser(&updateUser); err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("request", "invalid").Send(c)
 	}
-	user, err := repository.UpdateUsername(middleware.GetUser(c).Id, updateUser.Username)
+	user := middleware.GetUser(c)
+	user, err := repository.UpdateUsername(user.ApplicationId, user.Id, updateUser.Username)
 	if err != nil {
 		log.Printf("failed to create user: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)

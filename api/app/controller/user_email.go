@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/aicacia/auth/api/app/middleware"
 	"github.com/aicacia/auth/api/app/model"
 	"github.com/aicacia/auth/api/app/repository"
 	"github.com/aicacia/auth/api/app/util"
@@ -35,7 +36,8 @@ func PatchUserEmailSendConfirmation(c *fiber.Ctx) error {
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid").Send(c)
 	}
-	user, err := repository.GetUserById(int32(userId))
+	application := middleware.GetApplication(c)
+	user, err := repository.GetUserById(application.Id, int32(userId))
 	if err != nil {
 		log.Printf("failed to get user: %v\n", err)
 		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)
@@ -85,7 +87,8 @@ func PatchUserEmailConfirm(c *fiber.Ctx) error {
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid").Send(c)
 	}
-	user, err := repository.GetUserById(int32(userId))
+	application := middleware.GetApplication(c)
+	user, err := repository.GetUserById(application.Id, int32(userId))
 	if err != nil {
 		log.Printf("failed to get user: %v\n", err)
 		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)
@@ -132,7 +135,8 @@ func PatchUserEmailSetPrimary(c *fiber.Ctx) error {
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid").Send(c)
 	}
-	user, err := repository.GetUserById(int32(userId))
+	application := middleware.GetApplication(c)
+	user, err := repository.GetUserById(application.Id, int32(userId))
 	if err != nil {
 		log.Printf("failed to get user: %v\n", err)
 		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)
@@ -179,7 +183,8 @@ func PostUserCreateEmail(c *fiber.Ctx) error {
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid").Send(c)
 	}
-	user, err := repository.GetUserById(int32(userId))
+	application := middleware.GetApplication(c)
+	user, err := repository.GetUserById(application.Id, int32(userId))
 	if err != nil {
 		log.Printf("failed to get user: %v\n", err)
 		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)
@@ -226,7 +231,8 @@ func DeleteUserEmail(c *fiber.Ctx) error {
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid").Send(c)
 	}
-	user, err := repository.GetUserById(int32(userId))
+	application := middleware.GetApplication(c)
+	user, err := repository.GetUserById(application.Id, int32(userId))
 	if err != nil {
 		log.Printf("failed to get user: %v\n", err)
 		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)

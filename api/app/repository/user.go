@@ -52,12 +52,12 @@ func GetUsersPhoneNumbers(applicationId int32, limit, offset int) ([]PhoneNumber
 			);`, applicationId, limit, offset)
 }
 
-func GetUserById(userId int32) (*UserRowST, error) {
+func GetUserById(applicationId, userId int32) (*UserRowST, error) {
 	return GetOptional[UserRowST](`SELECT u.*
 		FROM users u
-		WHERE u.id = $1
+		WHERE u.application_id = $1 AND u.id = $2
 		LIMIT 1;`,
-		userId)
+		applicationId, userId)
 }
 
 func GetUserByUsernameOrEmail(applicationId int32, usernameOrEmail string) (*UserRowST, error) {
@@ -76,6 +76,15 @@ func GetUserByEmail(applicationId int32, email string) (*UserRowST, error) {
 		WHERE u.application_id = $1 AND e.email = $2
 		LIMIT 1;`,
 		applicationId, email)
+}
+
+func GetUserByPhoneNumber(applicationId int32, phoneNumber string) (*UserRowST, error) {
+	return GetOptional[UserRowST](`SELECT u.*
+		FROM users u
+		LEFT JOIN phone_numbers e ON e.id = u.phone_number_id
+		WHERE u.application_id = $1 AND e.phone_number = $2
+		LIMIT 1;`,
+		applicationId, phoneNumber)
 }
 
 func GetUserByUsername(applicationId int32, username string) (*UserRowST, error) {
@@ -208,26 +217,26 @@ func CreateUserFromEmail(applicationId int32, email string) (UserAndUserInfoST, 
 	})
 }
 
-func UpdateUserPassword(id int32, password string) (*UserRowST, error) {
+func UpdateUserPassword(applicationId, id int32, password string) (*UserRowST, error) {
 	encryptedPassword, err := util.EncryptPassword(password)
 	if err != nil {
 		return nil, err
 	}
 	return GetOptional[UserRowST](`UPDATE users
-		SET encrypted_password = $2
-		WHERE id = $1
+		SET encrypted_password = $3
+		WHERE application_id=$1 AND id=$2
 		RETURNING *;`,
-		id, encryptedPassword)
+		applicationId, id, encryptedPassword)
 }
 
-func UpdateUsername(id int32, username string) (*UserRowST, error) {
+func UpdateUsername(applicationId, id int32, username string) (*UserRowST, error) {
 	return GetOptional[UserRowST](`UPDATE users
-		SET username = $2
-		WHERE id = $1
+		SET username = $3
+		WHERE application_id=$1 AND id=$2
 		RETURNING *;`,
-		id, username)
+		applicationId, id, username)
 }
 
-func DeleteUserById(id int32) (bool, error) {
-	return Execute(`DELETE FROM users WHERE id = $1;`, id)
+func DeleteUserById(applicationId, id int32) (bool, error) {
+	return Execute(`DELETE FROM users WHERE application_id=$1 AND id=$2;`, applicationId, id)
 }

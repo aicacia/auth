@@ -99,7 +99,7 @@ func refreshToken(c *fiber.Ctx, tokenRequest model.TokenRequestST) error {
 		log.Printf("failed to get refresh token claims: %v\n", err)
 		return model.NewError(http.StatusUnauthorized).AddError("refresh_token", "invalid").Send(c)
 	}
-	user, err := repository.GetUserById(claims.Subject)
+	user, err := repository.GetUserById(tenent.ApplicationId, claims.Subject)
 	if err != nil {
 		log.Printf("failed to get user: %v\n", err)
 		return model.NewError(http.StatusUnauthorized).AddError("refresh_token", "invalid").Send(c)

@@ -668,6 +668,29 @@ definitions:
     - build
     - version
     type: object
+  model.PasswordResetST:
+    properties:
+      password:
+        type: string
+      passwordConfirmation:
+        type: string
+      token:
+        type: string
+    required:
+    - password
+    - passwordConfirmation
+    - token
+    type: object
+  model.RequestPasswordResetST:
+    properties:
+      email:
+        type: string
+      phoneNumber:
+        type: string
+    required:
+    - email
+    - phoneNumber
+    type: object
 info:
   contact:
     email: nathanfaucett@gmail.com
@@ -2274,6 +2297,86 @@ paths:
       summary: Get Health Check
       tags:
       - app
+  /password-reset:
+    post:
+      consumes:
+      - application/json
+      operationId: password-reset
+      parameters:
+      - description: request password reset body
+        in: body
+        name: passwordReset
+        required: true
+        schema:
+          $ref: '#/definitions/model.PasswordResetST'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Token'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Locale: []
+      - Timezone: []
+      summary: Request Password Reset
+      tags:
+      - password-reset
+  /password-reset/request:
+    post:
+      consumes:
+      - application/json
+      operationId: request-password-reset
+      parameters:
+      - description: request password reset body
+        in: body
+        name: requestPasswordReset
+        required: true
+        schema:
+          $ref: '#/definitions/model.RequestPasswordResetST'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Locale: []
+      - Timezone: []
+      summary: Request Password Reset
+      tags:
+      - password-reset
   /register:
     post:
       consumes:

@@ -60,6 +60,7 @@ const en = {
 		title: 'Profile',
 		updateUsername: 'Update Username',
 		submitUpdateUsername: 'Update',
+		updateUserInfo: 'Update Info',
 		updateEmails: 'Update Emails',
 		notification: {
 			usernameChangedSuccess: 'Username changed',

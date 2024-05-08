@@ -1,32 +1,31 @@
 package repository
 
 import (
-	"database/sql"
 	"time"
 )
 
 type UserInfoRowST struct {
-	UserId        int32          `db:"user_id"`
-	ApplicationId int32          `db:"application_id"`
-	Name          sql.NullString `db:"name"`
-	GivenName     sql.NullString `db:"given_name"`
-	FamilyName    sql.NullString `db:"family_name"`
-	MiddleName    sql.NullString `db:"middle_name"`
-	Nickname      sql.NullString `db:"nickname"`
-	Profile       sql.NullString `db:"profile"`
-	Picture       sql.NullString `db:"picture"`
-	Website       sql.NullString `db:"website"`
-	Gender        sql.NullString `db:"gender"`
-	Birthdate     sql.NullTime   `db:"birthdate"`
-	Zoneinfo      sql.NullString `db:"zoneinfo"`
-	Locale        sql.NullString `db:"locale"`
-	StreetAddress sql.NullString `db:"street_address"`
-	Locality      sql.NullString `db:"locality"`
-	Region        sql.NullString `db:"region"`
-	PostalCode    sql.NullString `db:"postal_code"`
-	Country       sql.NullString `db:"country"`
-	UpdatedAt     time.Time      `db:"updated_at"`
-	CreatedAt     time.Time      `db:"created_at"`
+	UserId        int32      `db:"user_id"`
+	ApplicationId int32      `db:"application_id"`
+	Name          *string    `db:"name"`
+	GivenName     *string    `db:"given_name"`
+	FamilyName    *string    `db:"family_name"`
+	MiddleName    *string    `db:"middle_name"`
+	Nickname      *string    `db:"nickname"`
+	Profile       *string    `db:"profile"`
+	Picture       *string    `db:"picture"`
+	Website       *string    `db:"website"`
+	Gender        *string    `db:"gender"`
+	Birthdate     *time.Time `db:"birthdate"`
+	Zoneinfo      *string    `db:"zoneinfo"`
+	Locale        *string    `db:"locale"`
+	StreetAddress *string    `db:"street_address"`
+	Locality      *string    `db:"locality"`
+	Region        *string    `db:"region"`
+	PostalCode    *string    `db:"postal_code"`
+	Country       *string    `db:"country"`
+	UpdatedAt     time.Time  `db:"updated_at"`
+	CreatedAt     time.Time  `db:"created_at"`
 }
 
 func GetUserInfoByUserId(userId int32) (*UserInfoRowST, error) {

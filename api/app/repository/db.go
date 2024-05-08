@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"errors"
 	"strings"
-	"time"
 
 	"github.com/aicacia/auth/api/app/env"
 	"github.com/jmoiron/sqlx"
@@ -31,34 +30,6 @@ func CloseDB() error {
 		return err
 	}
 	db = nil
-	return nil
-}
-
-func NullString(s *string) sql.NullString {
-	if s == nil {
-		return sql.NullString{Valid: false}
-	}
-	return sql.NullString{Valid: true, String: *s}
-}
-
-func StringFromSQLNullString(null sql.NullString) *string {
-	if null.Valid {
-		return &null.String
-	}
-	return nil
-}
-
-func Int32FromSQLInt32String(null sql.NullInt32) *int32 {
-	if null.Valid {
-		return &null.Int32
-	}
-	return nil
-}
-
-func TimeFromSQLNullTime(nullTime sql.NullTime) *time.Time {
-	if nullTime.Valid {
-		return &nullTime.Time
-	}
 	return nil
 }
 

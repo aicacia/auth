@@ -3,6 +3,7 @@
 export * from './AppApi';
 export * from './ApplicationApi';
 export * from './CurrentUserApi';
+export * from './PasswordResetApi';
 export * from './PermissionApi';
 export * from './RegistrationApi';
 export * from './TenentApi';

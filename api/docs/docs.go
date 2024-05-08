@@ -1388,7 +1388,7 @@ const docTemplate = `{
                     "user"
                 ],
                 "summary": "Get user info",
-                "operationId": "get-user-info",
+                "operationId": "user-info",
                 "parameters": [
                     {
                         "type": "integer",
@@ -3865,6 +3865,7 @@ const docTemplate = `{
         "UserInfo": {
             "type": "object",
             "required": [
+                "address",
                 "created_at",
                 "preferred_username",
                 "updated_at",

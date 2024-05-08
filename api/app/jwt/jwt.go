@@ -73,23 +73,23 @@ type OpenIdClaimsAddress struct {
 
 type OpenIdClaims struct {
 	Claims
-	Email         *string              `json:"email"`
-	EmailVerified *bool                `json:"email_verified"`
-	Phone         *string              `json:"phone"`
-	PhoneVerified *bool                `json:"phone_verified"`
-	Name          *string              `json:"name"`
-	GivenName     *string              `json:"given_name"`
-	FamilyName    *string              `json:"family_name"`
-	MiddleName    *string              `json:"middle_name"`
-	Nickname      *string              `json:"nickname"`
-	Profile       *string              `json:"profile"`
-	Picture       *string              `json:"picture"`
-	Website       *string              `json:"website"`
-	Gender        *string              `json:"gender"`
-	Birthdate     *time.Time           `json:"birthdate" format:"date-time"`
-	Zoneinfo      *string              `json:"zoneinfo"`
-	Locale        *string              `json:"locale"`
-	Address       *OpenIdClaimsAddress `json:"address"`
+	Email         *string             `json:"email"`
+	EmailVerified *bool               `json:"email_verified"`
+	Phone         *string             `json:"phone"`
+	PhoneVerified *bool               `json:"phone_verified"`
+	Name          *string             `json:"name"`
+	GivenName     *string             `json:"given_name"`
+	FamilyName    *string             `json:"family_name"`
+	MiddleName    *string             `json:"middle_name"`
+	Nickname      *string             `json:"nickname"`
+	Profile       *string             `json:"profile"`
+	Picture       *string             `json:"picture"`
+	Website       *string             `json:"website"`
+	Gender        *string             `json:"gender"`
+	Birthdate     *time.Time          `json:"birthdate" format:"date-time"`
+	Zoneinfo      *string             `json:"zoneinfo"`
+	Locale        *string             `json:"locale"`
+	Address       OpenIdClaimsAddress `json:"address"`
 }
 
 func (claims *OpenIdClaims) ToMapClaims() (jwt.MapClaims, error) {
@@ -127,24 +127,24 @@ func OpenIdClaimsForUser(claims *Claims, userId int32) (*OpenIdClaims, error) {
 		EmailVerified: emailVerified,
 		Phone:         phone,
 		PhoneVerified: phoneVerified,
-		Name:          repository.StringFromSQLNullString(userInfoRow.Name),
-		GivenName:     repository.StringFromSQLNullString(userInfoRow.GivenName),
-		FamilyName:    repository.StringFromSQLNullString(userInfoRow.FamilyName),
-		MiddleName:    repository.StringFromSQLNullString(userInfoRow.MiddleName),
-		Nickname:      repository.StringFromSQLNullString(userInfoRow.Nickname),
-		Profile:       repository.StringFromSQLNullString(userInfoRow.Profile),
-		Picture:       repository.StringFromSQLNullString(userInfoRow.Picture),
-		Website:       repository.StringFromSQLNullString(userInfoRow.Website),
-		Gender:        repository.StringFromSQLNullString(userInfoRow.Gender),
-		Birthdate:     repository.TimeFromSQLNullTime(userInfoRow.Birthdate),
-		Zoneinfo:      repository.StringFromSQLNullString(userInfoRow.Zoneinfo),
-		Locale:        repository.StringFromSQLNullString(userInfoRow.Locale),
-		Address: &OpenIdClaimsAddress{
-			StreetAddress: repository.StringFromSQLNullString(userInfoRow.StreetAddress),
-			Locality:      repository.StringFromSQLNullString(userInfoRow.Locality),
-			Region:        repository.StringFromSQLNullString(userInfoRow.Region),
-			PostalCode:    repository.StringFromSQLNullString(userInfoRow.PostalCode),
-			Country:       repository.StringFromSQLNullString(userInfoRow.Country),
+		Name:          userInfoRow.Name,
+		GivenName:     userInfoRow.GivenName,
+		FamilyName:    userInfoRow.FamilyName,
+		MiddleName:    userInfoRow.MiddleName,
+		Nickname:      userInfoRow.Nickname,
+		Profile:       userInfoRow.Profile,
+		Picture:       userInfoRow.Picture,
+		Website:       userInfoRow.Website,
+		Gender:        userInfoRow.Gender,
+		Birthdate:     userInfoRow.Birthdate,
+		Zoneinfo:      userInfoRow.Zoneinfo,
+		Locale:        userInfoRow.Locale,
+		Address: OpenIdClaimsAddress{
+			StreetAddress: userInfoRow.StreetAddress,
+			Locality:      userInfoRow.Locality,
+			Region:        userInfoRow.Region,
+			PostalCode:    userInfoRow.PostalCode,
+			Country:       userInfoRow.Country,
 		},
 	}, nil
 }

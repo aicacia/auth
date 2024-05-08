@@ -233,7 +233,7 @@ func DeleteUserById(c *fiber.Ctx) error {
 // GetUserInfo
 //
 //	@Summary		Get user info
-//	@ID				get-user-info
+//	@ID				user-info
 //	@Tags			user
 //	@Accept			json
 //	@Produce		json

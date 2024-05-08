@@ -76,8 +76,8 @@ func InstallRouter(fiberApp *fiber.App) {
 	users.Patch("/:id", controller.PatchUpdateUserById)
 	users.Post("", controller.PostCreateUser)
 	users.Delete("/:id", controller.DeleteUserById)
-	users.Get("/info", controller.GetUserInfo)
-	users.Patch("/info", controller.PatchUserInfo)
+	users.Get("/:id/info", controller.GetUserInfo)
+	users.Patch("/:id/info", controller.PatchUserInfo)
 
 	emails := users.Group("/:userId/emails")
 	emails.Patch("/:id/send-confirmation", controller.PatchUserEmailSendConfirmation)

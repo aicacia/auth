@@ -11,6 +11,7 @@
 	import { invalidateAll } from '$app/navigation';
 	import { handleError } from '$lib/errors';
 	import UserEditor from './UserEditor.svelte';
+	import { email } from 'vest/enforce/email';
 
 	export let application: Application;
 
@@ -83,8 +84,8 @@
 			<tr>
 				<td>{user.id}</td>
 				<td>{user.username}</td>
-				<td>{user.email || ''}</td>
-				<td>{user.phoneNumber || ''}</td>
+				<td>{user.email?.email || ''}</td>
+				<td>{user.phoneNumber?.phoneNumber || ''}</td>
 				<td>{user.updatedAt.toLocaleString()}</td>
 				<td>{user.createdAt.toLocaleString()}</td>
 				<td class="flex flex-row justify-end">

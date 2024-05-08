@@ -13,6 +13,8 @@ export * from './Email';
 export * from './ErrorMessage';
 export * from './Errors';
 export * from './Health';
+export * from './ModelPasswordResetST';
+export * from './ModelRequestPasswordResetST';
 export * from './OpenIDConfiguration';
 export * from './PaginationApplication';
 export * from './PaginationTenent';

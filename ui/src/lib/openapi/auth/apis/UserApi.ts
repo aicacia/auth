@@ -106,11 +106,6 @@ export interface DeleteUserByIdRequest {
     id: number;
 }
 
-export interface GetUserInfoRequest {
-    applicationId: number;
-    id: number;
-}
-
 export interface SendConfirmationToEmailRequest {
     applicationId: number;
     userId: number;
@@ -148,6 +143,11 @@ export interface UpdateUserInfoOperationRequest {
 }
 
 export interface UserByIdRequest {
+    applicationId: number;
+    id: number;
+}
+
+export interface UserInfoRequest {
     applicationId: number;
     id: number;
 }
@@ -303,22 +303,6 @@ export interface UserApiInterface {
 
     /**
      * 
-     * @summary Get user info
-     * @param {number} applicationId application id
-     * @param {number} id user id
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UserApiInterface
-     */
-    getUserInfoRaw(requestParameters: GetUserInfoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserInfo>>;
-
-    /**
-     * Get user info
-     */
-    getUserInfo(applicationId: number, id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserInfo>;
-
-    /**
-     * 
      * @summary Send confirmation token to user email
      * @param {number} applicationId application id
      * @param {number} userId user id
@@ -434,6 +418,22 @@ export interface UserApiInterface {
      * Get user by id
      */
     userById(applicationId: number, id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<User>;
+
+    /**
+     * 
+     * @summary Get user info
+     * @param {number} applicationId application id
+     * @param {number} id user id
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApiInterface
+     */
+    userInfoRaw(requestParameters: UserInfoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserInfo>>;
+
+    /**
+     * Get user info
+     */
+    userInfo(applicationId: number, id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserInfo>;
 
     /**
      * 
@@ -880,50 +880,6 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
     }
 
     /**
-     * Get user info
-     */
-    async getUserInfoRaw(requestParameters: GetUserInfoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserInfo>> {
-        if (requestParameters['applicationId'] == null) {
-            throw new runtime.RequiredError(
-                'applicationId',
-                'Required parameter "applicationId" was null or undefined when calling getUserInfo().'
-            );
-        }
-
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling getUserInfo().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
-
-        const response = await this.request({
-            path: `/applications/{applicationId}/users/{id}/info`.replace(`{${"applicationId"}}`, encodeURIComponent(String(requestParameters['applicationId']))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => UserInfoFromJSON(jsonValue));
-    }
-
-    /**
-     * Get user info
-     */
-    async getUserInfo(applicationId: number, id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserInfo> {
-        const response = await this.getUserInfoRaw({ applicationId: applicationId, id: id }, initOverrides);
-        return await response.value();
-    }
-
-    /**
      * Send confirmation token to user email
      */
     async sendConfirmationToEmailRaw(requestParameters: SendConfirmationToEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
@@ -1272,6 +1228,50 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
      */
     async userById(applicationId: number, id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<User> {
         const response = await this.userByIdRaw({ applicationId: applicationId, id: id }, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get user info
+     */
+    async userInfoRaw(requestParameters: UserInfoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserInfo>> {
+        if (requestParameters['applicationId'] == null) {
+            throw new runtime.RequiredError(
+                'applicationId',
+                'Required parameter "applicationId" was null or undefined when calling userInfo().'
+            );
+        }
+
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling userInfo().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // Authorization authentication
+        }
+
+        const response = await this.request({
+            path: `/applications/{applicationId}/users/{id}/info`.replace(`{${"applicationId"}}`, encodeURIComponent(String(requestParameters['applicationId']))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserInfoFromJSON(jsonValue));
+    }
+
+    /**
+     * Get user info
+     */
+    async userInfo(applicationId: number, id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserInfo> {
+        const response = await this.userInfoRaw({ applicationId: applicationId, id: id }, initOverrides);
         return await response.value();
     }
 

@@ -31,7 +31,7 @@ export interface UserInfo {
      * @type {UserInfoAddress}
      * @memberof UserInfo
      */
-    address?: UserInfoAddress;
+    address: UserInfoAddress;
     /**
      * 
      * @type {Date}
@@ -134,6 +134,7 @@ export interface UserInfo {
  * Check if a given object implements the UserInfo interface.
  */
 export function instanceOfUserInfo(value: object): boolean {
+    if (!('address' in value)) return false;
     if (!('createdAt' in value)) return false;
     if (!('preferredUsername' in value)) return false;
     if (!('updatedAt' in value)) return false;
@@ -151,7 +152,7 @@ export function UserInfoFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     }
     return {
         
-        'address': json['address'] == null ? undefined : UserInfoAddressFromJSON(json['address']),
+        'address': UserInfoAddressFromJSON(json['address']),
         'birthdate': json['birthdate'] == null ? undefined : (new Date(json['birthdate'])),
         'createdAt': (new Date(json['created_at'])),
         'familyName': json['family_name'] == null ? undefined : json['family_name'],

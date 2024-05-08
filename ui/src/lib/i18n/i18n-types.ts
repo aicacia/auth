@@ -202,6 +202,10 @@ type RootTranslation = {
 		 */
 		submitUpdateUsername: string
 		/**
+		 * U​p​d​a​t​e​ ​I​n​f​o
+		 */
+		updateUserInfo: string
+		/**
 		 * U​p​d​a​t​e​ ​E​m​a​i​l​s
 		 */
 		updateEmails: string
@@ -574,6 +578,10 @@ export type TranslationFunctions = {
 		 * Update
 		 */
 		submitUpdateUsername: () => LocalizedString
+		/**
+		 * Update Info
+		 */
+		updateUserInfo: () => LocalizedString
 		/**
 		 * Update Emails
 		 */

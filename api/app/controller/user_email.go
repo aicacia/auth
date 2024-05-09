@@ -34,30 +34,30 @@ import (
 func PatchUserEmailSendConfirmation(c *fiber.Ctx) error {
 	userId, err := strconv.Atoi(c.Params("userId"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid")
 	}
 	application := middleware.GetApplication(c)
 	user, err := repository.GetUserById(application.Id, int32(userId))
 	if err != nil {
 		log.Printf("failed to get user: %v\n", err)
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
 	}
 	if user == nil {
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
 	}
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("id", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
 	}
 	confirmationToken, err := util.GenerateRandomHex(8)
 	if err != nil {
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	// TODO: send to email
 	log.Printf("userId=%d, emailId=%d, token=%s\n", userId, id, confirmationToken)
 	_, err = repository.SetEmailConfirmation(user.Id, int32(id), confirmationToken)
 	if err != nil {
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	c.Status(http.StatusNoContent)
 	return c.Send(nil)
@@ -85,29 +85,29 @@ func PatchUserEmailSendConfirmation(c *fiber.Ctx) error {
 func PatchUserEmailConfirm(c *fiber.Ctx) error {
 	userId, err := strconv.Atoi(c.Params("userId"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid")
 	}
 	application := middleware.GetApplication(c)
 	user, err := repository.GetUserById(application.Id, int32(userId))
 	if err != nil {
 		log.Printf("failed to get user: %v\n", err)
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
 	}
 	if user == nil {
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
 	}
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("id", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
 	}
 	var confirmEmail model.ConfirmEmailST
 	if err := c.BodyParser(&confirmEmail); err != nil {
 		log.Printf("invalid request body: %v\n", err)
-		return model.NewError(http.StatusBadRequest).AddError("request", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	email, err := repository.ConfirmEmail(user.Id, int32(id), strings.ToLower(strings.TrimSpace(confirmEmail.Token)))
 	if err != nil {
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	return c.JSON(model.EmailFromRow(email))
 }
@@ -133,24 +133,24 @@ func PatchUserEmailConfirm(c *fiber.Ctx) error {
 func PatchUserEmailSetPrimary(c *fiber.Ctx) error {
 	userId, err := strconv.Atoi(c.Params("userId"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid")
 	}
 	application := middleware.GetApplication(c)
 	user, err := repository.GetUserById(application.Id, int32(userId))
 	if err != nil {
 		log.Printf("failed to get user: %v\n", err)
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
 	}
 	if user == nil {
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
 	}
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("id", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
 	}
 	_, err = repository.SetPrimaryEmail(user.Id, int32(id))
 	if err != nil {
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	c.Status(http.StatusNoContent)
 	return c.Send(nil)
@@ -177,30 +177,30 @@ func PatchUserEmailSetPrimary(c *fiber.Ctx) error {
 func PostUserCreateEmail(c *fiber.Ctx) error {
 	applicationId, err := strconv.Atoi(c.Params("applicationId"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("applicationId", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("applicationId", "invalid")
 	}
 	userId, err := strconv.Atoi(c.Params("userId"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid")
 	}
 	application := middleware.GetApplication(c)
 	user, err := repository.GetUserById(application.Id, int32(userId))
 	if err != nil {
 		log.Printf("failed to get user: %v\n", err)
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
 	}
 	if user == nil {
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
 	}
 	var createEmail model.CreateEmailST
 	if err := c.BodyParser(&createEmail); err != nil {
 		log.Printf("invalid request body: %v\n", err)
-		return model.NewError(http.StatusBadRequest).AddError("request", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	emailRow, err := repository.CreateEmail(int32(applicationId), int32(userId), createEmail.Email)
 	if err != nil {
 		log.Printf("failed to create email: %v\n", err)
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	// TODO: send to email
 	log.Printf("userId=%d, emailId=%d, token=%s\n", userId, emailRow.Id, emailRow.ConfirmationToken)
@@ -229,28 +229,28 @@ func PostUserCreateEmail(c *fiber.Ctx) error {
 func DeleteUserEmail(c *fiber.Ctx) error {
 	userId, err := strconv.Atoi(c.Params("userId"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid")
 	}
 	application := middleware.GetApplication(c)
 	user, err := repository.GetUserById(application.Id, int32(userId))
 	if err != nil {
 		log.Printf("failed to get user: %v\n", err)
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
 	}
 	if user == nil {
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
 	}
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("id", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
 	}
 	deleted, err := repository.DeleteEmail(int32(userId), int32(id))
 	if err != nil {
 		log.Printf("failed to delete email: %v\n", err)
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	if !deleted {
-		return model.NewError(http.StatusNotFound).AddError("id", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("id", "invalid")
 	}
 	c.Status(http.StatusNoContent)
 	return c.Send(nil)

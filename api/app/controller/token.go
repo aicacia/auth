@@ -37,7 +37,7 @@ func PostToken(c *fiber.Ctx) error {
 	var tokenRequest model.TokenRequestST
 	if err := c.BodyParser(&tokenRequest); err != nil {
 		log.Printf("invalid request body: %v\n", err)
-		return model.NewError(http.StatusBadRequest).AddError("request", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	switch tokenRequest.GrantType {
 	case model.PasswordGrantType:
@@ -47,7 +47,7 @@ func PostToken(c *fiber.Ctx) error {
 	case model.RefreshTokenGrantType:
 		return refreshToken(c, tokenRequest)
 	}
-	return model.NewError(http.StatusBadRequest).AddError("grant_type", "invalid").Send(c)
+	return model.NewError(http.StatusBadRequest).AddError("grant_type", "invalid")
 }
 
 func passwordToken(c *fiber.Ctx, tokenRequest model.TokenRequestST) error {
@@ -55,18 +55,18 @@ func passwordToken(c *fiber.Ctx, tokenRequest model.TokenRequestST) error {
 	user, err := repository.GetUserByUsernameOrEmail(application.Id, strings.TrimSpace(tokenRequest.Username))
 	if err != nil {
 		log.Printf("failed to get user: %v\n", err)
-		return model.NewError(http.StatusUnauthorized).AddError("username", "invalid").AddError("password", "invalid").Send(c)
+		return model.NewError(http.StatusUnauthorized).AddError("username", "invalid").AddError("password", "invalid")
 	}
 	if user == nil {
 		log.Printf("failed to get user: %v\n", err)
-		return model.NewError(http.StatusUnauthorized).AddError("username", "invalid").AddError("password", "invalid").Send(c)
+		return model.NewError(http.StatusUnauthorized).AddError("username", "invalid").AddError("password", "invalid")
 	}
 	verified, err := util.VerifyPassword(strings.TrimSpace(tokenRequest.Password), user.EncryptedPassword)
 	if !verified || err != nil {
 		if err != nil {
 			log.Printf("failed to verify password: %v\n", err)
 		}
-		return model.NewError(http.StatusUnauthorized).AddError("username", "invalid").AddError("password", "invalid").Send(c)
+		return model.NewError(http.StatusUnauthorized).AddError("username", "invalid").AddError("password", "invalid")
 	}
 	return sendToken(c, tokenRequest.GrantType, tokenRequest.Scope, application, middleware.GetTenent(c), user, nil)
 }
@@ -75,19 +75,19 @@ func serviceAccountToken(c *fiber.Ctx, tokenRequest model.TokenRequestST) error 
 	key, err := uuid.Parse(strings.TrimSpace(tokenRequest.Key))
 	if err != nil {
 		log.Printf("failed to parse key: %v\n", err)
-		return model.NewError(http.StatusUnauthorized).AddError("key", "invalid").AddError("secret", "invalid").Send(c)
+		return model.NewError(http.StatusUnauthorized).AddError("key", "invalid").AddError("secret", "invalid")
 	}
 	serviceAccount, err := repository.GetServiceAccountByKey(key)
 	if err != nil {
 		log.Printf("failed to get user: %v\n", err)
-		return model.NewError(http.StatusUnauthorized).AddError("key", "invalid").AddError("secret", "invalid").Send(c)
+		return model.NewError(http.StatusUnauthorized).AddError("key", "invalid").AddError("secret", "invalid")
 	}
 	verified, err := util.VerifyPassword(strings.TrimSpace(tokenRequest.Secret), serviceAccount.EncryptedSecret)
 	if !verified || err != nil {
 		if err != nil {
 			log.Printf("failed to verify secret: %v\n", err)
 		}
-		return model.NewError(http.StatusUnauthorized).AddError("key", "invalid").AddError("secret", "invalid").Send(c)
+		return model.NewError(http.StatusUnauthorized).AddError("key", "invalid").AddError("secret", "invalid")
 	}
 	return sendToken(c, tokenRequest.GrantType, tokenRequest.Scope, middleware.GetApplication(c), middleware.GetTenent(c), nil, serviceAccount)
 }
@@ -97,12 +97,12 @@ func refreshToken(c *fiber.Ctx, tokenRequest model.TokenRequestST) error {
 	claims, err := jwt.ParseClaimsFromToken(tokenRequest.RefreshToken, tenent)
 	if err != nil {
 		log.Printf("failed to get refresh token claims: %v\n", err)
-		return model.NewError(http.StatusUnauthorized).AddError("refresh_token", "invalid").Send(c)
+		return model.NewError(http.StatusUnauthorized).AddError("refresh_token", "invalid")
 	}
 	user, err := repository.GetUserById(tenent.ApplicationId, claims.Subject)
 	if err != nil {
 		log.Printf("failed to get user: %v\n", err)
-		return model.NewError(http.StatusUnauthorized).AddError("refresh_token", "invalid").Send(c)
+		return model.NewError(http.StatusUnauthorized).AddError("refresh_token", "invalid")
 	}
 	return sendToken(c, tokenRequest.GrantType, tokenRequest.Scope, middleware.GetApplication(c), tenent, user, nil)
 }
@@ -147,12 +147,12 @@ func sendToken(
 	accessToken, err := jwt.CreateToken(&claims, tenent)
 	if err != nil {
 		log.Printf("failed to create access token: %v\n", err)
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	refreshToken, err := jwt.CreateToken(claims.ToRefreshClaims(application, tenent), tenent)
 	if err != nil {
 		log.Printf("failed to create refresh token: %v\n", err)
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	var idToken *string
 	if slices.Contains(scopes, "openid") {
@@ -160,16 +160,16 @@ func sendToken(
 			openIdClaims, err := jwt.OpenIdClaimsForUser(&claims, user.Id)
 			if err != nil {
 				log.Printf("failed to create id claims: %v\n", err)
-				return model.NewError(http.StatusInternalServerError).Send(c)
+				return model.NewError(http.StatusInternalServerError)
 			}
 			token, err := jwt.CreateToken(openIdClaims, tenent)
 			if err != nil {
 				log.Printf("failed to create id token: %v\n", err)
-				return model.NewError(http.StatusInternalServerError).Send(c)
+				return model.NewError(http.StatusInternalServerError)
 			}
 			idToken = &token
 		} else {
-			return model.NewError(http.StatusBadRequest).AddError("scope", "invalid").Send(c)
+			return model.NewError(http.StatusBadRequest).AddError("scope", "invalid")
 		}
 	}
 	return c.JSON(model.TokenST{

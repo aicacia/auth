@@ -23,25 +23,25 @@ func AuthorizedMiddleware() fiber.Handler {
 		unvalidatedClaims, err := jwt.ParseClaimsFromTokenNoValidation(tokenString)
 		if err != nil {
 			log.Printf("failed to get authorization header: %v", err)
-			return model.NewError(http.StatusUnauthorized).AddError("authorization", "invalid").Send(c)
+			return model.NewError(http.StatusUnauthorized).AddError("authorization", "invalid")
 		}
 		if unvalidatedClaims.Type != jwt.BearerTokenType {
-			return model.NewError(http.StatusUnauthorized).AddError("authorization", "invalid").Send(c)
+			return model.NewError(http.StatusUnauthorized).AddError("authorization", "invalid")
 		}
 		tenent, err := repository.GetTenentByClientId(unvalidatedClaims.ClientId)
 		if err != nil {
 			log.Printf("failed to fetch application tenent: %v", err)
-			return model.NewError(http.StatusUnauthorized).AddError("authorization", "invalid").Send(c)
+			return model.NewError(http.StatusUnauthorized).AddError("authorization", "invalid")
 		}
 		claims, err := jwt.ParseClaimsFromToken(tokenString, tenent)
 		if err != nil {
 			log.Printf("failed to parse claims from token: %v", err)
-			return model.NewError(http.StatusUnauthorized).AddError("authorization", "invalid").Send(c)
+			return model.NewError(http.StatusUnauthorized).AddError("authorization", "invalid")
 		}
 		application, err := repository.GetApplicationById(tenent.ApplicationId)
 		if err != nil {
 			log.Printf("failed to fetch application: %v", err)
-			return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+			return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 		}
 		c.Locals(applicationLocalKey, application)
 		c.Locals(tenentLocalKey, tenent)
@@ -52,12 +52,12 @@ func AuthorizedMiddleware() fiber.Handler {
 			user, err := repository.GetUserById(application.Id, claims.Subject)
 			if err != nil {
 				log.Printf("failed to fetch user: %v", err)
-				return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+				return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 			}
 			permissions, err := repository.GetUserPermissions(user.Id, application.Id)
 			if err != nil {
 				log.Printf("failed to fetch user permissions: %v", err)
-				return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+				return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 			}
 			c.Locals(permissionsLocalKey, permissions)
 			c.Locals(permissionsMapLocalKey, repository.PermissionsToMap(permissions))
@@ -66,12 +66,12 @@ func AuthorizedMiddleware() fiber.Handler {
 			serviceAccount, err := repository.GetServiceAccountById(claims.Subject)
 			if err != nil {
 				log.Printf("failed to fetch service account: %v", err)
-				return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+				return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 			}
 			permissions, err := repository.GetServiceAccountPermissions(serviceAccount.Id, application.Id)
 			if err != nil {
 				log.Printf("failed to fetch user permissions: %v", err)
-				return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+				return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 			}
 			c.Locals(permissionsLocalKey, permissions)
 			c.Locals(permissionsMapLocalKey, repository.PermissionsToMap(permissions))
@@ -86,7 +86,7 @@ func OpenIdMiddleware() fiber.Handler {
 		if HasScope(c, "openid") {
 			return c.Next()
 		}
-		return model.NewError(http.StatusUnauthorized).AddError("token", "invalid").Send(c)
+		return model.NewError(http.StatusUnauthorized).AddError("token", "invalid")
 	}
 }
 
@@ -138,7 +138,7 @@ func IsUserMiddleware() fiber.Handler {
 		if IsUserSubject(c) {
 			return c.Next()
 		}
-		return model.NewError(http.StatusForbidden).AddError("authorization", "invalid").Send(c)
+		return model.NewError(http.StatusForbidden).AddError("authorization", "invalid")
 	}
 }
 
@@ -147,6 +147,6 @@ func IsServiceAccountMiddleware() fiber.Handler {
 		if IsServiceAccount(c) {
 			return c.Next()
 		}
-		return model.NewError(http.StatusForbidden).AddError("authorization", "invalid").Send(c)
+		return model.NewError(http.StatusForbidden).AddError("authorization", "invalid")
 	}
 }

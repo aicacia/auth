@@ -11,7 +11,7 @@ func AdminApplicationMiddleware() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		application := GetApplication(c)
 		if !application.IsAdmin {
-			return model.NewError(http.StatusForbidden).AddError("authorization", "invalid").Send(c)
+			return model.NewError(http.StatusForbidden).AddError("authorization", "invalid")
 		}
 		return c.Next()
 	}

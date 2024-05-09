@@ -32,11 +32,11 @@ import (
 //	@Security		Authorization
 func GetTenents(c *fiber.Ctx) error {
 	if err := access.IsAdmin(c); err != nil {
-		return err.Send(c)
+		return err
 	}
 	applicationId, err := strconv.Atoi(c.Params("applicationId"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("applicationId", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("applicationId", "invalid")
 	}
 	limit, offset, err := GetLimitAndOffset(c, 20)
 	if err != nil {
@@ -48,7 +48,7 @@ func GetTenents(c *fiber.Ctx) error {
 	tenents, err := repository.GetTenents(int32(applicationId), limit, offset)
 	if err != nil {
 		log.Printf("failed to get applications: %v\n", err)
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	return c.JSON(model.PaginationST[model.TenentST]{
 		HasMore: len(tenents) == limit,
@@ -75,23 +75,23 @@ func GetTenents(c *fiber.Ctx) error {
 //	@Security		Authorization
 func GetTenentById(c *fiber.Ctx) error {
 	if err := access.IsAdmin(c); err != nil {
-		return err.Send(c)
+		return err
 	}
 	_, err := strconv.Atoi(c.Params("applicationId"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("applicationId", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("applicationId", "invalid")
 	}
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("id", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
 	}
 	application, err := repository.GetTenentById(int32(id))
 	if err != nil {
 		log.Printf("failed to get application: %v\n", err)
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	if application == nil {
-		return model.NewError(http.StatusNotFound).AddError("id", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("id", "invalid")
 	}
 	return c.JSON(model.TenentFromRow(*application))
 }
@@ -115,21 +115,21 @@ func GetTenentById(c *fiber.Ctx) error {
 //	@Security		Authorization
 func PostCreateTenent(c *fiber.Ctx) error {
 	if err := access.IsAdmin(c); err != nil {
-		return err.Send(c)
+		return err
 	}
 	applicationId, err := strconv.Atoi(c.Params("applicationId"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("applicationId", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("applicationId", "invalid")
 	}
 	var createTenent model.CreateTenentST
 	if err := c.BodyParser(&createTenent); err != nil {
 		log.Printf("failed to parse body: %v\n", err)
-		return model.NewError(http.StatusBadRequest).AddError("request", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	application, err := repository.CreateTenent(int32(applicationId), createTenent.CreateTenentST)
 	if err != nil {
 		log.Printf("failed to create tenent: %v\n", err)
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	c.Status(http.StatusCreated)
 	return c.JSON(model.TenentFromRow(application))
@@ -155,28 +155,28 @@ func PostCreateTenent(c *fiber.Ctx) error {
 //	@Security		Authorization
 func PatchUpdateTenent(c *fiber.Ctx) error {
 	if err := access.IsAdmin(c); err != nil {
-		return err.Send(c)
+		return err
 	}
 	_, err := strconv.Atoi(c.Params("applicationId"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("applicationId", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("applicationId", "invalid")
 	}
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("id", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
 	}
 	var updateTenent model.UpdateTenentST
 	if err := c.BodyParser(&updateTenent); err != nil {
 		log.Printf("failed to parse body: %v\n", err)
-		return model.NewError(http.StatusBadRequest).AddError("request", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	application, err := repository.UpdateTenent(int32(id), updateTenent.UpdateTenentST)
 	if err != nil {
 		log.Printf("failed to update tenent: %v\n", err)
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	if application == nil {
-		return model.NewError(http.StatusNotFound).AddError("id", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("id", "invalid")
 	}
 	return c.JSON(model.TenentFromRow(*application))
 }
@@ -200,23 +200,23 @@ func PatchUpdateTenent(c *fiber.Ctx) error {
 //	@Security		Authorization
 func DeleteTenent(c *fiber.Ctx) error {
 	if err := access.IsAdmin(c); err != nil {
-		return err.Send(c)
+		return err
 	}
 	_, err := strconv.Atoi(c.Params("applicationId"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("applicationId", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("applicationId", "invalid")
 	}
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("id", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
 	}
 	deleted, err := repository.DeleteTenent(int32(id))
 	if err != nil {
 		log.Printf("failed to delete tenent: %v\n", err)
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	if !deleted {
-		return model.NewError(http.StatusNotFound).AddError("id", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("id", "invalid")
 	}
 	c.Status(http.StatusNoContent)
 	return c.Send(nil)

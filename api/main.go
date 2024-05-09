@@ -86,6 +86,7 @@ func main() {
 		StrictRouting: true,
 		ServerHeader:  "",
 		AppName:       "",
+		ErrorHandler:  router.ErrorHandler,
 	})
 	fiberApp.Use(fiberRecover.New())
 	fiberApp.Use(logger.New(logger.Config{

@@ -1,6 +1,10 @@
 package model
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"encoding/json"
+
+	"github.com/gofiber/fiber/v2"
+)
 
 type ErrorMessageST struct {
 	Message    string        `json:"error" validate:"required"`
@@ -43,4 +47,12 @@ func (e *ErrorST) HasErrors() bool {
 
 func (e *ErrorST) Send(c *fiber.Ctx) error {
 	return c.Status(e.StatusCode).JSON(e)
+}
+
+func (e *ErrorST) Error() string {
+	bytes, err := json.Marshal(e)
+	if err != nil {
+		panic(err)
+	}
+	return string(bytes)
 }

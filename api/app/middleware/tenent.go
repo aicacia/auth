@@ -19,25 +19,25 @@ func TenentMiddleware() fiber.Handler {
 		tenentId, err := uuid.Parse(tenentIdString)
 		if err != nil {
 			log.Printf("invalid tenent id %s: %v\n", tenentIdString, err)
-			return model.NewError(http.StatusBadRequest).AddError("Tenent-Id", "invalid").Send(c)
+			return model.NewError(http.StatusBadRequest).AddError("Tenent-Id", "invalid")
 		}
 		tenent, err := repository.GetTenentByClientId(tenentId)
 		if err != nil {
 			log.Printf("failed to fetch application tenent: %v\n", err)
-			return model.NewError(http.StatusNotFound).AddError("Tenent-Id", "invalid").Send(c)
+			return model.NewError(http.StatusNotFound).AddError("Tenent-Id", "invalid")
 		}
 		if tenent == nil {
 			log.Printf("tenent not found: %v\n", err)
-			return model.NewError(http.StatusNotFound).AddError("Tenent-Id", "invalid").Send(c)
+			return model.NewError(http.StatusNotFound).AddError("Tenent-Id", "invalid")
 		}
 		application, err := repository.GetApplicationById(tenent.ApplicationId)
 		if err != nil {
 			log.Printf("failed to fetch application: %v\n", err)
-			return model.NewError(http.StatusBadRequest).AddError("Tenent-Id", "invalid").Send(c)
+			return model.NewError(http.StatusBadRequest).AddError("Tenent-Id", "invalid")
 		}
 		if application == nil {
 			log.Printf("application not found: %v\n", err)
-			return model.NewError(http.StatusBadRequest).AddError("Tenent-Id", "invalid").Send(c)
+			return model.NewError(http.StatusBadRequest).AddError("Tenent-Id", "invalid")
 		}
 		c.Locals(applicationLocalKey, application)
 		c.Locals(tenentLocalKey, tenent)

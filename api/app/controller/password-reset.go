@@ -36,7 +36,7 @@ func PostRequestPasswordReset(c *fiber.Ctx) error {
 	var requestPasswordReset model.RequestPasswordResetST
 	if err := c.BodyParser(&requestPasswordReset); err != nil {
 		log.Printf("invalid request body: %v\n", err)
-		return model.NewError(http.StatusBadRequest).AddError("request", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	email := strings.TrimSpace(requestPasswordReset.Email)
 	phoneNumber := util.NumericRegex.ReplaceAllString(requestPasswordReset.PhoneNumber, "")
@@ -47,7 +47,7 @@ func PostRequestPasswordReset(c *fiber.Ctx) error {
 		user, err = repository.GetUserByEmail(application.Id, email)
 		if err != nil {
 			log.Printf("error fetching user by email: %v\n", err)
-			return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+			return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 		}
 	}
 	if user == nil && phoneNumber != "" {
@@ -55,11 +55,11 @@ func PostRequestPasswordReset(c *fiber.Ctx) error {
 		user, err = repository.GetUserByPhoneNumber(application.Id, phoneNumber)
 		if err != nil {
 			log.Printf("error fetching user by email: %v\n", err)
-			return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+			return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 		}
 	}
 	if user == nil {
-		return model.NewError(http.StatusBadRequest).AddError("request", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	tenent := middleware.GetTenent(c)
 	now := time.Now().UTC()
@@ -75,7 +75,7 @@ func PostRequestPasswordReset(c *fiber.Ctx) error {
 	passwordResetToken, err := jwt.CreateToken(&claims, tenent)
 	if err != nil {
 		log.Printf("failed to create access token: %v\n", err)
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	// TODO: send password reset email/phone number
 	log.Printf("password reset token: %v\n", passwordResetToken)
@@ -104,7 +104,7 @@ func PostPasswordReset(c *fiber.Ctx) error {
 	var passwordReset model.PasswordResetST
 	if err := c.BodyParser(&passwordReset); err != nil {
 		log.Printf("invalid request body: %v\n", err)
-		return model.NewError(http.StatusBadRequest).AddError("request", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	password := strings.TrimSpace(passwordReset.Password)
 	passwordConfirmation := strings.TrimSpace(passwordReset.PasswordConfirmation)
@@ -116,23 +116,23 @@ func PostPasswordReset(c *fiber.Ctx) error {
 		errors.AddError("passwordConfirmation", "mismatch")
 	}
 	if errors.HasErrors() {
-		return errors.Send(c)
+		return errors
 	}
 	tenent := middleware.GetTenent(c)
 	claims, err := jwt.ParseClaimsFromToken(passwordReset.Token, tenent)
 	if err != nil {
 		log.Printf("invalid password reset token: %v\n", err)
-		return model.NewError(http.StatusBadRequest).AddError("request", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	if claims.Type != jwt.PasswordResetTokenType {
 		log.Printf("invalid password reset token: %v\n", err)
-		return model.NewError(http.StatusBadRequest).AddError("request", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	application := middleware.GetApplication(c)
 	user, err := repository.UpdateUserPassword(application.Id, claims.Subject, passwordReset.Password)
 	if err != nil {
 		log.Printf("error setting user reset password token: %v\n", err)
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	return sendToken(c, jwt.PasswordResetTokenType, "openid", application, tenent, user, nil)
 }

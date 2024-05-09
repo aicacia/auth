@@ -30,12 +30,12 @@ import (
 func PostRegistration(c *fiber.Ctx) error {
 	tenent := middleware.GetTenent(c)
 	if tenent.RegistrationWebsite == nil {
-		return model.NewError(http.StatusForbidden).AddError("signup", "disabled", "application").Send(c)
+		return model.NewError(http.StatusForbidden).AddError("signup", "disabled", "application")
 	}
 	var registrationRequest model.RegistrationRequestST
 	if err := c.BodyParser(&registrationRequest); err != nil {
 		log.Printf("failed to parse body: %v\n", err)
-		return model.NewError(http.StatusBadRequest).AddError("request", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	username := strings.TrimSpace(registrationRequest.Username)
 	password := strings.TrimSpace(registrationRequest.Password)
@@ -48,18 +48,18 @@ func PostRegistration(c *fiber.Ctx) error {
 		errors.AddError("password_confirmation", "mismatch")
 	}
 	if errors.HasErrors() {
-		return errors.Send(c)
+		return errors
 	}
 	application := middleware.GetApplication(c)
 	createResult, err := repository.CreateUserWithPassword(application.Id, registrationRequest.Username, password)
 	if err != nil {
 		log.Printf("failed to create user: %v\n", err)
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	_, err = repository.AddUserToApplication(application.Id, createResult.User.Id)
 	if err != nil {
 		log.Printf("failed to add user to application: %v\n", err)
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	return sendToken(c, model.PasswordGrantType, "openid", application, tenent, &createResult.User, nil)
 }

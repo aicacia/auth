@@ -20,7 +20,7 @@ func GetLimitAndOffset(c *fiber.Ctx, limit int) (int, int, error) {
 		integer, err := strconv.Atoi(limitString)
 		if err != nil {
 			log.Printf("failed to parse limit: %v\n", err)
-			err = model.NewError(http.StatusUnauthorized).AddError("limit", "invalid").Send(c)
+			err = model.NewError(http.StatusUnauthorized).AddError("limit", "invalid")
 			if err == nil {
 				err = errParseLimitOffset
 			}
@@ -33,7 +33,7 @@ func GetLimitAndOffset(c *fiber.Ctx, limit int) (int, int, error) {
 		integer, err := strconv.Atoi(offsetString)
 		if err != nil {
 			log.Printf("failed to parse offset: %v\n", err)
-			err = model.NewError(http.StatusUnauthorized).AddError("offset", "invalid").Send(c)
+			err = model.NewError(http.StatusUnauthorized).AddError("offset", "invalid")
 			if err == nil {
 				err = errParseLimitOffset
 			}

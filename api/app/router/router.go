@@ -4,6 +4,7 @@ import (
 	"github.com/aicacia/auth/api/app/config"
 	"github.com/aicacia/auth/api/app/controller"
 	"github.com/aicacia/auth/api/app/middleware"
+	"github.com/aicacia/auth/api/app/model"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 )
@@ -92,4 +93,11 @@ func InstallRouter(fiberApp *fiber.App) {
 	phoneNumbers.Patch("/:id/set-primary", controller.PatchUserPhoneNumberSetPrimary)
 	phoneNumbers.Post("", controller.PostUserCreatePhoneNumber)
 	phoneNumbers.Delete("/:id", controller.DeleteUserPhoneNumber)
+}
+
+func ErrorHandler(c *fiber.Ctx, err error) error {
+	if e, ok := err.(*model.ErrorST); ok {
+		return e.Send(c)
+	}
+	return fiber.DefaultErrorHandler(c, err)
 }

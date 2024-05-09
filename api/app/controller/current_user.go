@@ -32,12 +32,12 @@ func GetCurrentUser(c *fiber.Ctx) error {
 	emails, phoneNumbers, err := getUserEmailsAndPhoneNumbersById(user.Id)
 	if err != nil {
 		log.Printf("failed to get user emails and phone numbers: %v\n", err)
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	permissionRows, err := repository.GetUserPermissions(user.Id, application.Id)
 	if err != nil {
 		log.Printf("failed to get user permissions: %v\n", err)
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	permissions := make([]string, 0, len(permissionRows))
 	for _, permissionRow := range permissionRows {
@@ -70,7 +70,7 @@ func PatchResetPassword(c *fiber.Ctx) error {
 	var resetPassword model.ResetPasswordST
 	if err := c.BodyParser(&resetPassword); err != nil {
 		log.Printf("failed to parse reset password: %v\n", err)
-		return model.NewError(http.StatusBadRequest).AddError("request", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	password := strings.TrimSpace(resetPassword.Password)
 	passwordConfirmation := strings.TrimSpace(resetPassword.PasswordConfirmation)
@@ -79,13 +79,13 @@ func PatchResetPassword(c *fiber.Ctx) error {
 		errors.AddError("password_confirmation", "mismatch", "body")
 	}
 	if errors.HasErrors() {
-		return errors.Send(c)
+		return errors
 	}
 	user := middleware.GetUser(c)
 	_, err := repository.UpdateUserPassword(user.ApplicationId, user.Id, password)
 	if err != nil {
 		log.Printf("failed to update user password: %v\n", err)
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	c.Status(http.StatusNoContent)
 	return c.Send(nil)
@@ -110,16 +110,16 @@ func PatchResetPassword(c *fiber.Ctx) error {
 func PatchUpdateCurrentUser(c *fiber.Ctx) error {
 	var updateUser model.UpdateUserST
 	if err := c.BodyParser(&updateUser); err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("request", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	user := middleware.GetUser(c)
 	user, err := repository.UpdateUsername(user.ApplicationId, user.Id, updateUser.Username)
 	if err != nil {
 		log.Printf("failed to create user: %v\n", err)
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	if user == nil {
-		return model.NewError(http.StatusNotFound).AddError("id", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("id", "invalid")
 	}
 	c.Status(http.StatusNoContent)
 	return c.Send(nil)
@@ -145,7 +145,7 @@ func GetCurrentUserInfo(c *fiber.Ctx) error {
 	userInfoRow, err := repository.GetUserInfoByUserId(user.Id)
 	if err != nil {
 		log.Printf("failed to fetch user info: %v\n", err)
-		return model.NewError(http.StatusInternalServerError).Send(c)
+		return model.NewError(http.StatusInternalServerError)
 	}
 	userInfo := model.UserInfoFromRow(user, userInfoRow)
 	return c.JSON(userInfo)
@@ -171,7 +171,7 @@ func PatchCurrentUserInfo(c *fiber.Ctx) error {
 	var userinfoUpdates model.UpdateUserInfoRequestST
 	if err := c.BodyParser(&userinfoUpdates); err != nil {
 		log.Printf("invalid request body: %v\n", err)
-		return model.NewError(http.StatusBadRequest).AddError("request", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	updates := repository.UpdateUserInfoST{
 		Name:       userinfoUpdates.Name,
@@ -198,7 +198,7 @@ func PatchCurrentUserInfo(c *fiber.Ctx) error {
 	userInfoRow, err := repository.UpdateUserInfoByUserId(user.Id, updates)
 	if err != nil {
 		log.Printf("failed to fetch user info: %v\n", err)
-		return model.NewError(http.StatusInternalServerError).Send(c)
+		return model.NewError(http.StatusInternalServerError)
 	}
 	userInfo := model.UserInfoFromRow(user, userInfoRow)
 	return c.JSON(userInfo)

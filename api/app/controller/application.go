@@ -31,7 +31,7 @@ import (
 //	@Security		Authorization
 func GetApplications(c *fiber.Ctx) error {
 	if err := access.IsAdmin(c); err != nil {
-		return err.Send(c)
+		return err
 	}
 	limit, offset, err := GetLimitAndOffset(c, 20)
 	if err != nil {
@@ -43,7 +43,7 @@ func GetApplications(c *fiber.Ctx) error {
 	applications, err := repository.GetApplications(limit, offset)
 	if err != nil {
 		log.Printf("failed to get applications: %v\n", err)
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	return c.JSON(model.PaginationST[model.ApplicationST]{
 		HasMore: len(applications) == limit,
@@ -69,19 +69,19 @@ func GetApplications(c *fiber.Ctx) error {
 //	@Security		Authorization
 func GetApplicationById(c *fiber.Ctx) error {
 	if err := access.IsAdmin(c); err != nil {
-		return err.Send(c)
+		return err
 	}
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("id", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
 	}
 	application, err := repository.GetApplicationById(int32(id))
 	if err != nil {
 		log.Printf("failed to get application: %v\n", err)
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	if application == nil {
-		return model.NewError(http.StatusNotFound).AddError("id", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("id", "invalid")
 	}
 	return c.JSON(model.ApplicationFromRow(*application))
 }
@@ -104,17 +104,17 @@ func GetApplicationById(c *fiber.Ctx) error {
 //	@Security		Authorization
 func PostCreateApplication(c *fiber.Ctx) error {
 	if err := access.IsAdmin(c); err != nil {
-		return err.Send(c)
+		return err
 	}
 	var createApplication model.CreateApplicationST
 	if err := c.BodyParser(&createApplication); err != nil {
 		log.Printf("failed to parse body: %v\n", err)
-		return model.NewError(http.StatusBadRequest).AddError("request", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	application, err := repository.CreateApplication(createApplication.CreateApplicationST)
 	if err != nil {
 		log.Printf("failed to create application: %v\n", err)
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	c.Status(http.StatusCreated)
 	return c.JSON(model.ApplicationFromRow(application))
@@ -139,24 +139,24 @@ func PostCreateApplication(c *fiber.Ctx) error {
 //	@Security		Authorization
 func PatchUpdateApplication(c *fiber.Ctx) error {
 	if err := access.IsAdmin(c); err != nil {
-		return err.Send(c)
+		return err
 	}
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("id", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
 	}
 	var updateApplication model.UpdateApplicationST
 	if err := c.BodyParser(&updateApplication); err != nil {
 		log.Printf("failed to parse body: %v\n", err)
-		return model.NewError(http.StatusBadRequest).AddError("request", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	application, err := repository.UpdateApplication(int32(id), updateApplication.UpdateApplicationST)
 	if err != nil {
 		log.Printf("failed to update application: %v\n", err)
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	if application == nil {
-		return model.NewError(http.StatusNotFound).AddError("id", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("id", "invalid")
 	}
 	return c.JSON(model.ApplicationFromRow(*application))
 }
@@ -179,30 +179,30 @@ func PatchUpdateApplication(c *fiber.Ctx) error {
 //	@Security		Authorization
 func DeleteApplication(c *fiber.Ctx) error {
 	if err := access.IsAdmin(c); err != nil {
-		return err.Send(c)
+		return err
 	}
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("id", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
 	}
 	application, err := repository.GetApplicationById(int32(id))
 	if err != nil {
 		log.Printf("failed to get application: %v\n", err)
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	if application == nil {
-		return model.NewError(http.StatusNotFound).AddError("id", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("id", "invalid")
 	}
 	if application.IsAdmin {
-		return model.NewError(http.StatusForbidden).AddError("internal", "cannotDeleteAdmin").Send(c)
+		return model.NewError(http.StatusForbidden).AddError("internal", "cannotDeleteAdmin")
 	}
 	deleted, err := repository.DeleteApplication(int32(id))
 	if err != nil {
 		log.Printf("failed to delete application: %v\n", err)
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	if !deleted {
-		return model.NewError(http.StatusNotFound).AddError("id", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("id", "invalid")
 	}
 	c.Status(http.StatusNoContent)
 	return c.Send(nil)

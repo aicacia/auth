@@ -34,30 +34,30 @@ import (
 func PatchUserPhoneNumberSendConfirmation(c *fiber.Ctx) error {
 	userId, err := strconv.Atoi(c.Params("userId"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid")
 	}
 	application := middleware.GetApplication(c)
 	user, err := repository.GetUserById(application.Id, int32(userId))
 	if err != nil {
 		log.Printf("failed to get user: %v\n", err)
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
 	}
 	if user == nil {
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
 	}
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("id", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
 	}
 	confirmationToken, err := util.GenerateRandomHex(8)
 	if err != nil {
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	// TODO: send to phone_number
 	log.Printf("userId=%d, emailId=%d, token=%s\n", userId, id, confirmationToken)
 	_, err = repository.SetPhoneNumberConfirmation(user.Id, int32(id), confirmationToken)
 	if err != nil {
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	c.Status(http.StatusNoContent)
 	return c.Send(nil)
@@ -85,29 +85,29 @@ func PatchUserPhoneNumberSendConfirmation(c *fiber.Ctx) error {
 func PatchUserPhoneNumberConfirm(c *fiber.Ctx) error {
 	userId, err := strconv.Atoi(c.Params("userId"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid")
 	}
 	application := middleware.GetApplication(c)
 	user, err := repository.GetUserById(application.Id, int32(userId))
 	if err != nil {
 		log.Printf("failed to get user: %v\n", err)
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
 	}
 	if user == nil {
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
 	}
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("id", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
 	}
 	var confirmPhoneNumber model.ConfirmPhoneNumberST
 	if err := c.BodyParser(&confirmPhoneNumber); err != nil {
 		log.Printf("invalid request body: %v\n", err)
-		return model.NewError(http.StatusBadRequest).AddError("request", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	phone_number, err := repository.ConfirmPhoneNumber(user.Id, int32(id), strings.ToLower(strings.TrimSpace(confirmPhoneNumber.Token)))
 	if err != nil {
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	return c.JSON(model.PhoneNumberFromRow(phone_number))
 }
@@ -133,24 +133,24 @@ func PatchUserPhoneNumberConfirm(c *fiber.Ctx) error {
 func PatchUserPhoneNumberSetPrimary(c *fiber.Ctx) error {
 	userId, err := strconv.Atoi(c.Params("userId"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid")
 	}
 	application := middleware.GetApplication(c)
 	user, err := repository.GetUserById(application.Id, int32(userId))
 	if err != nil {
 		log.Printf("failed to get user: %v\n", err)
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
 	}
 	if user == nil {
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
 	}
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("id", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
 	}
 	_, err = repository.SetPrimaryPhoneNumber(user.Id, int32(id))
 	if err != nil {
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	c.Status(http.StatusNoContent)
 	return c.Send(nil)
@@ -177,30 +177,30 @@ func PatchUserPhoneNumberSetPrimary(c *fiber.Ctx) error {
 func PostUserCreatePhoneNumber(c *fiber.Ctx) error {
 	applicationId, err := strconv.Atoi(c.Params("applicationId"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("applicationId", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("applicationId", "invalid")
 	}
 	userId, err := strconv.Atoi(c.Params("userId"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid")
 	}
 	application := middleware.GetApplication(c)
 	user, err := repository.GetUserById(application.Id, int32(userId))
 	if err != nil {
 		log.Printf("failed to get user: %v\n", err)
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
 	}
 	if user == nil {
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
 	}
 	var createPhoneNumber model.CreatePhoneNumberST
 	if err := c.BodyParser(&createPhoneNumber); err != nil {
 		log.Printf("invalid request body: %v\n", err)
-		return model.NewError(http.StatusBadRequest).AddError("request", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	phoneNumberRow, err := repository.CreatePhoneNumber(int32(applicationId), int32(userId), createPhoneNumber.PhoneNumber)
 	if err != nil {
 		log.Printf("failed to create phone_number: %v\n", err)
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	// TODO: send to phone number
 	log.Printf("userId=%d, emailId=%d, token=%s\n", userId, phoneNumberRow.Id, phoneNumberRow.ConfirmationToken)
@@ -229,28 +229,28 @@ func PostUserCreatePhoneNumber(c *fiber.Ctx) error {
 func DeleteUserPhoneNumber(c *fiber.Ctx) error {
 	userId, err := strconv.Atoi(c.Params("userId"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid")
 	}
 	application := middleware.GetApplication(c)
 	user, err := repository.GetUserById(application.Id, int32(userId))
 	if err != nil {
 		log.Printf("failed to get user: %v\n", err)
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
 	}
 	if user == nil {
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
 	}
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("id", "invalid").Send(c)
+		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
 	}
 	deleted, err := repository.DeletePhoneNumber(int32(userId), int32(id))
 	if err != nil {
 		log.Printf("failed to delete phone_number: %v\n", err)
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application").Send(c)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	if !deleted {
-		return model.NewError(http.StatusNotFound).AddError("id", "invalid").Send(c)
+		return model.NewError(http.StatusNotFound).AddError("id", "invalid")
 	}
 	c.Status(http.StatusNoContent)
 	return c.Send(nil)

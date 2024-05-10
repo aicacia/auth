@@ -34,10 +34,10 @@ export interface UpdateUserInfoRequest {
     address?: UserInfoAddress;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof UpdateUserInfoRequest
      */
-    birthdate?: string;
+    birthdate?: Date;
     /**
      * 
      * @type {string}
@@ -124,7 +124,7 @@ export function UpdateUserInfoRequestFromJSONTyped(json: any, ignoreDiscriminato
     return {
         
         'address': json['address'] == null ? undefined : UserInfoAddressFromJSON(json['address']),
-        'birthdate': json['birthdate'] == null ? undefined : json['birthdate'],
+        'birthdate': json['birthdate'] == null ? undefined : (new Date(json['birthdate'])),
         'familyName': json['family_name'] == null ? undefined : json['family_name'],
         'gender': json['gender'] == null ? undefined : json['gender'],
         'givenName': json['given_name'] == null ? undefined : json['given_name'],
@@ -146,7 +146,7 @@ export function UpdateUserInfoRequestToJSON(value?: UpdateUserInfoRequest | null
     return {
         
         'address': UserInfoAddressToJSON(value['address']),
-        'birthdate': value['birthdate'],
+        'birthdate': value['birthdate'] == null ? undefined : ((value['birthdate']).toISOString()),
         'family_name': value['familyName'],
         'gender': value['gender'],
         'given_name': value['givenName'],

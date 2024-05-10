@@ -29,9 +29,6 @@ import (
 //	@Failure		404	{object}	model.ErrorST
 //	@Failure		500	{object}	model.ErrorST
 //	@Router			/password-reset/request [post]
-//
-//	@Security		Locale
-//	@Security		Timezone
 func PostRequestPasswordReset(c *fiber.Ctx) error {
 	var requestPasswordReset model.RequestPasswordResetST
 	if err := c.BodyParser(&requestPasswordReset); err != nil {
@@ -97,9 +94,6 @@ func PostRequestPasswordReset(c *fiber.Ctx) error {
 //	@Failure		404	{object}	model.ErrorST
 //	@Failure		500	{object}	model.ErrorST
 //	@Router			/password-reset [post]
-//
-//	@Security		Locale
-//	@Security		Timezone
 func PostPasswordReset(c *fiber.Ctx) error {
 	var passwordReset model.PasswordResetST
 	if err := c.BodyParser(&passwordReset); err != nil {

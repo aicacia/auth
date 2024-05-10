@@ -121,11 +121,13 @@
 		<InputResults name="passwordConfirmation" {result} />
 	</div>
 	<div class="flex flex-row justify-end">
-		<button type="submit" class="btn primary flex flex-shrink" {disabled}>
-			{#if loading}<div class="flex flex-row justify-center mr-2">
-					<div class="inline-block w-6 h-6"><Spinner /></div>
-				</div>{/if}
-			{$LL.auth.reset()}
-		</button>
+		{#if password && passwordConfirmation}
+			<button type="submit" class="btn primary flex flex-shrink" {disabled}>
+				{#if loading}<div class="flex flex-row justify-center mr-2">
+						<div class="inline-block w-6 h-6"><Spinner /></div>
+					</div>{/if}
+				{$LL.auth.reset()}
+			</button>
+		{/if}
 	</div>
 </form>

@@ -77,12 +77,12 @@ export interface CurrentUserApiInterface {
      * @throws {RequiredError}
      * @memberof CurrentUserApiInterface
      */
-    getCurrentUserInfoRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserInfo>>;
+    currentUserInfoRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserInfo>>;
 
     /**
      * Get user info
      */
-    getCurrentUserInfo(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserInfo>;
+    currentUserInfo(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserInfo>;
 
     /**
      * 
@@ -169,7 +169,7 @@ export class CurrentUserApi extends runtime.BaseAPI implements CurrentUserApiInt
     /**
      * Get user info
      */
-    async getCurrentUserInfoRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserInfo>> {
+    async currentUserInfoRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserInfo>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -191,8 +191,8 @@ export class CurrentUserApi extends runtime.BaseAPI implements CurrentUserApiInt
     /**
      * Get user info
      */
-    async getCurrentUserInfo(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserInfo> {
-        const response = await this.getCurrentUserInfoRaw(initOverrides);
+    async currentUserInfo(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserInfo> {
+        const response = await this.currentUserInfoRaw(initOverrides);
         return await response.value();
     }
 

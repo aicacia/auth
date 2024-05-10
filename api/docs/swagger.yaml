@@ -501,6 +501,7 @@ definitions:
       address:
         $ref: '#/definitions/UserInfoAddress'
       birthdate:
+        format: date-time
         type: string
       family_name:
         type: string
@@ -2333,9 +2334,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/Errors'
-      security:
-      - Locale: []
-      - Timezone: []
       summary: Request Password Reset
       tags:
       - password-reset
@@ -2372,9 +2370,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/Errors'
-      security:
-      - Locale: []
-      - Timezone: []
       summary: Request Password Reset
       tags:
       - password-reset
@@ -2532,7 +2527,7 @@ paths:
     get:
       consumes:
       - application/json
-      operationId: get-current-user-info
+      operationId: current-user-info
       produces:
       - application/json
       responses:

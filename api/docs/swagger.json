@@ -2476,14 +2476,6 @@
         },
         "/password-reset": {
             "post": {
-                "security": [
-                    {
-                        "Locale": []
-                    },
-                    {
-                        "Timezone": []
-                    }
-                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -2542,14 +2534,6 @@
         },
         "/password-reset/request": {
             "post": {
-                "security": [
-                    {
-                        "Locale": []
-                    },
-                    {
-                        "Timezone": []
-                    }
-                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -2856,7 +2840,7 @@
                     "current-user"
                 ],
                 "summary": "Get user info",
-                "operationId": "get-current-user-info",
+                "operationId": "current-user-info",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -3768,7 +3752,8 @@
                     "$ref": "#/definitions/UserInfoAddress"
                 },
                 "birthdate": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "date-time"
                 },
                 "family_name": {
                     "type": "string"

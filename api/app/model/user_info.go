@@ -24,7 +24,7 @@ type UpdateUserInfoRequestST struct {
 	Picture    *string            `json:"picture"`
 	Website    *string            `json:"website"`
 	Gender     *string            `json:"gender"`
-	Birthdate  *time.Time         `json:"birthdate"`
+	Birthdate  *time.Time         `json:"birthdate" format:"date-time"`
 	Zoneinfo   *string            `json:"zoneinfo"`
 	Locale     *string            `json:"locale"`
 	Address    *UserInfoAddressST `json:"address"`

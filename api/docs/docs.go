@@ -2484,14 +2484,6 @@ const docTemplate = `{
         },
         "/password-reset": {
             "post": {
-                "security": [
-                    {
-                        "Locale": []
-                    },
-                    {
-                        "Timezone": []
-                    }
-                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -2550,14 +2542,6 @@ const docTemplate = `{
         },
         "/password-reset/request": {
             "post": {
-                "security": [
-                    {
-                        "Locale": []
-                    },
-                    {
-                        "Timezone": []
-                    }
-                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -2864,7 +2848,7 @@ const docTemplate = `{
                     "current-user"
                 ],
                 "summary": "Get user info",
-                "operationId": "get-current-user-info",
+                "operationId": "current-user-info",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -3776,7 +3760,8 @@ const docTemplate = `{
                     "$ref": "#/definitions/UserInfoAddress"
                 },
                 "birthdate": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "date-time"
                 },
                 "family_name": {
                     "type": "string"

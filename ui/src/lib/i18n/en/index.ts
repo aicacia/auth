@@ -64,7 +64,8 @@ const en = {
 		updateEmails: 'Update Emails',
 		notification: {
 			usernameChangedSuccess: 'Username changed',
-			passwordResetSuccess: 'Your Password has been reset.'
+			passwordResetSuccess: 'Password has been reset.',
+			userInfoChangedSuccess: 'User Info updated'
 		}
 	},
 	applications: {

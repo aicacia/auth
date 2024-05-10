@@ -50,6 +50,7 @@ export function getCurrentUser() {
 
 export async function signIn(usernameOrEmail: string, password: string) {
 	const token = await tokenApi.createToken({
+		scope: 'openid',
 		grantType: 'password',
 		username: usernameOrEmail,
 		password

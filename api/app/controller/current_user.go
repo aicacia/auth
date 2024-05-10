@@ -128,7 +128,7 @@ func PatchUpdateCurrentUser(c *fiber.Ctx) error {
 // GetCurrentUserInfo
 //
 //	@Summary		Get user info
-//	@ID				get-current-user-info
+//	@ID				current-user-info
 //	@Tags			current-user
 //	@Accept			json
 //	@Produce		json

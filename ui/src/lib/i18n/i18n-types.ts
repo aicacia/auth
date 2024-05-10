@@ -215,9 +215,13 @@ type RootTranslation = {
 			 */
 			usernameChangedSuccess: string
 			/**
-			 * Y​o​u​r​ ​P​a​s​s​w​o​r​d​ ​h​a​s​ ​b​e​e​n​ ​r​e​s​e​t​.
+			 * P​a​s​s​w​o​r​d​ ​h​a​s​ ​b​e​e​n​ ​r​e​s​e​t​.
 			 */
 			passwordResetSuccess: string
+			/**
+			 * U​s​e​r​ ​I​n​f​o​ ​u​p​d​a​t​e​d
+			 */
+			userInfoChangedSuccess: string
 		}
 	}
 	applications: {
@@ -592,9 +596,13 @@ export type TranslationFunctions = {
 			 */
 			usernameChangedSuccess: () => LocalizedString
 			/**
-			 * Your Password has been reset.
+			 * Password has been reset.
 			 */
 			passwordResetSuccess: () => LocalizedString
+			/**
+			 * User Info updated
+			 */
+			userInfoChangedSuccess: () => LocalizedString
 		}
 	}
 	applications: {

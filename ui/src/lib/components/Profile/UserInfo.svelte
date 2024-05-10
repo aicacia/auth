@@ -1,7 +1,8 @@
 <svelte:options immutable />
 
 <script lang="ts" context="module">
-	import { create, only } from 'vest';
+	import { create, only, test, enforce, omitWhen } from 'vest';
+	import { all } from 'locale-codes';
 
 	const createSuite = (LL: TranslationFunctions) =>
 		create((data: Partial<UserInfo> = {}, fields: string[]) => {
@@ -9,7 +10,19 @@
 				return;
 			}
 			only(fields);
+
+			omitWhen(
+				() => !data.birthdate,
+				() => {
+					test('birthdate', LL.errors.message.required(), () => {
+						enforce(data.birthdate).isNotNaN();
+					});
+				}
+			);
 		});
+
+	const timezones = Intl.supportedValuesOf('timeZone');
+	const locales = all;
 </script>
 
 <script lang="ts">
@@ -21,15 +34,24 @@
 	import type { UserInfo } from '$lib/openapi/auth';
 	import type { TranslationFunctions } from '$lib/i18n/i18n-types';
 	import LL from '$lib/i18n/i18n-svelte';
+	import { timezone } from '$lib/stores/timezone';
+	import { locale } from '$lib/stores/locale';
+	import deepEqual from 'deep-equal';
 
 	export let userInfo: UserInfo;
-	export let onUpdate: (data: Partial<UserInfo>) => Promise<void>;
+	export let onUpdate: (data: UserInfo) => Promise<UserInfo>;
 
-	$: newUserInfo = { ...userInfo };
+	$: newUserInfo = {
+		...userInfo,
+		locale: userInfo.locale || $locale,
+		zoneinfo: userInfo.zoneinfo || $timezone,
+		address: { ...userInfo.address }
+	};
 
 	$: suite = createSuite($LL);
 	$: result = suite.get();
 	$: disabled = loading;
+	$: hasUpdates = !deepEqual(newUserInfo, userInfo);
 	$: cn = classNames(result, {
 		untested: 'untested',
 		tested: 'tested',
@@ -44,6 +66,7 @@
 			result = r;
 		});
 		fields.clear();
+		hasUpdates = !deepEqual(newUserInfo, userInfo);
 	}, 300);
 	function validateAll() {
 		fields.add('name');
@@ -72,7 +95,6 @@
 		validate();
 	}
 	function onChange(e: Event & { currentTarget: HTMLInputElement | HTMLSelectElement }) {
-		e.currentTarget.value = e.currentTarget.value.trim();
 		fields.add(e.currentTarget.name);
 		validate();
 	}
@@ -83,7 +105,7 @@
 			loading = true;
 			validateAll();
 			if (result.isValid()) {
-				await onUpdate(newUserInfo);
+				userInfo = await onUpdate(newUserInfo);
 				suite.reset();
 				result = suite.get();
 			}
@@ -205,7 +227,7 @@
 			class="w-full {cn('website')}"
 			type="url"
 			name="website"
-			autocomplete="name"
+			autocomplete="website"
 			placeholder="Website"
 			bind:value={newUserInfo.website}
 			on:input={onChange}
@@ -221,9 +243,11 @@
 			bind:value={newUserInfo.locale}
 			on:input={onChange}
 		>
-			<option value="en-US">English (US)</option>
+			{#each locales as locale}
+				<option value={locale.tag}>{locale.local || locale.name} ({locale.tag})</option>
+			{/each}
 		</select>
-		<InputResults name="name" {result} />
+		<InputResults name="locale" {result} />
 	</div>
 	<div class="mb-2">
 		<label for="zoneinfo">Zone Info</label>
@@ -231,12 +255,14 @@
 			class="w-full {cn('zoneinfo')}"
 			name="zoneinfo"
 			autocomplete="zoneinfo"
-			bind:value={newUserInfo.locale}
+			bind:value={newUserInfo.zoneinfo}
 			on:input={onChange}
 		>
-			<option value="American/New_York">American/New York</option>
+			{#each timezones as timezone (timezone)}
+				<option value={timezone}>{timezone}</option>
+			{/each}
 		</select>
-		<InputResults name="name" {result} />
+		<InputResults name="zoneinfo" {result} />
 	</div>
 	<div class="mb-2">
 		<label for="address.country">Country</label>
@@ -262,7 +288,7 @@
 			bind:value={newUserInfo.address.locality}
 			on:input={onChange}
 		/>
-		<InputResults name="address.region" {result} />
+		<InputResults name="address.locality" {result} />
 	</div>
 	<div class="mb-2">
 		<label for="address.region">Region</label>
@@ -270,7 +296,7 @@
 			class="w-full {cn('address.region')}"
 			type="url"
 			name="address.region"
-			autocomplete="name"
+			autocomplete="region"
 			placeholder="Region"
 			bind:value={newUserInfo.address.region}
 			on:input={onChange}
@@ -278,7 +304,7 @@
 		<InputResults name="address.region" {result} />
 	</div>
 	<div class="mb-2">
-		<label for="address.country">Street Address</label>
+		<label for="address.streetAddress">Street Address</label>
 		<input
 			class="w-full {cn('address.streetAddress')}"
 			type="url"
@@ -291,11 +317,13 @@
 		<InputResults name="address.streetAddress" {result} />
 	</div>
 	<div class="flex flex-row justify-end">
-		<button type="submit" class="btn primary flex flex-shrink" {disabled}>
-			{#if loading}<div class="flex flex-row justify-center mr-2">
-					<div class="inline-block w-6 h-6"><Spinner /></div>
-				</div>{/if}
-			Update
-		</button>
+		{#if hasUpdates}
+			<button type="submit" class="btn primary flex flex-shrink" {disabled}>
+				{#if loading}<div class="flex flex-row justify-center mr-2">
+						<div class="inline-block w-6 h-6"><Spinner /></div>
+					</div>{/if}
+				Update
+			</button>
+		{/if}
 	</div>
 </form>

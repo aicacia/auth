@@ -398,6 +398,16 @@ type RootTranslation = {
 		 * P​h​o​n​e​ ​N​u​m​b​e​r
 		 */
 		phoneNumber: string
+		newUser: {
+			/**
+			 * N​e​w​ ​U​s​e​r
+			 */
+			title: string
+			/**
+			 * C​r​e​a​t​e
+			 */
+			button: string
+		}
 		edit: {
 			/**
 			 * E​d​i​t​ ​U​s​e​r
@@ -418,9 +428,10 @@ type RootTranslation = {
 			 */
 			confirmTitle: string
 			/**
-			 * T​h​i​s​ ​o​p​e​r​a​t​i​o​n​ ​i​s​ ​p​e​r​m​a​n​e​n​t​ ​a​n​d​ ​w​i​l​l​ ​d​e​l​e​t​e​ ​e​v​e​n​y​t​h​i​n​g​ ​a​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​u​s​e​r​.
+			 * T​h​i​s​ ​o​p​e​r​a​t​i​o​n​ ​i​s​ ​p​e​r​m​a​n​e​n​t​ ​a​n​d​ ​w​i​l​l​ ​d​e​l​e​t​e​ ​e​v​e​n​y​t​h​i​n​g​ ​a​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​u​s​e​r​ ​{​0​}​.
+			 * @param {string} 0
 			 */
-			confirmMessage: string
+			confirmMessage: RequiredParams<'0'>
 			/**
 			 * D​e​l​e​t​e
 			 */
@@ -866,6 +877,16 @@ export type TranslationFunctions = {
 		 * Phone Number
 		 */
 		phoneNumber: () => LocalizedString
+		newUser: {
+			/**
+			 * New User
+			 */
+			title: () => LocalizedString
+			/**
+			 * Create
+			 */
+			button: () => LocalizedString
+		}
 		edit: {
 			/**
 			 * Edit User
@@ -886,9 +907,9 @@ export type TranslationFunctions = {
 			 */
 			confirmTitle: () => LocalizedString
 			/**
-			 * This operation is permanent and will delete evenything associated with user.
+			 * This operation is permanent and will delete evenything associated with user {0}.
 			 */
-			confirmMessage: () => LocalizedString
+			confirmMessage: (arg0: string) => LocalizedString
 			/**
 			 * Delete
 			 */

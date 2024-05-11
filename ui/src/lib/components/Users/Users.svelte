@@ -13,8 +13,8 @@
 	import UserEditor from './UserEditor.svelte';
 
 	export let application: Application;
+	export let users: User[] = [];
 
-	let users: User[] = [];
 	onMount(async () => {
 		const pagination = await userApi.users(application.id, 20, 0);
 		users = pagination.items;
@@ -26,19 +26,23 @@
 		editOpen = true;
 		editUser = user;
 	}
-	let editing = false;
-	async function onUserUpdate(user: User) {
-		try {
-			editing = true;
-			const index = users.findIndex((u) => u.id === user.id);
-			if (index !== -1) {
-				const newUsers = users.slice();
-				newUsers[index] = user;
-				users = newUsers;
-				editUser = user;
-			}
-		} finally {
-			editing = false;
+
+	function onUserUpdate(user: User) {
+		const index = users.findIndex((u) => u.id === user.id);
+		if (index !== -1) {
+			const newUsers = users.slice();
+			newUsers[index] = user;
+			users = newUsers;
+			editUser = user;
+		}
+	}
+	function onUserDelete(user: User) {
+		const index = users.findIndex((u) => u.id === user.id);
+		if (index !== -1) {
+			const newUsers = users.slice();
+			newUsers.splice(index, 1);
+			users = newUsers;
+			editUser = user;
 		}
 	}
 
@@ -54,6 +58,7 @@
 			try {
 				deleting = true;
 				await userApi.deleteUserById(application.id, deleteUser.id);
+				onUserDelete(deleteUser);
 				await invalidateAll();
 				deleteOpen = false;
 				deleteUser = undefined;
@@ -68,7 +73,7 @@
 
 <table class="w-full">
 	<thead class="sticky top-0">
-		<tr class="text-left border-b border-gray-300 dark:border-gray-900 shadow">
+		<tr class="border-b border-gray-300 text-left shadow dark:border-gray-900">
 			<th>{$LL.users.id()}</th>
 			<th>{$LL.users.username()}</th>
 			<th>{$LL.users.email()}</th>
@@ -91,13 +96,13 @@
 					<Dropdown>
 						<EllipsisVertical slot="button" />
 						<button
-							class="flex flex-row justify-between p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600"
+							class="flex cursor-pointer flex-row justify-between p-2 hover:bg-gray-200 dark:hover:bg-gray-600"
 							on:click={() => onOpenEdit(user)}
 						>
 							<Pencil /><span class="ms-4">{$LL.users.edit.button()}</span>
 						</button>
 						<button
-							class="flex flex-row justify-between p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600"
+							class="flex cursor-pointer flex-row justify-between p-2 hover:bg-gray-200 dark:hover:bg-gray-600"
 							on:click={() => onOpenDelete(user)}
 						>
 							<Trash /><span class="ms-4">{$LL.users.delete.button()}</span>
@@ -118,7 +123,7 @@
 <Modal bind:open={deleteOpen}>
 	<h4 slot="title">{$LL.users.delete.confirmTitle()}</h4>
 	{#if deleteUser}
-		<p>{$LL.users.delete.confirmMessage()}</p>
+		<p>{$LL.users.delete.confirmMessage(deleteUser.username)}</p>
 		<div class="flex flex-row justify-end">
 			<button class="btn danger" on:click={onDelete} disabled={deleting}
 				>{$LL.users.delete.confirm()}</button

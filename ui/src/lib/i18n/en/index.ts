@@ -120,6 +120,10 @@ const en = {
 		username: 'Username',
 		email: 'Email',
 		phoneNumber: 'Phone Number',
+    newUser: {
+      title: 'New User',
+      button: 'Create'
+    },
 		edit: {
 			title: 'Edit User',
 			button: 'Edit'
@@ -128,7 +132,7 @@ const en = {
 			button: 'Delete',
 			confirmTitle: 'Delete User?',
 			confirmMessage:
-				'This operation is permanent and will delete evenything associated with user.',
+				'This operation is permanent and will delete evenything associated with user {0:string}.',
 			confirm: 'Delete'
 		}
 	},

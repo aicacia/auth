@@ -57,4 +57,6 @@
 	</div>
 </div>
 
-<Application bind:application />
+<div class="flex flex-col flex-grow px-4">
+	<Application bind:application />
+</div>

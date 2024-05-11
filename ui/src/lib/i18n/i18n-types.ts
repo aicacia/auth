@@ -209,6 +209,80 @@ type RootTranslation = {
 		 * U​p​d​a​t​e​ ​E​m​a​i​l​s
 		 */
 		updateEmails: string
+		/**
+		 * U​p​d​a​t​e​ ​P​h​o​n​e​ ​N​u​m​b​e​r​s
+		 */
+		updatePhoneNumbers: string
+		emails: {
+			/**
+			 * C​a​n​c​e​l
+			 */
+			cancel: string
+			/**
+			 * A​d​d
+			 */
+			add: string
+			/**
+			 * S​e​n​d​ ​C​o​n​f​i​r​m​a​t​i​o​n
+			 */
+			sendConfirmation: string
+			/**
+			 * S​e​t​ ​a​s​ ​P​r​i​m​a​r​y
+			 */
+			setAsPrimary: string
+			/**
+			 * D​e​l​e​t​e
+			 */
+			'delete': string
+			/**
+			 * C​h​e​c​k​ ​y​o​u​r​ ​E​m​a​i​l
+			 */
+			checkYourEmail: string
+			/**
+			 * C​o​n​f​i​r​m
+			 */
+			confirmCode: string
+			/**
+			 * D​e​l​e​t​e​ ​{​0​}​?
+			 * @param {string} 0
+			 */
+			deleteEmail: RequiredParams<'0'>
+		}
+		phoneNumbers: {
+			/**
+			 * C​a​n​c​e​l
+			 */
+			cancel: string
+			/**
+			 * A​d​d
+			 */
+			add: string
+			/**
+			 * S​e​n​d​ ​C​o​n​f​i​r​m​a​t​i​o​n
+			 */
+			sendConfirmation: string
+			/**
+			 * S​e​t​ ​a​s​ ​P​r​i​m​a​r​y
+			 */
+			setAsPrimary: string
+			/**
+			 * D​e​l​e​t​e
+			 */
+			'delete': string
+			/**
+			 * C​h​e​c​k​ ​y​o​u​r​ ​P​h​o​n​e
+			 */
+			checkYourPhone: string
+			/**
+			 * C​o​n​f​i​r​m
+			 */
+			confirmCode: string
+			/**
+			 * D​e​l​e​t​e​ ​{​0​}​?
+			 * @param {string} 0
+			 */
+			deletePhoneNumber: RequiredParams<'0'>
+		}
 		notification: {
 			/**
 			 * U​s​e​r​n​a​m​e​ ​c​h​a​n​g​e​d
@@ -222,6 +296,22 @@ type RootTranslation = {
 			 * U​s​e​r​ ​I​n​f​o​ ​u​p​d​a​t​e​d
 			 */
 			userInfoChangedSuccess: string
+			/**
+			 * S​e​n​t​ ​E​m​a​i​l​ ​C​o​n​f​i​r​m​a​t​i​o​n​ ​C​o​d​e
+			 */
+			sentEmailConfirmation: string
+			/**
+			 * S​e​n​t​ ​P​h​o​n​e​ ​N​u​m​b​e​r​ ​C​o​n​f​i​r​m​a​t​i​o​n​ ​C​o​d​e
+			 */
+			sentPhoneNumberConfirmation: string
+			/**
+			 * E​m​a​i​l​ ​C​o​n​f​i​r​m​e​d
+			 */
+			emailConfirmed: string
+			/**
+			 * P​h​o​n​e​ ​N​u​m​b​e​r​ ​C​o​n​f​i​r​m​e​d
+			 */
+			phoneNumberConfirmed: string
 		}
 	}
 	applications: {
@@ -590,6 +680,78 @@ export type TranslationFunctions = {
 		 * Update Emails
 		 */
 		updateEmails: () => LocalizedString
+		/**
+		 * Update Phone Numbers
+		 */
+		updatePhoneNumbers: () => LocalizedString
+		emails: {
+			/**
+			 * Cancel
+			 */
+			cancel: () => LocalizedString
+			/**
+			 * Add
+			 */
+			add: () => LocalizedString
+			/**
+			 * Send Confirmation
+			 */
+			sendConfirmation: () => LocalizedString
+			/**
+			 * Set as Primary
+			 */
+			setAsPrimary: () => LocalizedString
+			/**
+			 * Delete
+			 */
+			'delete': () => LocalizedString
+			/**
+			 * Check your Email
+			 */
+			checkYourEmail: () => LocalizedString
+			/**
+			 * Confirm
+			 */
+			confirmCode: () => LocalizedString
+			/**
+			 * Delete {0}?
+			 */
+			deleteEmail: (arg0: string) => LocalizedString
+		}
+		phoneNumbers: {
+			/**
+			 * Cancel
+			 */
+			cancel: () => LocalizedString
+			/**
+			 * Add
+			 */
+			add: () => LocalizedString
+			/**
+			 * Send Confirmation
+			 */
+			sendConfirmation: () => LocalizedString
+			/**
+			 * Set as Primary
+			 */
+			setAsPrimary: () => LocalizedString
+			/**
+			 * Delete
+			 */
+			'delete': () => LocalizedString
+			/**
+			 * Check your Phone
+			 */
+			checkYourPhone: () => LocalizedString
+			/**
+			 * Confirm
+			 */
+			confirmCode: () => LocalizedString
+			/**
+			 * Delete {0}?
+			 */
+			deletePhoneNumber: (arg0: string) => LocalizedString
+		}
 		notification: {
 			/**
 			 * Username changed
@@ -603,6 +765,22 @@ export type TranslationFunctions = {
 			 * User Info updated
 			 */
 			userInfoChangedSuccess: () => LocalizedString
+			/**
+			 * Sent Email Confirmation Code
+			 */
+			sentEmailConfirmation: () => LocalizedString
+			/**
+			 * Sent Phone Number Confirmation Code
+			 */
+			sentPhoneNumberConfirmation: () => LocalizedString
+			/**
+			 * Email Confirmed
+			 */
+			emailConfirmed: () => LocalizedString
+			/**
+			 * Phone Number Confirmed
+			 */
+			phoneNumberConfirmed: () => LocalizedString
 		}
 	}
 	applications: {

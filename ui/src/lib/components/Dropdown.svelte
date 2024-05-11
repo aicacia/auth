@@ -4,8 +4,8 @@
 	import Popup, { type Position } from './Popup.svelte';
 
 	export let name = '';
-	export let anchorPosition: Position = 'bottom-right';
-	export let position: Position = 'top-right';
+	export let anchorPosition: Position | undefined = undefined;
+	export let position: Position | undefined = undefined;
 	export let open = false;
 
 	function toggle() {

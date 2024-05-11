@@ -11,7 +11,6 @@
 	import { invalidateAll } from '$app/navigation';
 	import { handleError } from '$lib/errors';
 	import UserEditor from './UserEditor.svelte';
-	import { email } from 'vest/enforce/email';
 
 	export let application: Application;
 
@@ -111,7 +110,6 @@
 </table>
 
 <Modal bind:open={editOpen}>
-	<h4 slot="title">{$LL.users.edit.title()}</h4>
 	{#if editUser}
 		<UserEditor bind:user={editUser} onUpdate={onUserUpdate} />
 	{/if}

@@ -18,9 +18,6 @@
 			test('username', LL.errors.message.required(), () => {
 				enforce(data.username).isNotBlank();
 			});
-			test('username', LL.errors.message.noChange(), () => {
-				enforce(data.username).notEquals(data.initialUsername);
-			});
 		});
 </script>
 

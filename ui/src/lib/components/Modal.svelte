@@ -35,20 +35,20 @@
 <div use:portal class="relative" role="dialog" aria-modal="true">
 	{#if open}
 		<div
-			class="fixed inset-0 z-[10000] bg-black bg-opacity-25"
+			class="fixed inset-0 bg-black bg-opacity-25"
 			class:hidden={backdrop ? !open : true}
 			transition:fade={{ duration: 150 }}
 		/>
 	{/if}
 	{#if open}
 		<div
-			class="fixed inset-0 z-[10000] overflow-y-auto"
+			class="fixed inset-0 overflow-y-auto"
 			on:pointerdown={onClickOutside}
 			transition:fly={{ duration: 150, y: 300 }}
 		>
 			<div class="flex min-h-full items-end justify-center p-4 sm:items-center sm:p-0">
 				<div
-					class="relative w-full rounded bg-white dark:bg-gray-800 shadow-lg sm:my-8 sm:max-w-lg"
+					class="relative w-full rounded bg-white shadow-lg sm:my-8 sm:max-w-lg dark:bg-gray-800"
 					class:m-auto={small}
 					bind:this={container}
 				>

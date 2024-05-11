@@ -11,8 +11,11 @@
 </script>
 
 <script lang="ts">
+	import { debounce } from '@aicacia/debounce';
+
 	import { clickoutside } from '@svelte-put/clickoutside';
 	import { onMount, tick } from 'svelte';
+	import { portal } from 'svelte-portal';
 
 	export let anchor: Element;
 	export let anchorPosition: Position = 'bottom-right';
@@ -31,7 +34,6 @@
 		const anchorRect = anchor.getBoundingClientRect();
 		child.style.top = child.style.left = child.style.bottom = child.style.right = '';
 		await tick();
-		let isRightAligned = false;
 		switch (anchorPosition) {
 			case 'top-left': {
 				child.style.top = `${anchorRect.top}px`;
@@ -41,7 +43,6 @@
 			case 'top-right': {
 				child.style.top = `${anchorRect.top}px`;
 				child.style.right = `${anchor.ownerDocument.body.offsetWidth - anchorRect.right}px`;
-				isRightAligned = true;
 				break;
 			}
 			case 'top-center': {
@@ -52,7 +53,6 @@
 			case 'bottom-right': {
 				child.style.top = `${anchorRect.bottom}px`;
 				child.style.right = `${anchor.ownerDocument.body.offsetWidth - anchorRect.right}px`;
-				isRightAligned = true;
 				break;
 			}
 			case 'bottom-left': {
@@ -84,9 +84,12 @@
 	}
 
 	onMount(() => {
-		window.addEventListener('resize', resize);
+		const debouncedResize = debounce(resize, 0);
+		window.addEventListener('resize', debouncedResize);
+		document.addEventListener('scroll', debouncedResize, true);
 		return () => {
-			window.removeEventListener('resize', resize);
+			window.removeEventListener('resize', debouncedResize);
+			document.removeEventListener('scroll', debouncedResize, true);
 		};
 	});
 
@@ -99,9 +102,10 @@
 </script>
 
 <div
-	class="flex flex-col absolute z-[1001] max-h-full max-w-full border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 shadow-md transition-transform duration-75 focus:outline-none"
+	class="absolute flex max-h-full max-w-full flex-col border-gray-300 bg-gray-50 shadow-md transition-transform duration-75 focus:outline-none dark:border-gray-600 dark:bg-gray-700"
 	bind:this={child}
 	bind:offsetWidth
+	use:portal
 	use:clickoutside={{ event: 'pointerdown', enabled: closeOnClickOutside }}
 	on:clickoutside={onClickOutside}
 	role="menu"

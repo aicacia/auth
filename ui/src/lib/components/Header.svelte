@@ -24,18 +24,18 @@
 	}
 </script>
 
-<div class="flex flex-row flex-shrink justify-between bg-white dark:bg-gray-800 shadow z-20">
-	<div class="flex flex-row flex-shrink ms-2">
+<div class="flex flex-shrink flex-row justify-between bg-white shadow dark:bg-gray-800">
+	<div class="ms-2 flex flex-shrink flex-row">
 		<a class="btn text-lg" href={`${base}/`}>{$LL.header.title()}</a>
 	</div>
-	<div class="flex flex-row flex-shrink me-2">
-		<div class="flex flex-col justify-center content-center">
+	<div class="me-2 flex flex-shrink flex-row">
+		<div class="flex flex-col content-center justify-center">
 			{#if $signedIn}
 				<Dropdown bind:open>
 					<Menu slot="button" />
 					<a
 						href={`${base}/applications`}
-						class="default flex flex-row justify-between p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600"
+						class="default flex cursor-pointer flex-row justify-between p-2 hover:bg-gray-200 dark:hover:bg-gray-600"
 						class:active={$page.route.id === '/(authed)/applications'}
 						on:click={onGoto}
 					>
@@ -43,7 +43,7 @@
 					</a>
 					<a
 						href={`${base}/profile`}
-						class="default flex flex-row justify-between p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600"
+						class="default flex cursor-pointer flex-row justify-between p-2 hover:bg-gray-200 dark:hover:bg-gray-600"
 						class:active={$page.route.id === '/(authed)/profile'}
 						on:click={onGoto}
 					>
@@ -53,7 +53,7 @@
 					<!-- svelte-ignore a11y-click-events-have-key-events -->
 					<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 					<li
-						class="flex flex-row justify-between p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600"
+						class="flex cursor-pointer flex-row justify-between p-2 hover:bg-gray-200 dark:hover:bg-gray-600"
 						on:click={onSignOut}
 					>
 						<LogOut /><span class="ms-4">{$LL.header.signOut()}</span>

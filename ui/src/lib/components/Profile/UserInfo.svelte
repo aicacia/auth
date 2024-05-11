@@ -15,7 +15,7 @@
 				() => !data.birthdate,
 				() => {
 					test('birthdate', LL.errors.message.required(), () => {
-						enforce(data.birthdate).isNotNaN();
+						enforce(data.birthdate!.valueOf()).isNotNaN();
 					});
 				}
 			);
@@ -190,6 +190,7 @@
 			type="date"
 			name="birthdate"
 			placeholder="Birthdate"
+			value={newUserInfo.birthdate?.toISOString().substring(0, 10)}
 			on:input={onBirthdateChange}
 		/>
 		<InputResults name="birthdate" {result} />

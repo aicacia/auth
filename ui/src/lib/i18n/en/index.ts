@@ -62,10 +62,35 @@ const en = {
 		submitUpdateUsername: 'Update',
 		updateUserInfo: 'Update Info',
 		updateEmails: 'Update Emails',
+		updatePhoneNumbers: 'Update Phone Numbers',
+    emails: {
+      cancel: "Cancel",
+      add: "Add",
+      sendConfirmation: "Send Confirmation",
+      setAsPrimary: "Set as Primary",
+      delete: "Delete",
+      checkYourEmail: "Check your Email",
+      confirmCode: "Confirm",
+      deleteEmail: "Delete {0:string}?"
+    },
+    phoneNumbers: {
+      cancel: "Cancel",
+      add: "Add",
+      sendConfirmation: "Send Confirmation",
+      setAsPrimary: "Set as Primary",
+      delete: "Delete",
+      checkYourPhone: "Check your Phone",
+      confirmCode: "Confirm",
+      deletePhoneNumber: "Delete {0:string}?"
+    },
 		notification: {
 			usernameChangedSuccess: 'Username changed',
 			passwordResetSuccess: 'Password has been reset.',
-			userInfoChangedSuccess: 'User Info updated'
+			userInfoChangedSuccess: 'User Info updated',
+      sentEmailConfirmation: "Sent Email Confirmation Code",
+      sentPhoneNumberConfirmation: "Sent Phone Number Confirmation Code",
+      emailConfirmed: "Email Confirmed",
+      phoneNumberConfirmed: "Phone Number Confirmed"
 		}
 	},
 	applications: {

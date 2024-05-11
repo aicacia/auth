@@ -2,7 +2,7 @@
 
 <script lang="ts">
 	import Dropdown from '$lib/components/Dropdown.svelte';
-	import type { Email, User } from '$lib/openapi/auth';
+	import type { PhoneNumber, User } from '$lib/openapi/auth';
 	import EllipsisVertical from 'lucide-svelte/icons/ellipsis-vertical';
 	import CircleCheck from 'lucide-svelte/icons/circle-check';
 	import Send from 'lucide-svelte/icons/send';
@@ -17,24 +17,24 @@
 	import LL from '$lib/i18n/i18n-svelte';
 
 	export let user: User;
-	export let email: Email;
+	export let phoneNumber: PhoneNumber;
 	export let primary = false;
-	export let sentEmailConfirmation = false;
+	export let sentPhoneNumberConfirmation = false;
 
 	let open = false;
 
 	async function onSetPrimaryInternal() {
 		try {
-			await userApi.setPrimaryEmail(user.applicationId, user.id, email.id);
-			const newEmails = user.emails.slice();
-			const index = newEmails.findIndex((e) => e.id === email.id);
+			await userApi.setPrimaryPhoneNumber(user.applicationId, user.id, phoneNumber.id);
+			const newPhoneNumbers = user.phoneNumbers.slice();
+			const index = newPhoneNumbers.findIndex((e) => e.id === phoneNumber.id);
 			if (index !== -1) {
-				newEmails.splice(index, 1);
+				newPhoneNumbers.splice(index, 1);
 			}
-			if (user.email) {
-				newEmails.push(user.email);
+			if (user.phoneNumber) {
+				newPhoneNumbers.push(user.phoneNumber);
 			}
-			user = { ...user, email, emails: newEmails };
+			user = { ...user, phoneNumber, phoneNumbers: newPhoneNumbers };
 			updateCurrentUser(user);
 			open = false;
 			await invalidateAll();
@@ -42,126 +42,126 @@
 			await handleError(error);
 		}
 	}
-	async function onDeleteEmail() {
+	async function onDeletePhoneNumber() {
 		try {
-			await userApi.deleteEmail(user.applicationId, user.id, email.id);
-			const newEmails = user.emails.slice();
-			const index = newEmails.findIndex((e) => e.id === email.id);
+			await userApi.deletePhoneNumber(user.applicationId, user.id, phoneNumber.id);
+			const newPhoneNumbers = user.phoneNumbers.slice();
+			const index = newPhoneNumbers.findIndex((e) => e.id === phoneNumber.id);
 			if (index !== -1) {
-				newEmails.splice(index, 1);
+				newPhoneNumbers.splice(index, 1);
 			}
-			user = { ...user, emails: newEmails };
+			user = { ...user, phoneNumbers: newPhoneNumbers };
 			updateCurrentUser(user);
-			deleteEmailOpen = false;
+			deletePhoneNumberOpen = false;
 			await invalidateAll();
 		} catch (error) {
 			await handleError(error);
 		}
 	}
 
-	let emailConfirmation: string;
+	let phoneNumberConfirmation: string;
 	async function onSendConfirmation() {
 		try {
-			await userApi.sendConfirmationToEmail(user.applicationId, user.id, email.id);
+			await userApi.sendConfirmationToPhoneNumber(user.applicationId, user.id, phoneNumber.id);
 			open = false;
-			sentEmailConfirmation = true;
-			createNotification($LL.profile.notification.sentEmailConfirmation(), 'info');
+			sentPhoneNumberConfirmation = true;
+			createNotification($LL.profile.notification.sentPhoneNumberConfirmation(), 'info');
 		} catch (error) {
 			await handleError(error);
 		}
 	}
-	async function onConfirmEmail() {
+	async function onConfirmPhoneNumber() {
 		try {
-			email = await userApi.confirmEmail(user.applicationId, user.id, email.id, {
-				token: emailConfirmation
+			phoneNumber = await userApi.confirmPhoneNumber(user.applicationId, user.id, phoneNumber.id, {
+				token: phoneNumberConfirmation
 			});
-			const newEmails = user.emails.slice();
-			const index = newEmails.findIndex((e) => e.id === email.id);
+			const newPhoneNumbers = user.phoneNumbers.slice();
+			const index = newPhoneNumbers.findIndex((e) => e.id === phoneNumber.id);
 			if (index !== -1) {
-				newEmails[index] = email;
+				newPhoneNumbers[index] = phoneNumber;
 			}
-			user = { ...user, emails: newEmails };
+			user = { ...user, phoneNumbers: newPhoneNumbers };
 			updateCurrentUser(user);
-			sentEmailConfirmation = false;
-			createNotification($LL.profile.notification.emailConfirmed(), 'success');
+			sentPhoneNumberConfirmation = false;
+			createNotification($LL.profile.notification.phoneNumberConfirmed(), 'success');
 			await invalidateAll();
 		} catch (error) {
 			await handleError(error);
 		}
 	}
 
-	let deleteEmailOpen = false;
-	function onDeleteEmailOpen() {
-		deleteEmailOpen = true;
+	let deletePhoneNumberOpen = false;
+	function onDeletePhoneNumberOpen() {
+		deletePhoneNumberOpen = true;
 		open = false;
 	}
 </script>
 
 <div class="flex flex-grow flex-row items-center justify-between">
 	<div class="relative flex flex-grow">
-		<input class="w-full" type="email" value={email.email} readonly />
-		{#if email.confirmed}
+		<input class="w-full" type="phoneNumber" value={phoneNumber.phoneNumber} readonly />
+		{#if phoneNumber.confirmed}
 			<span class="absolute right-0 top-0 me-1 mt-1 cursor-help text-green-600" title="Confirmed"
 				><CircleCheck size={22} /></span
 			>
 		{/if}
 	</div>
-	{#if !primary || !email.confirmed}
+	{#if !primary || !phoneNumber.confirmed}
 		<div class="flex flex-shrink">
 			<Dropdown bind:open>
 				<EllipsisVertical slot="button" />
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
 				<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-				{#if !email.confirmed}
+				{#if !phoneNumber.confirmed}
 					<li
 						class="flex cursor-pointer flex-row justify-between p-2 hover:bg-gray-200 dark:hover:bg-gray-600"
 						on:click={onSendConfirmation}
 					>
-						<Mail /><span class="ms-4">{$LL.profile.emails.sendConfirmation()}</span>
+						<Mail /><span class="ms-4">{$LL.profile.phoneNumbers.sendConfirmation()}</span>
 					</li>
 				{:else}
 					<li
 						class="flex cursor-pointer flex-row justify-between p-2 hover:bg-gray-200 dark:hover:bg-gray-600"
 						on:click={onSetPrimaryInternal}
 					>
-						<Send /><span class="ms-4">{$LL.profile.emails.setAsPrimary()}</span>
+						<Send /><span class="ms-4">{$LL.profile.phoneNumbers.setAsPrimary()}</span>
 					</li>
 				{/if}
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
 				<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 				<li
 					class="flex cursor-pointer flex-row justify-between p-2 hover:bg-gray-200 dark:hover:bg-gray-600"
-					on:click={onDeleteEmailOpen}
+					on:click={onDeletePhoneNumberOpen}
 				>
-					<Trash /><span class="ms-4">{$LL.profile.emails.delete()}</span>
+					<Trash /><span class="ms-4">{$LL.profile.phoneNumbers.delete()}</span>
 				</li>
 			</Dropdown>
 		</div>
 	{/if}
 </div>
 
-<Modal bind:open={sentEmailConfirmation} backgroundClose={false}>
-	<h4 slot="title">{$LL.profile.emails.checkYourEmail()}</h4>
-	<form on:submit|preventDefault={onConfirmEmail}>
+<Modal bind:open={sentPhoneNumberConfirmation} backgroundClose={false}>
+	<h4 slot="title">{$LL.profile.phoneNumbers.checkYourPhone()}</h4>
+	<form on:submit|preventDefault={onConfirmPhoneNumber}>
 		<div class="flex flex-col">
 			<input
 				type="text"
 				class="flex flex-grow"
 				placeholder="Confirmation Token"
-				bind:value={emailConfirmation}
+				bind:value={phoneNumberConfirmation}
 			/>
 		</div>
 		<div class="mt-2 flex flex-row justify-end">
-			<button class="btn primary" type="submit">{$LL.profile.emails.confirmCode()}</button>
+			<button class="btn primary" type="submit">{$LL.profile.phoneNumbers.confirmCode()}</button>
 		</div>
 	</form>
 </Modal>
 
-<Modal bind:open={deleteEmailOpen}>
-	<h4 slot="title">{$LL.profile.emails.deleteEmail(email.email)}</h4>
-	<form on:submit|preventDefault={onDeleteEmail}>
+<Modal bind:open={deletePhoneNumberOpen}>
+	<h4 slot="title">{$LL.profile.phoneNumbers.deletePhoneNumber(phoneNumber.phoneNumber)}</h4>
+	<form on:submit|preventDefault={onDeletePhoneNumber}>
 		<div class="mt-2 flex flex-row justify-end">
-			<button class="btn danger" type="submit">{$LL.profile.emails.delete()}</button>
+			<button class="btn danger" type="submit">{$LL.profile.phoneNumbers.delete()}</button>
 		</div>
 	</form>
 </Modal>

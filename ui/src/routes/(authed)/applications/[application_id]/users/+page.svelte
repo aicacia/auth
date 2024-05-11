@@ -31,8 +31,10 @@
 	</div>
 </div>
 
-<div
-	class="flex flex-col flex-grow w-full max-w-6xl mx-auto mt-4 bg-white dark:bg-gray-800 shadow p-4 mb-16"
->
-	<Users bind:application />
+<div class="flex flex-col flex-grow px-4">
+	<div
+		class="flex flex-col flex-grow w-full max-w-6xl mx-auto mt-4 bg-white dark:bg-gray-800 shadow p-4"
+	>
+		<Users bind:application />
+	</div>
 </div>

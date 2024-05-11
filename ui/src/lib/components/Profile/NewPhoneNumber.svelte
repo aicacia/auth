@@ -2,24 +2,20 @@
 
 <script lang="ts" context="module">
 	import { create, test, enforce, only } from 'vest';
-	import 'vest/enforce/email';
 
-	type NewEmailForm = {
-		email: string;
+	type NewPhoneNumberForm = {
+		phoneNumber: string;
 	};
 
 	const createSuite = (LL: TranslationFunctions) =>
-		create((data: Partial<NewEmailForm> = {}, fields: string[]) => {
+		create((data: Partial<NewPhoneNumberForm> = {}, fields: string[]) => {
 			if (!fields.length) {
 				return;
 			}
 			only(fields);
 
-			test('email', LL.errors.message.required(), () => {
-				enforce(data.email).isNotBlank();
-			});
-			test('email', LL.errors.message.invalid(), () => {
-				enforce(data.email).isEmail();
+			test('phoneNumber', LL.errors.message.required(), () => {
+				enforce(data.phoneNumber).isNotBlank();
 			});
 		});
 </script>
@@ -34,9 +30,9 @@
 	import type { TranslationFunctions } from '$lib/i18n/i18n-types';
 	import LL from '$lib/i18n/i18n-svelte';
 
-	export let onCreate: (email: string) => Promise<void>;
+	export let onCreate: (phoneNumber: string) => Promise<void>;
 
-	let email = '';
+	let phoneNumber = '';
 
 	$: suite = createSuite($LL);
 	$: result = suite.get();
@@ -51,13 +47,13 @@
 
 	const fields = new Set<string>();
 	const validate = debounce(() => {
-		suite({ email }, Array.from(fields)).done((r) => {
+		suite({ phoneNumber }, Array.from(fields)).done((r) => {
 			result = r;
 		});
 		fields.clear();
 	}, 300);
 	function validateAll() {
-		fields.add('email');
+		fields.add('phoneNumber');
 		validate();
 		validate.flush();
 	}
@@ -67,10 +63,10 @@
 	}
 
 	let adding = false;
-	function onAddEmail() {
+	function onAddPhoneNumber() {
 		adding = true;
 	}
-	function onCancelEmail() {
+	function onCancelPhoneNumber() {
 		adding = false;
 	}
 
@@ -80,9 +76,9 @@
 			loading = true;
 			validateAll();
 			if (result.isValid()) {
-				await onCreate(email);
+				await onCreate(phoneNumber);
 				adding = false;
-				email = '';
+				phoneNumber = '';
 			}
 		} catch (error) {
 			await handleError(error);
@@ -96,29 +92,29 @@
 	<form class="flex flex-grow flex-col" on:submit|preventDefault={onSubmit} class:hidden={!adding}>
 		<div class="mb-2">
 			<input
-				class="w-full {cn('email')}"
-				type="email"
-				name="email"
-				autocomplete="email"
-				placeholder="New Email"
-				bind:value={email}
+				class="w-full {cn('phoneNumber')}"
+				type="phoneNumber"
+				name="phoneNumber"
+				autocomplete="phoneNumber"
+				placeholder="New PhoneNumber"
+				bind:value={phoneNumber}
 				on:input={onChange}
 			/>
-			<InputResults name="email" {result} />
+			<InputResults name="phoneNumber" {result} />
 		</div>
 		<div class="flex flex-row justify-end">
-			<button class="btn secondary flex flex-shrink" on:click={onCancelEmail} {disabled}>
-				{$LL.profile.emails.cancel()}
+			<button class="btn secondary flex flex-shrink" on:click={onCancelPhoneNumber} {disabled}>
+				{$LL.profile.phoneNumbers.cancel()}
 			</button>
 			<button type="submit" class="btn primary flex flex-shrink" {disabled}>
 				{#if loading}<div class="mr-2 flex flex-row justify-center">
 						<div class="inline-block h-6 w-6"><Spinner /></div>
 					</div>{/if}
-				{$LL.profile.emails.add()}
+				{$LL.profile.phoneNumbers.add()}
 			</button>
 		</div>
 	</form>
-	<button class="btn primary icon" on:click={onAddEmail} class:hidden={adding}>
+	<button class="btn primary icon" on:click={onAddPhoneNumber} class:hidden={adding}>
 		<Plus />
 	</button>
 </div>

@@ -53,46 +53,46 @@
 </svelte:head>
 
 <div class="container mx-auto my-4">
-	<div class="bg-white dark:bg-gray-800 shadow p-4">
-		<div class="flex flex-row flex-grow justify-between">
+	<div class="bg-white p-4 shadow dark:bg-gray-800">
+		<div class="flex flex-grow flex-row justify-between">
 			<input type="text" placeholder={$LL.applications.filter()} bind:value={$search} />
 			<button class="btn primary icon" on:click={onAddOpen}><Plus /></button>
 		</div>
-		<hr class="mt-1 mb-3" />
-		<div class="grid gap-2 grid-cols-1 sm:grid-cols-3 lg:grid-cols-6">
+		<hr class="mb-3 mt-1" />
+		<div class="grid grid-cols-1 gap-2 sm:grid-cols-3 lg:grid-cols-6">
 			{#each applications as application (application.id)}
 				{@const hidden = filtered.has(application.id)}
 				<div
-					class="flex flex-col bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-900 shadow hover:shadow-lg p-2"
+					class="flex flex-col border border-gray-300 bg-white p-2 shadow hover:shadow-lg dark:border-gray-900 dark:bg-gray-700"
 					class:hidden
 				>
 					<div class="flex flex-row justify-between">
-						<h4 class="text-ellipsis overflow-hidden text-nowrap">
+						<h4 class="overflow-hidden text-ellipsis text-nowrap">
 							{application.description}
 						</h4>
 						<Dropdown>
 							<EllipsisVertical slot="button" />
 							<a
 								href={`${base}/applications/${application.id}`}
-								class="default flex flex-row justify-between p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600"
+								class="default flex cursor-pointer flex-row justify-between p-2 hover:bg-gray-200 dark:hover:bg-gray-600"
 							>
 								<Settings /><span class="ms-4">{$LL.application.title()}</span>
 							</a>
 							<a
 								href={`${base}/applications/${application.id}/users`}
-								class="default flex flex-row justify-between p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600"
+								class="default flex cursor-pointer flex-row justify-between p-2 hover:bg-gray-200 dark:hover:bg-gray-600"
 							>
 								<Users /><span class="ms-4">{$LL.users.title()}</span>
 							</a>
 							<a
 								href={`${base}/applications/${application.id}/tenents`}
-								class="default flex flex-row justify-between p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600"
+								class="default flex cursor-pointer flex-row justify-between p-2 hover:bg-gray-200 dark:hover:bg-gray-600"
 							>
 								<KeySquare /><span class="ms-4">{$LL.tenents.title()}</span>
 							</a>
 							<a
 								href={`${base}/applications/${application.id}/permissions`}
-								class="default flex flex-row justify-between p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600"
+								class="default flex cursor-pointer flex-row justify-between p-2 hover:bg-gray-200 dark:hover:bg-gray-600"
 							>
 								<Lock /><span class="ms-4">{$LL.permissions.title()}</span>
 							</a>

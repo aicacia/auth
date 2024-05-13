@@ -5,9 +5,9 @@
 	import { page } from '$app/stores';
 </script>
 
-<div class="flex flex-col w-full h-full">
+<div class="flex h-full w-full flex-col">
 	<Header />
-	<div class="flex flex-grow flex-col w-full mx-4 sm:container sm:mx-auto mt-4 mb-16">
+	<div class="mx-4 mb-16 mt-4 flex w-full flex-grow flex-col sm:container sm:mx-auto">
 		<h3>{$page.status}</h3>
 		{#if $page.error?.message}
 			<p>{$page.error.message}</p>

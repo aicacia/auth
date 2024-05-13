@@ -19,9 +19,9 @@
 	<title>{application.description}</title>
 </svelte:head>
 
-<div class="flex flex-col justify-end md:justify-start px-4">
+<div class="flex flex-col justify-end px-4 md:justify-start">
 	<div
-		class="flex flex-col flex-shrink w-full max-w-6xl mx-auto mt-4 bg-white dark:bg-gray-800 shadow p-4"
+		class="mx-auto mt-4 flex w-full max-w-6xl flex-shrink flex-col bg-white p-4 shadow dark:bg-gray-800"
 	>
 		<div class="flex flex-row justify-between">
 			<div class="flex flex-row">
@@ -32,21 +32,21 @@
 			</div>
 			<div class="flex flex-row">
 				<a
-					class="btn primary flex flex-row me-2"
+					class="btn primary me-2 flex flex-row"
 					href={`${base}/applications/${application.id}/users`}
 				>
 					<Users class="me-2" />
 					{$LL.users.title()}
 				</a>
 				<a
-					class="btn primary flex flex-row me-2"
+					class="btn primary me-2 flex flex-row"
 					href={`${base}/applications/${application.id}/tenents`}
 				>
 					<KeySquare class="me-2" />
 					{$LL.tenents.title()}
 				</a>
 				<a
-					class="btn primary flex flex-row me-2"
+					class="btn primary me-2 flex flex-row"
 					href={`${base}/applications/${application.id}/permissions`}
 				>
 					<Lock class="me-2" />
@@ -57,6 +57,6 @@
 	</div>
 </div>
 
-<div class="flex flex-col flex-grow px-4">
+<div class="flex flex-grow flex-col px-4">
 	<Application bind:application />
 </div>

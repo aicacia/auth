@@ -9,9 +9,9 @@
 	<title>{$LL.maintenance.title()}</title>
 </svelte:head>
 
-<div class="flex flex-col flex-grow justify-end md:justify-start mt-10">
-	<div class="sm:container mx-4 sm:mx-auto bg-white pt-4 px-4 pb-8 text-justify">
-		<h4 class="uppercase mb-11">{$LL.maintenance.header()}</h4>
+<div class="mt-10 flex flex-grow flex-col justify-end md:justify-start">
+	<div class="mx-4 bg-white px-4 pb-8 pt-4 text-justify sm:container sm:mx-auto">
+		<h4 class="mb-11 uppercase">{$LL.maintenance.header()}</h4>
 		<p>
 			{@html $LL.maintenance.body({ link: `${base}/` })}
 		</p>

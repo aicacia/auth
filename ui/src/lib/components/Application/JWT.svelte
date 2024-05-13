@@ -113,7 +113,7 @@
 	}
 </script>
 
-<form class="flex flex-col flex-grow" on:submit|preventDefault={onUpdateOpen}>
+<form class="flex flex-grow flex-col" on:submit|preventDefault={onUpdateOpen}>
 	<label for="application-jwt">JWT Secret</label>
 	<div class="flex flex-row">
 		{#if jwt !== initialJwt}
@@ -128,7 +128,7 @@
 				</button>
 			</div>
 		{/if}
-		<div class="flex flex-grow relative">
+		<div class="relative flex flex-grow">
 			{#if show}
 				<input
 					id="application-jwt"
@@ -175,10 +175,10 @@
 	</div>
 	<InputResults name="jwt" {result} />
 	{#if jwt !== initialJwt}
-		<div class="flex flex-row justify-end mt-2">
+		<div class="mt-2 flex flex-row justify-end">
 			<button type="submit" class="btn primary" {disabled}>
-				{#if loading}<div class="flex flex-row justify-center mr-2">
-						<div class="inline-block w-6 h-6"><Spinner /></div>
+				{#if loading}<div class="mr-2 flex flex-row justify-center">
+						<div class="inline-block h-6 w-6"><Spinner /></div>
 					</div>{/if}
 				Update
 			</button>

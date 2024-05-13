@@ -15,14 +15,14 @@
 </script>
 
 <button
-	class="flex flex-row flex-grow items-center py-2 px-3 m-1 cursor-pointer shadow"
+	class="m-1 flex flex-grow cursor-pointer flex-row items-center px-3 py-2 shadow"
 	class:bg-green-600={notification.type === 'success'}
 	class:bg-red-600={notification.type === 'error'}
 	class:bg-blue-600={notification.type === 'info'}
 	class:bg-yellow-600={notification.type === 'warning'}
 	on:click={onDelete}
 >
-	<div class="w-6 h-6 mr-2 text-white">
+	<div class="mr-2 h-6 w-6 text-white">
 		{#if notification.type === 'error'}
 			<CircleX />
 		{:else if notification.type === 'success'}
@@ -33,5 +33,5 @@
 			<TriangleAlert />
 		{/if}
 	</div>
-	<div class="text-white flex-grow text-left">{notification.message}</div>
+	<div class="flex-grow text-left text-white">{notification.message}</div>
 </button>

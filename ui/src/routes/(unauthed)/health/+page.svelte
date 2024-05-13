@@ -9,9 +9,9 @@
 	<title>{$LL.health.title()}</title>
 </svelte:head>
 
-<div class="flex flex-col flex-grow justify-end md:justify-start">
+<div class="flex flex-grow flex-col justify-end md:justify-start">
 	<div
-		class="flex flex-col flex-shrink md:w-80 w-full mx-auto my-10 bg-white dark:bg-gray-800 shadow p-4"
+		class="mx-auto my-10 flex w-full flex-shrink flex-col bg-white p-4 shadow dark:bg-gray-800 md:w-80"
 	>
 		<h1 class="text-center">{$LL.health.header()}</h1>
 		<p class="py-2 text-center">

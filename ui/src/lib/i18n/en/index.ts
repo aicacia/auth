@@ -63,34 +63,34 @@ const en = {
 		updateUserInfo: 'Update Info',
 		updateEmails: 'Update Emails',
 		updatePhoneNumbers: 'Update Phone Numbers',
-    emails: {
-      cancel: "Cancel",
-      add: "Add",
-      sendConfirmation: "Send Confirmation",
-      setAsPrimary: "Set as Primary",
-      delete: "Delete",
-      checkYourEmail: "Check your Email",
-      confirmCode: "Confirm",
-      deleteEmail: "Delete {0:string}?"
-    },
-    phoneNumbers: {
-      cancel: "Cancel",
-      add: "Add",
-      sendConfirmation: "Send Confirmation",
-      setAsPrimary: "Set as Primary",
-      delete: "Delete",
-      checkYourPhone: "Check your Phone",
-      confirmCode: "Confirm",
-      deletePhoneNumber: "Delete {0:string}?"
-    },
+		emails: {
+			cancel: 'Cancel',
+			add: 'Add',
+			sendConfirmation: 'Send Confirmation',
+			setAsPrimary: 'Set as Primary',
+			delete: 'Delete',
+			checkYourEmail: 'Check your Email',
+			confirmCode: 'Confirm',
+			deleteEmail: 'Delete {0:string}?'
+		},
+		phoneNumbers: {
+			cancel: 'Cancel',
+			add: 'Add',
+			sendConfirmation: 'Send Confirmation',
+			setAsPrimary: 'Set as Primary',
+			delete: 'Delete',
+			checkYourPhone: 'Check your Phone',
+			confirmCode: 'Confirm',
+			deletePhoneNumber: 'Delete {0:string}?'
+		},
 		notification: {
 			usernameChangedSuccess: 'Username changed',
 			passwordResetSuccess: 'Password has been reset.',
 			userInfoChangedSuccess: 'User Info updated',
-      sentEmailConfirmation: "Sent Email Confirmation Code",
-      sentPhoneNumberConfirmation: "Sent Phone Number Confirmation Code",
-      emailConfirmed: "Email Confirmed",
-      phoneNumberConfirmed: "Phone Number Confirmed"
+			sentEmailConfirmation: 'Sent Email Confirmation Code',
+			sentPhoneNumberConfirmation: 'Sent Phone Number Confirmation Code',
+			emailConfirmed: 'Email Confirmed',
+			phoneNumberConfirmed: 'Phone Number Confirmed'
 		}
 	},
 	applications: {
@@ -120,10 +120,10 @@ const en = {
 		username: 'Username',
 		email: 'Email',
 		phoneNumber: 'Phone Number',
-    newUser: {
-      title: 'New User',
-      button: 'Create'
-    },
+		newUser: {
+			title: 'New User',
+			button: 'Create'
+		},
 		edit: {
 			title: 'Edit User',
 			button: 'Edit'

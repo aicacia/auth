@@ -87,7 +87,7 @@
 	}
 </script>
 
-<form class="flex flex-col flex-grow" on:submit|preventDefault={onSubmit}>
+<form class="flex flex-grow flex-col" on:submit|preventDefault={onSubmit}>
 	<label for="uri">URI</label>
 	<div class="flex flex-row">
 		{#if uri !== initialUri}
@@ -102,7 +102,7 @@
 				</button>
 			</div>
 		{/if}
-		<div class="flex flex-grow relative">
+		<div class="relative flex flex-grow">
 			<input
 				id="uri"
 				class="flex flex-grow {cn('uri')}"
@@ -116,10 +116,10 @@
 	</div>
 	<InputResults name="uri" {result} />
 	{#if initialUri !== uri}
-		<div class="flex flex-row justify-end mt-2">
+		<div class="mt-2 flex flex-row justify-end">
 			<button type="submit" class="btn primary flex flex-shrink" {disabled}>
-				{#if loading}<div class="flex flex-row justify-center mr-2">
-						<div class="inline-block w-6 h-6"><Spinner /></div>
+				{#if loading}<div class="mr-2 flex flex-row justify-center">
+						<div class="inline-block h-6 w-6"><Spinner /></div>
 					</div>{/if}
 				Update
 			</button>

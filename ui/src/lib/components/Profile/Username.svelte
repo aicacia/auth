@@ -100,8 +100,8 @@
 	{#if initialUsername !== username}
 		<div class="flex flex-row justify-end">
 			<button type="submit" class="btn primary flex flex-shrink" {disabled}>
-				{#if loading}<div class="flex flex-row justify-center mr-2">
-						<div class="inline-block w-6 h-6"><Spinner /></div>
+				{#if loading}<div class="mr-2 flex flex-row justify-center">
+						<div class="inline-block h-6 w-6"><Spinner /></div>
 					</div>{/if}
 				{$LL.profile.submitUpdateUsername()}
 			</button>

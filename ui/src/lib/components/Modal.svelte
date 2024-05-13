@@ -48,7 +48,7 @@
 		>
 			<div class="flex min-h-full items-end justify-center p-4 sm:items-center sm:p-0">
 				<div
-					class="relative w-full rounded bg-white shadow-lg sm:my-8 sm:max-w-lg dark:bg-gray-800"
+					class="relative w-full rounded bg-white shadow-lg dark:bg-gray-800 sm:my-8 sm:max-w-lg"
 					class:m-auto={small}
 					bind:this={container}
 				>

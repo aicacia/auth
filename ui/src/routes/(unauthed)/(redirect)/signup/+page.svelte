@@ -106,14 +106,14 @@
 	<title>{$LL.auth.signUp()}</title>
 </svelte:head>
 
-<div class="flex flex-col flex-grow justify-end md:justify-start">
+<div class="flex flex-grow flex-col justify-end md:justify-start">
 	<div
-		class="flex flex-col flex-shrink md:w-72 w-full mx-auto my-10 bg-white dark:bg-gray-800 shadow p-4"
+		class="mx-auto my-10 flex w-full flex-shrink flex-col bg-white p-4 shadow dark:bg-gray-800 md:w-72"
 	>
 		<h1 class="mb-1">{$LL.auth.signUp()}</h1>
 		<p class="py-2">
 			<span>{$LL.auth.alreadyAMember()}</span>
-			<a href={`${base}/signin`} class="underline text-blue-500">{$LL.auth.signIn()}</a>
+			<a href={`${base}/signin`} class="text-blue-500 underline">{$LL.auth.signIn()}</a>
 		</p>
 		<form on:submit|preventDefault={onSubmit}>
 			<div class="mb-2">
@@ -166,8 +166,8 @@
 			</div>
 			<div class="flex flex-row justify-end">
 				<button type="submit" class="btn primary flex flex-shrink" {disabled}>
-					{#if loading}<div class="flex flex-row justify-center mr-2">
-							<div class="inline-block w-6 h-6"><Spinner /></div>
+					{#if loading}<div class="mr-2 flex flex-row justify-center">
+							<div class="inline-block h-6 w-6"><Spinner /></div>
 						</div>{/if}
 					{$LL.auth.signUp()}
 				</button>

@@ -107,7 +107,7 @@
 	}
 </script>
 
-<form class="flex flex-col flex-grow" on:submit|preventDefault={onSubmit}>
+<form class="flex flex-grow flex-col" on:submit|preventDefault={onSubmit}>
 	<div class="mb-2">
 		<label for="application-description">{$LL.application.description()}</label>
 		<input
@@ -137,8 +137,8 @@
 	{#if initalDescription !== description || initalURI !== uri}
 		<div class="flex flex-row justify-end">
 			<button type="submit" class="btn primary flex flex-shrink" {disabled}>
-				{#if loading}<div class="flex flex-row justify-center mr-2">
-						<div class="inline-block w-6 h-6"><Spinner /></div>
+				{#if loading}<div class="mr-2 flex flex-row justify-center">
+						<div class="inline-block h-6 w-6"><Spinner /></div>
 					</div>{/if}
 				{#if id == null}{$LL.application.create()}{:else}{$LL.application.update()}{/if}
 			</button>

@@ -13,7 +13,7 @@
 </script>
 
 <div
-	class="flex flex-col flex-shrink w-full max-w-6xl mx-auto mt-4 bg-white dark:bg-gray-800 shadow p-4"
+	class="mx-auto mt-4 flex w-full max-w-6xl flex-shrink flex-col bg-white p-4 shadow dark:bg-gray-800"
 >
 	<ApplicationEditor
 		id={application.id}
@@ -24,7 +24,7 @@
 </div>
 
 <div
-	class="flex flex-col flex-shrink w-full max-w-6xl mx-auto mt-4 bg-white dark:bg-gray-800 shadow p-4"
+	class="mx-auto mt-4 flex w-full max-w-6xl flex-shrink flex-col bg-white p-4 shadow dark:bg-gray-800"
 >
 	<DeleteApplication id={application.id} originalUri={application.uri} />
 </div>

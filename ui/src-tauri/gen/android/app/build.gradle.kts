@@ -6,10 +6,10 @@ plugins {
 
 android {
     compileSdk = 33
-    namespace = "com.auth"
+    namespace = "com.auth_ui"
     defaultConfig {
         manifestPlaceholders["usesCleartextTraffic"] = "false"
-        applicationId = "com.auth"
+        applicationId = "com.auth_ui"
         minSdk = 24
         targetSdk = 33
         versionCode = 1

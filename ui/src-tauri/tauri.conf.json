@@ -3,47 +3,42 @@
 	"build": {
 		"beforeBuildCommand": "npm run build",
 		"beforeDevCommand": "npm run web",
-		"devPath": "http://localhost:5173",
-		"distDir": "../build"
+		"devUrl": "http://localhost:5173",
+		"frontendDist": "../build"
 	},
-	"package": {
-		"productName": "auth",
-		"version": "0.1.0"
-	},
-	"tauri": {
-		"bundle": {
-			"active": true,
-			"category": "Lifestyle",
-			"copyright": "",
-			"deb": {
-				"depends": []
-			},
-			"externalBin": [],
-			"icon": [
-				"icons/32x32.png",
-				"icons/128x128.png",
-				"icons/128x128@2x.png",
-				"icons/icon.icns",
-				"icons/icon.ico"
-			],
-			"identifier": "com.auth",
-			"longDescription": "",
-			"macOS": {
-				"entitlements": null,
-				"exceptionDomain": "",
-				"frameworks": [],
-				"providerShortName": null,
-				"signingIdentity": null
-			},
-			"resources": [],
-			"shortDescription": "",
-			"targets": "all",
-			"windows": {
-				"certificateThumbprint": null,
-				"digestAlgorithm": "sha256",
-				"timestampUrl": ""
-			}
+	"identifier": "com.auth",
+	"productName": "auth",
+	"version": "0.1.0",
+	"bundle": {
+		"active": true,
+		"category": "Lifestyle",
+		"copyright": "",
+		"externalBin": [],
+		"icon": [
+			"icons/32x32.png",
+			"icons/128x128.png",
+			"icons/128x128@2x.png",
+			"icons/icon.icns",
+			"icons/icon.ico"
+		],
+		"longDescription": "",
+		"macOS": {
+			"entitlements": null,
+			"exceptionDomain": "",
+			"frameworks": [],
+			"providerShortName": null,
+			"signingIdentity": null
 		},
+		"resources": [],
+		"shortDescription": "",
+		"targets": "all",
+		"windows": {
+			"certificateThumbprint": null,
+			"digestAlgorithm": "sha256",
+			"timestampUrl": ""
+		}
+	},
+	"app": {
 		"security": {
 			"csp": null
 		},

@@ -100,6 +100,9 @@ func GetUserById(c *fiber.Ctx) error {
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
 	}
+	if err := access.UserIsOwnerOrHasAction(c, int32(id), "read"); err != nil {
+		return err
+	}
 	application := middleware.GetApplication(c)
 	user, emails, phoneNumbers, err := getUserById(application.Id, int32(id))
 	if err != nil {
@@ -174,6 +177,9 @@ func PatchUpdateUserById(c *fiber.Ctx) error {
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
 	}
+	if err := access.UserIsOwnerOrHasAction(c, int32(id), "write"); err != nil {
+		return err
+	}
 	var updateUser model.UpdateUserST
 	if err := c.BodyParser(&updateUser); err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
@@ -217,6 +223,9 @@ func DeleteUserById(c *fiber.Ctx) error {
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
 	}
+	if err := access.UserIsOwnerOrHasAction(c, int32(id), "write"); err != nil {
+		return err
+	}
 	application := middleware.GetApplication(c)
 	deleted, err := repository.DeleteUserById(application.Id, int32(id))
 	if err != nil {
@@ -251,6 +260,9 @@ func GetUserInfo(c *fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
+	}
+	if err := access.UserIsOwnerOrHasAction(c, int32(id), "read"); err != nil {
+		return err
 	}
 	application := middleware.GetApplication(c)
 	user, err := repository.GetUserById(application.Id, int32(id))
@@ -297,6 +309,9 @@ func PatchUserInfo(c *fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
+	}
+	if err := access.UserIsOwnerOrHasAction(c, int32(id), "write"); err != nil {
+		return err
 	}
 	application := middleware.GetApplication(c)
 	user, err := repository.GetUserById(application.Id, int32(id))

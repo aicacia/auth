@@ -32,11 +32,13 @@
 		return userInfo;
 	}
 
-	async function onEmailUpdate(_user: User) {
+	async function onEmailUpdate(user: User) {
+		updateCurrentUser(user);
 		await invalidateAll();
 	}
 
-	async function onPhoneNumberUpdate(_user: User) {
+	async function onPhoneNumberUpdate(user: User) {
+		updateCurrentUser(user);
 		await invalidateAll();
 	}
 

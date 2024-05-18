@@ -11,21 +11,22 @@
 	import { handleError } from '$lib/errors';
 	import { createNotification } from '$lib/stores/notifications';
 	import Modal from '$lib/components/Modal.svelte';
-	import { userApi } from '$lib/openapi';
-	import { invalidateAll } from '$app/navigation';
-	import { updateCurrentUser } from '$lib/stores/user';
+	import { currentUserApi } from '$lib/openapi';
 	import LL from '$lib/i18n/i18n-svelte';
+	import { formatPhoneNumber } from '$lib/util';
 
 	export let user: User;
 	export let phoneNumber: PhoneNumber;
 	export let primary = false;
 	export let sentPhoneNumberConfirmation = false;
+	export let onUpdate: (user: User) => Promise<void>;
 
+	$: formatedPhoneNumber = formatPhoneNumber(phoneNumber.phoneNumber);
 	let open = false;
 
 	async function onSetPrimaryInternal() {
 		try {
-			await userApi.setPrimaryPhoneNumber(user.applicationId, user.id, phoneNumber.id);
+			await currentUserApi.setPrimaryPhoneNumber(phoneNumber.id);
 			const newPhoneNumbers = user.phoneNumbers.slice();
 			const index = newPhoneNumbers.findIndex((e) => e.id === phoneNumber.id);
 			if (index !== -1) {
@@ -35,25 +36,23 @@
 				newPhoneNumbers.push(user.phoneNumber);
 			}
 			user = { ...user, phoneNumber, phoneNumbers: newPhoneNumbers };
-			updateCurrentUser(user);
+			await onUpdate(user);
 			open = false;
-			await invalidateAll();
 		} catch (error) {
 			await handleError(error);
 		}
 	}
 	async function onDeletePhoneNumber() {
 		try {
-			await userApi.deletePhoneNumber(user.applicationId, user.id, phoneNumber.id);
+			await currentUserApi.deletePhoneNumber(phoneNumber.id);
 			const newPhoneNumbers = user.phoneNumbers.slice();
 			const index = newPhoneNumbers.findIndex((e) => e.id === phoneNumber.id);
 			if (index !== -1) {
 				newPhoneNumbers.splice(index, 1);
 			}
 			user = { ...user, phoneNumbers: newPhoneNumbers };
-			updateCurrentUser(user);
+			await onUpdate(user);
 			deletePhoneNumberOpen = false;
-			await invalidateAll();
 		} catch (error) {
 			await handleError(error);
 		}
@@ -62,7 +61,7 @@
 	let phoneNumberConfirmation: string;
 	async function onSendConfirmation() {
 		try {
-			await userApi.sendConfirmationToPhoneNumber(user.applicationId, user.id, phoneNumber.id);
+			await currentUserApi.sendConfirmationToPhoneNumber(phoneNumber.id);
 			open = false;
 			sentPhoneNumberConfirmation = true;
 			createNotification($LL.profile.notification.sentPhoneNumberConfirmation(), 'info');
@@ -72,7 +71,7 @@
 	}
 	async function onConfirmPhoneNumber() {
 		try {
-			phoneNumber = await userApi.confirmPhoneNumber(user.applicationId, user.id, phoneNumber.id, {
+			phoneNumber = await currentUserApi.confirmPhoneNumber(phoneNumber.id, {
 				token: phoneNumberConfirmation
 			});
 			const newPhoneNumbers = user.phoneNumbers.slice();
@@ -81,10 +80,9 @@
 				newPhoneNumbers[index] = phoneNumber;
 			}
 			user = { ...user, phoneNumbers: newPhoneNumbers };
-			updateCurrentUser(user);
+			await onUpdate(user);
 			sentPhoneNumberConfirmation = false;
 			createNotification($LL.profile.notification.phoneNumberConfirmed(), 'success');
-			await invalidateAll();
 		} catch (error) {
 			await handleError(error);
 		}
@@ -99,7 +97,7 @@
 
 <div class="flex flex-grow flex-row items-center justify-between">
 	<div class="relative flex flex-grow">
-		<input class="w-full" type="phoneNumber" value={phoneNumber.phoneNumber} readonly />
+		<input class="w-full" type="phoneNumber" value={formatedPhoneNumber} readonly />
 		{#if phoneNumber.confirmed}
 			<span class="absolute right-0 top-0 me-1 mt-1 cursor-help text-green-600" title="Confirmed"
 				><CircleCheck size={22} /></span
@@ -158,7 +156,7 @@
 </Modal>
 
 <Modal bind:open={deletePhoneNumberOpen}>
-	<h4 slot="title">{$LL.profile.phoneNumbers.deletePhoneNumber(phoneNumber.phoneNumber)}</h4>
+	<h4 slot="title">{$LL.profile.phoneNumbers.deletePhoneNumber(formatedPhoneNumber)}</h4>
 	<form on:submit|preventDefault={onDeletePhoneNumber}>
 		<div class="mt-2 flex flex-row justify-end">
 			<button class="btn danger" type="submit">{$LL.profile.phoneNumbers.delete()}</button>

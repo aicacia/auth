@@ -42,6 +42,20 @@ func InstallRouter(fiberApp *fiber.App) {
 	user.Patch("", controller.PatchUpdateCurrentUser)
 	user.Patch("/reset-password", controller.PatchResetPassword)
 
+	userEmails := user.Group("/emails")
+	userEmails.Patch("/:id/send-confirmation", controller.PatchCurrentUserEmailSendConfirmation)
+	userEmails.Patch("/:id/confirm", controller.PatchCurrentUserEmailConfirm)
+	userEmails.Patch("/:id/set-primary", controller.PatchCurrentUserEmailSetPrimary)
+	userEmails.Post("", controller.PostCurrentUserCreateEmail)
+	userEmails.Delete("/:id", controller.DeleteCurrentUserEmail)
+
+	userPhoneNumbers := user.Group("/phone-numbers")
+	userPhoneNumbers.Patch("/:id/send-confirmation", controller.PatchCurrentUserPhoneNumberSendConfirmation)
+	userPhoneNumbers.Patch("/:id/confirm", controller.PatchCurrentUserPhoneNumberConfirm)
+	userPhoneNumbers.Patch("/:id/set-primary", controller.PatchCurrentUserPhoneNumberSetPrimary)
+	userPhoneNumbers.Post("", controller.PostCurrentUserCreatePhoneNumber)
+	userPhoneNumbers.Delete("/:id", controller.DeleteCurrentUserPhoneNumber)
+
 	openid := user.Group("/info")
 	openid.Use(middleware.OpenIdMiddleware())
 	openid.Get("", controller.GetCurrentUserInfo)
@@ -72,20 +86,6 @@ func InstallRouter(fiberApp *fiber.App) {
 	users.Delete("/:id", controller.DeleteUserById)
 	users.Get("/:id/info", controller.GetUserInfo)
 	users.Patch("/:id/info", controller.PatchUserInfo)
-
-	emails := users.Group("/:userId/emails")
-	emails.Patch("/:id/send-confirmation", controller.PatchUserEmailSendConfirmation)
-	emails.Patch("/:id/confirm", controller.PatchUserEmailConfirm)
-	emails.Patch("/:id/set-primary", controller.PatchUserEmailSetPrimary)
-	emails.Post("", controller.PostUserCreateEmail)
-	emails.Delete("/:id", controller.DeleteUserEmail)
-
-	phoneNumbers := users.Group("/:userId/phone-numbers")
-	phoneNumbers.Patch("/:id/send-confirmation", controller.PatchUserPhoneNumberSendConfirmation)
-	phoneNumbers.Patch("/:id/confirm", controller.PatchUserPhoneNumberConfirm)
-	phoneNumbers.Patch("/:id/set-primary", controller.PatchUserPhoneNumberSetPrimary)
-	phoneNumbers.Post("", controller.PostUserCreatePhoneNumber)
-	phoneNumbers.Delete("/:id", controller.DeleteUserPhoneNumber)
 }
 
 func ErrorHandler(c *fiber.Ctx, err error) error {

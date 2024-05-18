@@ -11,21 +11,20 @@
 	import { handleError } from '$lib/errors';
 	import { createNotification } from '$lib/stores/notifications';
 	import Modal from '$lib/components/Modal.svelte';
-	import { userApi } from '$lib/openapi';
-	import { invalidateAll } from '$app/navigation';
-	import { updateCurrentUser } from '$lib/stores/user';
+	import { currentUserApi } from '$lib/openapi';
 	import LL from '$lib/i18n/i18n-svelte';
 
 	export let user: User;
 	export let email: Email;
 	export let primary = false;
 	export let sentEmailConfirmation = false;
+	export let onUpdate: (user: User) => Promise<void>;
 
 	let open = false;
 
 	async function onSetPrimaryInternal() {
 		try {
-			await userApi.setPrimaryEmail(user.applicationId, user.id, email.id);
+			await currentUserApi.setPrimaryEmail(email.id);
 			const newEmails = user.emails.slice();
 			const index = newEmails.findIndex((e) => e.id === email.id);
 			if (index !== -1) {
@@ -35,25 +34,23 @@
 				newEmails.push(user.email);
 			}
 			user = { ...user, email, emails: newEmails };
-			updateCurrentUser(user);
+			await onUpdate(user);
 			open = false;
-			await invalidateAll();
 		} catch (error) {
 			await handleError(error);
 		}
 	}
 	async function onDeleteEmail() {
 		try {
-			await userApi.deleteEmail(user.applicationId, user.id, email.id);
+			await currentUserApi.deleteEmail(email.id);
 			const newEmails = user.emails.slice();
 			const index = newEmails.findIndex((e) => e.id === email.id);
 			if (index !== -1) {
 				newEmails.splice(index, 1);
 			}
 			user = { ...user, emails: newEmails };
-			updateCurrentUser(user);
+			await onUpdate(user);
 			deleteEmailOpen = false;
-			await invalidateAll();
 		} catch (error) {
 			await handleError(error);
 		}
@@ -62,7 +59,7 @@
 	let emailConfirmation: string;
 	async function onSendConfirmation() {
 		try {
-			await userApi.sendConfirmationToEmail(user.applicationId, user.id, email.id);
+			await currentUserApi.sendConfirmationToEmail(email.id);
 			open = false;
 			sentEmailConfirmation = true;
 			createNotification($LL.profile.notification.sentEmailConfirmation(), 'info');
@@ -72,7 +69,7 @@
 	}
 	async function onConfirmEmail() {
 		try {
-			email = await userApi.confirmEmail(user.applicationId, user.id, email.id, {
+			email = await currentUserApi.confirmEmail(email.id, {
 				token: emailConfirmation
 			});
 			const newEmails = user.emails.slice();
@@ -81,10 +78,9 @@
 				newEmails[index] = email;
 			}
 			user = { ...user, emails: newEmails };
-			updateCurrentUser(user);
 			sentEmailConfirmation = false;
+			await onUpdate(user);
 			createNotification($LL.profile.notification.emailConfirmed(), 'success');
-			await invalidateAll();
 		} catch (error) {
 			await handleError(error);
 		}

@@ -12,8 +12,6 @@
 	import Spinner from '../Spinner.svelte';
 	import Username from '../Profile/Username.svelte';
 	import UserInfoComponent from '../Profile/UserInfo.svelte';
-	import Emails from '../Profile/Emails.svelte';
-	import PhoneNumbers from '../Profile/PhoneNumbers.svelte';
 
 	export let user: User;
 	export let onUpdate: (user: User) => void;
@@ -35,16 +33,6 @@
 		return userInfo;
 	}
 
-	async function onEmailUpdate(user: User) {
-		onUpdate(user);
-		await invalidateAll();
-	}
-
-	async function onPhoneNumberUpdate(user: User) {
-		onUpdate(user);
-		await invalidateAll();
-	}
-
 	let loading = true;
 	let userInfo: UserInfo;
 	onMount(async () => {
@@ -60,18 +48,6 @@
 	<div class="mb-2">
 		<h3 class="mb-1">{$LL.profile.updateUsername()}</h3>
 		<Username bind:user onUpdate={onUsernameUpdate} />
-	</div>
-</div>
-<div class="flex flex-col justify-end md:justify-start">
-	<div class="mb-2">
-		<h3 class="mb-1">{$LL.profile.updateEmails()}</h3>
-		<Emails bind:user onUpdate={onEmailUpdate} />
-	</div>
-</div>
-<div class="flex flex-col justify-end md:justify-start">
-	<div class="mb-2">
-		<h3 class="mb-1">{$LL.profile.updatePhoneNumbers()}</h3>
-		<PhoneNumbers bind:user onUpdate={onPhoneNumberUpdate} />
 	</div>
 </div>
 <div class="flex flex-col justify-end md:justify-start">

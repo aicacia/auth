@@ -2,7 +2,7 @@ package util
 
 import "regexp"
 
-var NumericRegex = regexp.MustCompile(`[0-9]+`)
+var NumericRegex = regexp.MustCompile(`\D+`)
 
 func Map[T, U any](ts []T, f func(T) U) []U {
 	us := make([]U, len(ts))

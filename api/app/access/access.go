@@ -19,3 +19,11 @@ func HasAction(c *fiber.Ctx, resource string, actions ...string) *model.ErrorST 
 	}
 	return nil
 }
+
+func UserIsOwnerOrHasAction(c *fiber.Ctx, userId int32, actions ...string) *model.ErrorST {
+	user := middleware.GetUser(c)
+	if user.Id == userId {
+		return nil
+	}
+	return HasAction(c, "users", actions...)
+}

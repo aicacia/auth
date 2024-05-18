@@ -1,7 +1,7 @@
 <svelte:options immutable />
 
 <script lang="ts">
-	import { userApi } from '$lib/openapi';
+	import { currentUserApi } from '$lib/openapi';
 	import type { User, PhoneNumber } from '$lib/openapi/auth';
 	import PhoneNumberComponent from './PhoneNumber.svelte';
 	import NewPhoneNumber from './NewPhoneNumber.svelte';
@@ -11,7 +11,7 @@
 
 	let newPhoneNumber: PhoneNumber | undefined;
 	async function onCreatePhoneNumber(phoneNumber: string) {
-		newPhoneNumber = await userApi.createPhoneNumber(user.applicationId, user.id as number, {
+		newPhoneNumber = await currentUserApi.createPhoneNumber({
 			phoneNumber
 		});
 		user = { ...user, phoneNumbers: [...user.phoneNumbers, newPhoneNumber] };
@@ -21,7 +21,7 @@
 
 <div class="flex flex-col">
 	{#if user.phoneNumber}
-		<PhoneNumberComponent bind:user bind:phoneNumber={user.phoneNumber} primary />
+		<PhoneNumberComponent bind:user bind:phoneNumber={user.phoneNumber} primary {onUpdate} />
 		{#if user.phoneNumbers.length}
 			<hr class="my-1" />
 		{/if}
@@ -31,6 +31,7 @@
 			bind:user
 			bind:phoneNumber
 			sentPhoneNumberConfirmation={newPhoneNumber?.id === phoneNumber.id}
+			{onUpdate}
 		/>
 		{#if index < user.phoneNumbers.length - 1}
 			<hr class="my-1" />

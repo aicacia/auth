@@ -9,7 +9,8 @@ const en = {
 			email: 'Email',
 			username: 'Username',
 			password: 'Password',
-			passwordConfirmation: 'Password confirmation'
+			passwordConfirmation: 'Password confirmation',
+			phoneNumber: 'Phone Number'
 		},
 		message: {
 			application: 'if it presists please contact support',

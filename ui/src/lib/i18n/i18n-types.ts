@@ -45,6 +45,10 @@ type RootTranslation = {
 			 * P​a​s​s​w​o​r​d​ ​c​o​n​f​i​r​m​a​t​i​o​n
 			 */
 			passwordConfirmation: string
+			/**
+			 * P​h​o​n​e​ ​N​u​m​b​e​r
+			 */
+			phoneNumber: string
 		}
 		message: {
 			/**
@@ -528,6 +532,10 @@ export type TranslationFunctions = {
 			 * Password confirmation
 			 */
 			passwordConfirmation: () => LocalizedString
+			/**
+			 * Phone Number
+			 */
+			phoneNumber: () => LocalizedString
 		}
 		message: {
 			/**

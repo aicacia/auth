@@ -13,48 +13,34 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-// PatchUserPhoneNumberSendConfirmation
+// PatchCurrentUserPhoneNumberSendConfirmation
 //
 //	@Summary		Send confirmation token to user phone_number
 //	@ID				send-confirmation-to-phone-number
-//	@Tags			user
+//	@Tags			current-user
 //	@Accept			json
 //	@Produce		json
-//	@Param			applicationId	path		int	true	"application id"
-//	@Param			userId	path		int	true	"user id"
 //	@Param			id	path		int	true	"phone_number id"
 //	@Success		204
 //	@Failure		400	{object}	model.ErrorST
 //	@Failure		401	{object}	model.ErrorST
 //	@Failure		403	{object}	model.ErrorST
 //	@Failure		500	{object}	model.ErrorST
-//	@Router			/applications/{applicationId}/users/{userId}/phone-numbers/{id}/send-confirmation [patch]
+//	@Router			/user/phone-numbers/{id}/send-confirmation [patch]
 //
 //	@Security		Authorization
-func PatchUserPhoneNumberSendConfirmation(c *fiber.Ctx) error {
-	userId, err := strconv.Atoi(c.Params("userId"))
-	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid")
-	}
-	application := middleware.GetApplication(c)
-	user, err := repository.GetUserById(application.Id, int32(userId))
-	if err != nil {
-		log.Printf("failed to get user: %v\n", err)
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
-	}
-	if user == nil {
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
-	}
+func PatchCurrentUserPhoneNumberSendConfirmation(c *fiber.Ctx) error {
+	user := middleware.GetUser(c)
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
 	}
-	confirmationToken, err := util.GenerateRandomHex(8)
+	confirmationToken, err := util.GenerateRandomHex(6)
 	if err != nil {
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	// TODO: send to phone_number
-	log.Printf("userId=%d, emailId=%d, token=%s\n", userId, id, confirmationToken)
+	log.Printf("userId=%d, emailId=%d, token=%s\n", user.Id, id, confirmationToken)
 	_, err = repository.SetPhoneNumberConfirmation(user.Id, int32(id), confirmationToken)
 	if err != nil {
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
@@ -63,15 +49,13 @@ func PatchUserPhoneNumberSendConfirmation(c *fiber.Ctx) error {
 	return c.Send(nil)
 }
 
-// PatchUserPhoneNumberConfirm
+// PatchCurrentUserPhoneNumberConfirm
 //
 //	@Summary		Confirm phone_number with token
 //	@ID				confirm-phone-number
-//	@Tags			user
+//	@Tags			current-user
 //	@Accept			json
 //	@Produce		json
-//	@Param			applicationId	path		int	true	"application id"
-//	@Param			userId	path		int	true	"user id"
 //	@Param			id	path		int	true	"phone_number id"
 //	@Param			confirmPhoneNumber	body		model.ConfirmPhoneNumberST	true	"phone_number confirmation"
 //	@Success		200 {object}	model.PhoneNumberST
@@ -79,23 +63,11 @@ func PatchUserPhoneNumberSendConfirmation(c *fiber.Ctx) error {
 //	@Failure		401	{object}	model.ErrorST
 //	@Failure		403	{object}	model.ErrorST
 //	@Failure		500	{object}	model.ErrorST
-//	@Router			/applications/{applicationId}/users/{userId}/phone-numbers/{id}/confirm [patch]
+//	@Router			/user/phone-numbers/{id}/confirm [patch]
 //
 //	@Security		Authorization
-func PatchUserPhoneNumberConfirm(c *fiber.Ctx) error {
-	userId, err := strconv.Atoi(c.Params("userId"))
-	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid")
-	}
-	application := middleware.GetApplication(c)
-	user, err := repository.GetUserById(application.Id, int32(userId))
-	if err != nil {
-		log.Printf("failed to get user: %v\n", err)
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
-	}
-	if user == nil {
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
-	}
+func PatchCurrentUserPhoneNumberConfirm(c *fiber.Ctx) error {
+	user := middleware.GetUser(c)
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
@@ -112,38 +84,24 @@ func PatchUserPhoneNumberConfirm(c *fiber.Ctx) error {
 	return c.JSON(model.PhoneNumberFromRow(phone_number))
 }
 
-// PatchUserPhoneNumberSetPrimary
+// PatchCurrentUserPhoneNumberSetPrimary
 //
 //	@Summary		Set a confirmed phone to primary
 //	@ID				set-primary-phone-number
-//	@Tags			user
+//	@Tags			current-user
 //	@Accept			json
 //	@Produce		json
-//	@Param			applicationId	path		int	true	"application id"
-//	@Param			userId	path		int	true	"user id"
 //	@Param			id	path		int	true	"email id"
 //	@Success		204
 //	@Failure		400	{object}	model.ErrorST
 //	@Failure		401	{object}	model.ErrorST
 //	@Failure		403	{object}	model.ErrorST
 //	@Failure		500	{object}	model.ErrorST
-//	@Router			/applications/{applicationId}/users/{userId}/phone-numbers/{id}/set-primary [patch]
+//	@Router			/user/phone-numbers/{id}/set-primary [patch]
 //
 //	@Security		Authorization
-func PatchUserPhoneNumberSetPrimary(c *fiber.Ctx) error {
-	userId, err := strconv.Atoi(c.Params("userId"))
-	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid")
-	}
-	application := middleware.GetApplication(c)
-	user, err := repository.GetUserById(application.Id, int32(userId))
-	if err != nil {
-		log.Printf("failed to get user: %v\n", err)
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
-	}
-	if user == nil {
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
-	}
+func PatchCurrentUserPhoneNumberSetPrimary(c *fiber.Ctx) error {
+	user := middleware.GetUser(c)
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
@@ -156,99 +114,74 @@ func PatchUserPhoneNumberSetPrimary(c *fiber.Ctx) error {
 	return c.Send(nil)
 }
 
-// PostUserCreatePhoneNumber
+// PostCurrentUserCreatePhoneNumber
 //
 //	@Summary		Create user phone number
 //	@ID				create-phone-number
-//	@Tags			user
+//	@Tags			current-user
 //	@Accept			json
 //	@Produce		json
-//	@Param			applicationId	path		int	true	"application id"
-//	@Param			userId	path		int	true	"user id"
 //	@Param			createPhoneNumber	body		model.CreatePhoneNumberST	true	"update phone_number"
 //	@Success		201	{object}   	model.PhoneNumberST
 //	@Failure		400	{object}	model.ErrorST
 //	@Failure		401	{object}	model.ErrorST
 //	@Failure		403	{object}	model.ErrorST
 //	@Failure		500	{object}	model.ErrorST
-//	@Router			/applications/{applicationId}/users/{userId}/phone-numbers [post]
+//	@Router			/user/phone-numbers [post]
 //
 //	@Security		Authorization
-func PostUserCreatePhoneNumber(c *fiber.Ctx) error {
-	applicationId, err := strconv.Atoi(c.Params("applicationId"))
-	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("applicationId", "invalid")
-	}
-	userId, err := strconv.Atoi(c.Params("userId"))
-	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid")
-	}
-	application := middleware.GetApplication(c)
-	user, err := repository.GetUserById(application.Id, int32(userId))
-	if err != nil {
-		log.Printf("failed to get user: %v\n", err)
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
-	}
-	if user == nil {
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
-	}
+func PostCurrentUserCreatePhoneNumber(c *fiber.Ctx) error {
 	var createPhoneNumber model.CreatePhoneNumberST
 	if err := c.BodyParser(&createPhoneNumber); err != nil {
 		log.Printf("invalid request body: %v\n", err)
 		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
+	phoneNumber := util.NumericRegex.ReplaceAllString(createPhoneNumber.PhoneNumber, "")
+	if phoneNumber == "" {
+		return model.NewError(http.StatusBadRequest).AddError("phoneNumber", "required")
+	}
+	if len(phoneNumber) < 10 || len(phoneNumber) > 13 {
+		return model.NewError(http.StatusBadRequest).AddError("phoneNumber", "invalid")
+	}
+	user := middleware.GetUser(c)
 	confirmationToken, err := util.GenerateRandomHex(6)
 	if err != nil {
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
-	phoneNumberRow, err := repository.CreatePhoneNumber(int32(applicationId), int32(userId), createPhoneNumber.PhoneNumber, confirmationToken)
+	phoneNumberRow, err := repository.CreatePhoneNumber(user.ApplicationId, user.Id, phoneNumber, confirmationToken)
 	if err != nil {
 		log.Printf("failed to create phone_number: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	// TODO: send to phone number
-	log.Printf("userId=%d, emailId=%d, token=%s\n", userId, phoneNumberRow.Id, strings.ToUpper(*phoneNumberRow.ConfirmationToken))
+	log.Printf("userId=%d, emailId=%d, token=%s\n", user.Id, phoneNumberRow.Id, strings.ToUpper(*phoneNumberRow.ConfirmationToken))
 	c.Status(http.StatusCreated)
 	return c.JSON(model.PhoneNumberFromRow(phoneNumberRow))
 }
 
-// DeleteUserPhoneNumber
+// DeleteCurrentUserPhoneNumber
 //
 //	@Summary		Delete user phone number
 //	@ID				delete-phone-number
-//	@Tags			user
+//	@Tags			current-user
 //	@Accept			json
 //	@Produce		json
-//	@Param			applicationId	path		int	true	"application id"
-//	@Param			userId	path		int	true	"user id"
 //	@Param			id	path		int	true	"phone_number id"
 //	@Success		204
 //	@Failure		400	{object}	model.ErrorST
 //	@Failure		401	{object}	model.ErrorST
 //	@Failure		403	{object}	model.ErrorST
 //	@Failure		500	{object}	model.ErrorST
-//	@Router			/applications/{applicationId}/users/{userId}/phone-numbers/{id} [delete]
+//	@Router			/user/phone-numbers/{id} [delete]
 //
 //	@Security		Authorization
-func DeleteUserPhoneNumber(c *fiber.Ctx) error {
-	userId, err := strconv.Atoi(c.Params("userId"))
-	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid")
-	}
-	application := middleware.GetApplication(c)
-	user, err := repository.GetUserById(application.Id, int32(userId))
-	if err != nil {
-		log.Printf("failed to get user: %v\n", err)
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
-	}
-	if user == nil {
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
-	}
+func DeleteCurrentUserPhoneNumber(c *fiber.Ctx) error {
+	user := middleware.GetUser(c)
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
 	}
-	deleted, err := repository.DeletePhoneNumber(int32(userId), int32(id))
+	deleted, err := repository.DeletePhoneNumber(user.Id, int32(id))
 	if err != nil {
 		log.Printf("failed to delete phone_number: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")

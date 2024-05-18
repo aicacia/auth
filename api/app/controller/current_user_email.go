@@ -13,48 +13,34 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-// PatchUserEmailSendConfirmation
+// PatchCurrentUserEmailSendConfirmation
 //
 //	@Summary		Send confirmation token to user email
 //	@ID				send-confirmation-to-email
-//	@Tags			user
+//	@Tags			current-user
 //	@Accept			json
 //	@Produce		json
-//	@Param			applicationId	path		int	true	"application id"
-//	@Param			userId	path		int	true	"user id"
 //	@Param			id	path		int	true	"email id"
 //	@Success		204
 //	@Failure		400	{object}	model.ErrorST
 //	@Failure		401	{object}	model.ErrorST
 //	@Failure		403	{object}	model.ErrorST
 //	@Failure		500	{object}	model.ErrorST
-//	@Router			/applications/{applicationId}/users/{userId}/emails/{id}/send-confirmation [patch]
+//	@Router			/user/emails/{id}/send-confirmation [patch]
 //
 //	@Security		Authorization
-func PatchUserEmailSendConfirmation(c *fiber.Ctx) error {
-	userId, err := strconv.Atoi(c.Params("userId"))
-	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid")
-	}
-	application := middleware.GetApplication(c)
-	user, err := repository.GetUserById(application.Id, int32(userId))
-	if err != nil {
-		log.Printf("failed to get user: %v\n", err)
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
-	}
-	if user == nil {
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
-	}
+func PatchCurrentUserEmailSendConfirmation(c *fiber.Ctx) error {
+	user := middleware.GetUser(c)
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
 	}
-	confirmationToken, err := util.GenerateRandomHex(8)
+	confirmationToken, err := util.GenerateRandomHex(6)
 	if err != nil {
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	// TODO: send to email
-	log.Printf("userId=%d, emailId=%d, token=%s\n", userId, id, confirmationToken)
+	log.Printf("userId=%d, emailId=%d, token=%s\n", user.Id, id, confirmationToken)
 	_, err = repository.SetEmailConfirmation(user.Id, int32(id), confirmationToken)
 	if err != nil {
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
@@ -63,15 +49,13 @@ func PatchUserEmailSendConfirmation(c *fiber.Ctx) error {
 	return c.Send(nil)
 }
 
-// PatchUserEmailConfirm
+// PatchCurrentUserEmailConfirm
 //
 //	@Summary		Confirm email with token
 //	@ID				confirm-email
-//	@Tags			user
+//	@Tags			current-user
 //	@Accept			json
 //	@Produce		json
-//	@Param			applicationId	path		int	true	"application id"
-//	@Param			userId	path		int	true	"user id"
 //	@Param			id	path		int	true	"email id"
 //	@Param			confirmEmail	body		model.ConfirmEmailST	true	"email confirmation"
 //	@Success		200 {object}	model.EmailST
@@ -79,23 +63,11 @@ func PatchUserEmailSendConfirmation(c *fiber.Ctx) error {
 //	@Failure		401	{object}	model.ErrorST
 //	@Failure		403	{object}	model.ErrorST
 //	@Failure		500	{object}	model.ErrorST
-//	@Router			/applications/{applicationId}/users/{userId}/emails/{id}/confirm [patch]
+//	@Router			/user/emails/{id}/confirm [patch]
 //
 //	@Security		Authorization
-func PatchUserEmailConfirm(c *fiber.Ctx) error {
-	userId, err := strconv.Atoi(c.Params("userId"))
-	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid")
-	}
-	application := middleware.GetApplication(c)
-	user, err := repository.GetUserById(application.Id, int32(userId))
-	if err != nil {
-		log.Printf("failed to get user: %v\n", err)
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
-	}
-	if user == nil {
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
-	}
+func PatchCurrentUserEmailConfirm(c *fiber.Ctx) error {
+	user := middleware.GetUser(c)
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
@@ -112,38 +84,24 @@ func PatchUserEmailConfirm(c *fiber.Ctx) error {
 	return c.JSON(model.EmailFromRow(email))
 }
 
-// PatchUserEmailSetPrimary
+// PatchCurrentUserEmailSetPrimary
 //
 //	@Summary		Set a confirmed email to primary
 //	@ID				set-primary-email
-//	@Tags			user
+//	@Tags			current-user
 //	@Accept			json
 //	@Produce		json
-//	@Param			applicationId	path		int	true	"application id"
-//	@Param			userId	path		int	true	"user id"
 //	@Param			id	path		int	true	"email id"
 //	@Success		204
 //	@Failure		400	{object}	model.ErrorST
 //	@Failure		401	{object}	model.ErrorST
 //	@Failure		403	{object}	model.ErrorST
 //	@Failure		500	{object}	model.ErrorST
-//	@Router			/applications/{applicationId}/users/{userId}/emails/{id}/set-primary [patch]
+//	@Router			/user/emails/{id}/set-primary [patch]
 //
 //	@Security		Authorization
-func PatchUserEmailSetPrimary(c *fiber.Ctx) error {
-	userId, err := strconv.Atoi(c.Params("userId"))
-	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid")
-	}
-	application := middleware.GetApplication(c)
-	user, err := repository.GetUserById(application.Id, int32(userId))
-	if err != nil {
-		log.Printf("failed to get user: %v\n", err)
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
-	}
-	if user == nil {
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
-	}
+func PatchCurrentUserEmailSetPrimary(c *fiber.Ctx) error {
+	user := middleware.GetUser(c)
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
@@ -156,58 +114,44 @@ func PatchUserEmailSetPrimary(c *fiber.Ctx) error {
 	return c.Send(nil)
 }
 
-// PostUserCreateEmail
+// PostCurrentUserCreateEmail
 //
 //	@Summary		Create user email
 //	@ID				create-email
-//	@Tags			user
+//	@Tags			current-user
 //	@Accept			json
 //	@Produce		json
-//	@Param			applicationId	path		int	true	"application id"
-//	@Param			userId	path		int	true	"user id"
 //	@Param			createEmail	body		model.CreateEmailST	true	"update email"
 //	@Success		201	{object}   	model.EmailST
 //	@Failure		400	{object}	model.ErrorST
 //	@Failure		401	{object}	model.ErrorST
 //	@Failure		403	{object}	model.ErrorST
 //	@Failure		500	{object}	model.ErrorST
-//	@Router			/applications/{applicationId}/users/{userId}/emails [post]
+//	@Router			/user/emails [post]
 //
 //	@Security		Authorization
-func PostUserCreateEmail(c *fiber.Ctx) error {
-	applicationId, err := strconv.Atoi(c.Params("applicationId"))
-	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("applicationId", "invalid")
-	}
-	userId, err := strconv.Atoi(c.Params("userId"))
-	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid")
-	}
-	application := middleware.GetApplication(c)
-	user, err := repository.GetUserById(application.Id, int32(userId))
-	if err != nil {
-		log.Printf("failed to get user: %v\n", err)
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
-	}
-	if user == nil {
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
-	}
+func PostCurrentUserCreateEmail(c *fiber.Ctx) error {
 	var createEmail model.CreateEmailST
 	if err := c.BodyParser(&createEmail); err != nil {
 		log.Printf("invalid request body: %v\n", err)
 		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
+	user := middleware.GetUser(c)
 	confirmationToken, err := util.GenerateRandomHex(6)
 	if err != nil {
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
-	emailRow, err := repository.CreateEmail(int32(applicationId), int32(userId), createEmail.Email, confirmationToken)
+	email := strings.TrimSpace(createEmail.Email)
+	if email == "" {
+		return model.NewError(http.StatusBadRequest).AddError("email", "required")
+	}
+	emailRow, err := repository.CreateEmail(user.ApplicationId, user.Id, email, confirmationToken)
 	if err != nil {
 		log.Printf("failed to create email: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	// TODO: send to email
-	log.Printf("userId=%d, emailId=%d, token=%s\n", userId, emailRow.Id, strings.ToUpper(*emailRow.ConfirmationToken))
+	log.Printf("userId=%d, emailId=%d, token=%s\n", user.Id, emailRow.Id, strings.ToUpper(*emailRow.ConfirmationToken))
 	c.Status(http.StatusCreated)
 	return c.JSON(model.EmailFromRow(emailRow))
 }
@@ -216,39 +160,25 @@ func PostUserCreateEmail(c *fiber.Ctx) error {
 //
 //	@Summary		Delete user email
 //	@ID				delete-email
-//	@Tags			user
+//	@Tags			current-user
 //	@Accept			json
 //	@Produce		json
-//	@Param			applicationId	path		int	true	"application id"
-//	@Param			userId	path		int	true	"user id"
 //	@Param			id	path		int	true	"email id"
 //	@Success		204
 //	@Failure		400	{object}	model.ErrorST
 //	@Failure		401	{object}	model.ErrorST
 //	@Failure		403	{object}	model.ErrorST
 //	@Failure		500	{object}	model.ErrorST
-//	@Router			/applications/{applicationId}/users/{userId}/emails/{id} [delete]
+//	@Router			/user/emails/{id} [delete]
 //
 //	@Security		Authorization
-func DeleteUserEmail(c *fiber.Ctx) error {
-	userId, err := strconv.Atoi(c.Params("userId"))
-	if err != nil {
-		return model.NewError(http.StatusBadRequest).AddError("userId", "invalid")
-	}
-	application := middleware.GetApplication(c)
-	user, err := repository.GetUserById(application.Id, int32(userId))
-	if err != nil {
-		log.Printf("failed to get user: %v\n", err)
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
-	}
-	if user == nil {
-		return model.NewError(http.StatusNotFound).AddError("userId", "invalid")
-	}
+func DeleteCurrentUserEmail(c *fiber.Ctx) error {
+	user := middleware.GetUser(c)
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
 	}
-	deleted, err := repository.DeleteEmail(int32(userId), int32(id))
+	deleted, err := repository.DeleteEmail(user.Id, int32(id))
 	if err != nil {
 		log.Printf("failed to delete email: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")

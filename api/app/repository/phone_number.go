@@ -50,7 +50,8 @@ func SetPhoneNumberConfirmation(userId, id int32, confirmationToken string) (Pho
 
 func ConfirmPhoneNumber(userId, id int32, confirmationToken string) (PhoneNumberRowST, error) {
 	return Get[PhoneNumberRowST](`UPDATE phone_numbers SET
-		confirmed=true
+		confirmed=true,
+		confirmation_token=NULL
 		WHERE user_id=$1 
 			AND id=$2
 			AND confirmation_token=$3

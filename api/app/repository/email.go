@@ -49,7 +49,8 @@ func SetEmailConfirmation(userId, id int32, confirmationToken string) (EmailRowS
 
 func ConfirmEmail(userId, id int32, confirmationToken string) (EmailRowST, error) {
 	return Get[EmailRowST](`UPDATE emails SET
-		confirmed=true
+		confirmed=true,
+		confirmation_token=NULL
 		WHERE user_id=$1 
 			AND id=$2
 			AND confirmation_token=$3

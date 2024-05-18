@@ -197,13 +197,17 @@ func PostUserCreatePhoneNumber(c *fiber.Ctx) error {
 		log.Printf("invalid request body: %v\n", err)
 		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
-	phoneNumberRow, err := repository.CreatePhoneNumber(int32(applicationId), int32(userId), createPhoneNumber.PhoneNumber)
+	confirmationToken, err := util.GenerateRandomHex(6)
+	if err != nil {
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
+	}
+	phoneNumberRow, err := repository.CreatePhoneNumber(int32(applicationId), int32(userId), createPhoneNumber.PhoneNumber, confirmationToken)
 	if err != nil {
 		log.Printf("failed to create phone_number: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	// TODO: send to phone number
-	log.Printf("userId=%d, emailId=%d, token=%s\n", userId, phoneNumberRow.Id, phoneNumberRow.ConfirmationToken)
+	log.Printf("userId=%d, emailId=%d, token=%s\n", userId, phoneNumberRow.Id, strings.ToUpper(*phoneNumberRow.ConfirmationToken))
 	c.Status(http.StatusCreated)
 	return c.JSON(model.PhoneNumberFromRow(phoneNumberRow))
 }

@@ -1,21 +1,18 @@
 package repository
 
 import (
-	"database/sql"
 	"time"
-
-	"github.com/aicacia/auth/api/app/util"
 )
 
 type PhoneNumberRowST struct {
-	Id                int32          `db:"id"`
-	ApplicationId     int32          `db:"application_id"`
-	UserId            int32          `db:"user_id"`
-	PhoneNumber       string         `db:"phone_number"`
-	Confirmed         bool           `db:"confirmed"`
-	ConfirmationToken sql.NullString `db:"confirmation_token"`
-	UpdatedAt         time.Time      `db:"updated_at"`
-	CreatedAt         time.Time      `db:"created_at"`
+	Id                int32     `db:"id"`
+	ApplicationId     int32     `db:"application_id"`
+	UserId            int32     `db:"user_id"`
+	PhoneNumber       string    `db:"phone_number"`
+	Confirmed         bool      `db:"confirmed"`
+	ConfirmationToken *string   `db:"confirmation_token"`
+	UpdatedAt         time.Time `db:"updated_at"`
+	CreatedAt         time.Time `db:"created_at"`
 }
 
 func GetPhoneNumbersByUserId(userId int32) ([]PhoneNumberRowST, error) {
@@ -35,35 +32,30 @@ func GetUserPrimaryPhoneNumber(userId int32) (*PhoneNumberRowST, error) {
 		userId)
 }
 
-func CreatePhoneNumber(applicationId, userId int32, phoneNumber string) (PhoneNumberRowST, error) {
-	confirmationToken, err := util.GenerateRandomHex(8)
-	if err != nil {
-		var empty PhoneNumberRowST
-		return empty, err
-	}
+func CreatePhoneNumber(applicationId, userId int32, phoneNumber, confirmationToken string) (PhoneNumberRowST, error) {
 	return Get[PhoneNumberRowST](`INSERT INTO phone_numbers (application_id, user_id, phone_number, confirmation_token)
 		VALUES ($1, $2, $3, $4)
 		RETURNING *;`,
 		applicationId, userId, phoneNumber, confirmationToken)
 }
 
-func SetPhoneNumberConfirmation(userId, id int32, token string) (PhoneNumberRowST, error) {
+func SetPhoneNumberConfirmation(userId, id int32, confirmationToken string) (PhoneNumberRowST, error) {
 	return Get[PhoneNumberRowST](`UPDATE phone_numbers SET
 		confirmation_token=COALESCE($3, confirmation_token)
 		WHERE user_id=$1 
 			AND id=$2
 		RETURNING *;`,
-		userId, id, token)
+		userId, id, confirmationToken)
 }
 
-func ConfirmPhoneNumber(userId, id int32, token string) (PhoneNumberRowST, error) {
+func ConfirmPhoneNumber(userId, id int32, confirmationToken string) (PhoneNumberRowST, error) {
 	return Get[PhoneNumberRowST](`UPDATE phone_numbers SET
 		confirmed=true
 		WHERE user_id=$1 
 			AND id=$2
 			AND confirmation_token=$3
 		RETURNING *;`,
-		userId, id, token)
+		userId, id, confirmationToken)
 }
 
 func SetPrimaryPhoneNumber(userId, id int32) (bool, error) {

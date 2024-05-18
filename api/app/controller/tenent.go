@@ -31,7 +31,7 @@ import (
 //
 //	@Security		Authorization
 func GetTenents(c *fiber.Ctx) error {
-	if err := access.IsAdmin(c); err != nil {
+	if err := access.HasAction(c, "tenents", "read"); err != nil {
 		return err
 	}
 	applicationId, err := strconv.Atoi(c.Params("applicationId"))
@@ -74,7 +74,7 @@ func GetTenents(c *fiber.Ctx) error {
 //
 //	@Security		Authorization
 func GetTenentById(c *fiber.Ctx) error {
-	if err := access.IsAdmin(c); err != nil {
+	if err := access.HasAction(c, "tenents", "read"); err != nil {
 		return err
 	}
 	_, err := strconv.Atoi(c.Params("applicationId"))
@@ -114,7 +114,7 @@ func GetTenentById(c *fiber.Ctx) error {
 //
 //	@Security		Authorization
 func PostCreateTenent(c *fiber.Ctx) error {
-	if err := access.IsAdmin(c); err != nil {
+	if err := access.HasAction(c, "tenents", "write"); err != nil {
 		return err
 	}
 	applicationId, err := strconv.Atoi(c.Params("applicationId"))
@@ -154,7 +154,7 @@ func PostCreateTenent(c *fiber.Ctx) error {
 //
 //	@Security		Authorization
 func PatchUpdateTenent(c *fiber.Ctx) error {
-	if err := access.IsAdmin(c); err != nil {
+	if err := access.HasAction(c, "tenents", "write"); err != nil {
 		return err
 	}
 	_, err := strconv.Atoi(c.Params("applicationId"))
@@ -199,7 +199,7 @@ func PatchUpdateTenent(c *fiber.Ctx) error {
 //
 //	@Security		Authorization
 func DeleteTenent(c *fiber.Ctx) error {
-	if err := access.IsAdmin(c); err != nil {
+	if err := access.HasAction(c, "tenents", "write"); err != nil {
 		return err
 	}
 	_, err := strconv.Atoi(c.Params("applicationId"))

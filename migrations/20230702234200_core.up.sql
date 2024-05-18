@@ -94,21 +94,62 @@ INSERT INTO "tenents" ("client_id", "application_id", "description", "uri", "aut
 	('cbf7bbef-5132-4b2c-8622-06e28359c291', (SELECT id FROM "applications" WHERE uri='admin' LIMIT 1), 'Admin', 'admin', 'http://localhost:5173/signin');
 
 
-CREATE TABLE "permissions"(
+CREATE TABLE "resources"(
+	"id" SERIAL PRIMARY KEY,
+	"application_id" INT4 NOT NULL,
+	"description" VARCHAR(255) NOT NULL,
+	"uri" VARCHAR(255) NOT NULL,
+	"actions" VARCHAR(255) ARRAY NOT NULL DEFAULT ARRAY[]::VARCHAR[],
+	"updated_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  	CONSTRAINT "resources_application_id_fk" FOREIGN KEY("application_id") REFERENCES "applications"("id") ON DELETE CASCADE
+);
+CREATE UNIQUE INDEX "resources_application_id_uri_unique_idx" ON "resources" ("application_id", "uri");
+CREATE TRIGGER "resources_updated_at_tgr" BEFORE UPDATE ON "resources" FOR EACH ROW EXECUTE PROCEDURE "trigger_updated_at"();
+
+INSERT INTO "resources" ("application_id", "description", "uri", "actions")
+  	VALUES
+	((SELECT id FROM "applications" WHERE uri='admin' LIMIT 1), 'Applications', 'applications', ARRAY['read', 'write']),
+	((SELECT id FROM "applications" WHERE uri='admin' LIMIT 1), 'Users', 'users', ARRAY['read', 'write']),
+	((SELECT id FROM "applications" WHERE uri='admin' LIMIT 1), 'Tenents', 'tenents', ARRAY['read', 'write']),
+	((SELECT id FROM "applications" WHERE uri='admin' LIMIT 1), 'Roles', 'roles', ARRAY['read', 'write']);
+
+
+CREATE TABLE "roles"(
 	"id" SERIAL PRIMARY KEY,
 	"application_id" INT4 NOT NULL,
 	"description" VARCHAR(255) NOT NULL,
 	"uri" VARCHAR(255) NOT NULL,
 	"updated_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	"created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  	CONSTRAINT "permissions_application_id_fk" FOREIGN KEY("application_id") REFERENCES "applications"("id") ON DELETE CASCADE
+  	CONSTRAINT "roles_application_id_fk" FOREIGN KEY("application_id") REFERENCES "applications"("id") ON DELETE CASCADE
 );
-CREATE UNIQUE INDEX "permissions_application_id_uri_unique_idx" ON "permissions" ("application_id", "uri");
-CREATE TRIGGER "permissions_updated_at_tgr" BEFORE UPDATE ON "permissions" FOR EACH ROW EXECUTE PROCEDURE "trigger_updated_at"();
+CREATE UNIQUE INDEX "roles_application_id_uri_unique_idx" ON "roles" ("application_id", "uri");
+CREATE TRIGGER "roles_updated_at_tgr" BEFORE UPDATE ON "roles" FOR EACH ROW EXECUTE PROCEDURE "trigger_updated_at"();
 
-INSERT INTO "permissions" ("application_id", "description", "uri")
+INSERT INTO "roles" ("application_id", "description", "uri")
   	VALUES
 	((SELECT id FROM "applications" WHERE uri='admin' LIMIT 1), 'Admin', 'admin');
+
+
+CREATE TABLE "role_resource_permissions"(
+	"role_id" INT4 NOT NULL,
+	"resource_id" INT4 NOT NULL,
+	"actions" VARCHAR(255) ARRAY NOT NULL DEFAULT ARRAY[]::VARCHAR[],
+	"updated_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  	CONSTRAINT "role_resource_permissions_role_id_fk" FOREIGN KEY("role_id") REFERENCES "roles"("id") ON DELETE CASCADE,
+  	CONSTRAINT "role_resource_permissions_resource_id_fk" FOREIGN KEY("resource_id") REFERENCES "resources"("id") ON DELETE CASCADE,
+	PRIMARY KEY("role_id", "resource_id")
+);
+CREATE TRIGGER "role_resource_permissions_updated_at_tgr" BEFORE UPDATE ON "role_resource_permissions" FOR EACH ROW EXECUTE PROCEDURE "trigger_updated_at"();
+
+INSERT INTO "role_resource_permissions" ("role_id", "resource_id", "actions")
+  	VALUES
+	((SELECT id FROM "roles" WHERE uri='admin' LIMIT 1), (SELECT id FROM "resources" WHERE uri='applications' LIMIT 1), ARRAY['read', 'write']),
+	((SELECT id FROM "roles" WHERE uri='admin' LIMIT 1), (SELECT id FROM "resources" WHERE uri='users' LIMIT 1), ARRAY['read', 'write']),
+	((SELECT id FROM "roles" WHERE uri='admin' LIMIT 1), (SELECT id FROM "resources" WHERE uri='tenents' LIMIT 1), ARRAY['read', 'write']),
+	((SELECT id FROM "roles" WHERE uri='admin' LIMIT 1), (SELECT id FROM "resources" WHERE uri='roles' LIMIT 1), ARRAY['read', 'write']);
 
 
 CREATE TABLE "users"(
@@ -206,23 +247,23 @@ CREATE TABLE "user_tenent_totps"(
 	"updated_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	"created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT "user_tenent_totps_user_id_fk" FOREIGN KEY("user_id") REFERENCES "users"("id") ON DELETE CASCADE,
-	CONSTRAINT "user_tenent_totps_permission_id_fk" FOREIGN KEY("tenent_id") REFERENCES "tenents"("id") ON DELETE CASCADE,
+	CONSTRAINT "user_tenent_totps_tenent_id_fk" FOREIGN KEY("tenent_id") REFERENCES "tenents"("id") ON DELETE CASCADE,
 	PRIMARY KEY("user_id", "tenent_id")
 );
 
 
-CREATE TABLE "user_permissions"(
+CREATE TABLE "user_roles"(
 	"user_id" INT4 NOT NULL,
-	"permission_id" INT4 NOT NULL,
+	"role_id" INT4 NOT NULL,
 	"created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	CONSTRAINT "user_permissions_user_id_fk" FOREIGN KEY("user_id") REFERENCES "users"("id") ON DELETE CASCADE,
-	CONSTRAINT "user_permissions_permission_id_fk" FOREIGN KEY("permission_id") REFERENCES "permissions"("id") ON DELETE CASCADE,
-	PRIMARY KEY("user_id", "permission_id")
+	CONSTRAINT "user_roles_user_id_fk" FOREIGN KEY("user_id") REFERENCES "users"("id") ON DELETE CASCADE,
+	CONSTRAINT "user_roles_role_id_fk" FOREIGN KEY("role_id") REFERENCES "roles"("id") ON DELETE CASCADE,
+	PRIMARY KEY("user_id", "role_id")
 );
 
-INSERT INTO "user_permissions" ("user_id", "permission_id")
+INSERT INTO "user_roles" ("user_id", "role_id")
   	VALUES
-    ((SELECT id FROM "users" WHERE username='admin' LIMIT 1), (SELECT id FROM "permissions" WHERE uri='admin' LIMIT 1));
+    ((SELECT id FROM "users" WHERE username='admin' LIMIT 1), (SELECT id FROM "roles" WHERE uri='admin' LIMIT 1));
 
 
 CREATE TABLE "service_accounts"(
@@ -239,11 +280,11 @@ CREATE UNIQUE INDEX "service_accounts_name_unique_idx" ON "service_accounts" ("a
 CREATE TRIGGER "service_accounts_updated_at_tgr" BEFORE UPDATE ON "service_accounts" FOR EACH ROW EXECUTE PROCEDURE "trigger_updated_at"();
 
 
-CREATE TABLE "service_account_permissions"(
+CREATE TABLE "service_account_roles"(
 	"service_account_id" INT4 NOT NULL,
-	"permission_id" INT4 NOT NULL,
+	"role_id" INT4 NOT NULL,
 	"created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	CONSTRAINT "service_account_permissions_service_account_id_fk" FOREIGN KEY("service_account_id") REFERENCES "service_accounts"("id") ON DELETE CASCADE,
-	CONSTRAINT "service_account_permissions_permission_id_fk" FOREIGN KEY("permission_id") REFERENCES "permissions"("id") ON DELETE CASCADE,
-	PRIMARY KEY("service_account_id", "permission_id")
+	CONSTRAINT "service_account_roles_service_account_id_fk" FOREIGN KEY("service_account_id") REFERENCES "service_accounts"("id") ON DELETE CASCADE,
+	CONSTRAINT "service_account_roles_role_id_fk" FOREIGN KEY("role_id") REFERENCES "roles"("id") ON DELETE CASCADE,
+	PRIMARY KEY("service_account_id", "role_id")
 );

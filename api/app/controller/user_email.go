@@ -197,13 +197,17 @@ func PostUserCreateEmail(c *fiber.Ctx) error {
 		log.Printf("invalid request body: %v\n", err)
 		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
-	emailRow, err := repository.CreateEmail(int32(applicationId), int32(userId), createEmail.Email)
+	confirmationToken, err := util.GenerateRandomHex(6)
+	if err != nil {
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
+	}
+	emailRow, err := repository.CreateEmail(int32(applicationId), int32(userId), createEmail.Email, confirmationToken)
 	if err != nil {
 		log.Printf("failed to create email: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	// TODO: send to email
-	log.Printf("userId=%d, emailId=%d, token=%s\n", userId, emailRow.Id, emailRow.ConfirmationToken)
+	log.Printf("userId=%d, emailId=%d, token=%s\n", userId, emailRow.Id, strings.ToUpper(*emailRow.ConfirmationToken))
 	c.Status(http.StatusCreated)
 	return c.JSON(model.EmailFromRow(emailRow))
 }

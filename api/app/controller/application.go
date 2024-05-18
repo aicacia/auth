@@ -30,7 +30,7 @@ import (
 //
 //	@Security		Authorization
 func GetApplications(c *fiber.Ctx) error {
-	if err := access.IsAdmin(c); err != nil {
+	if err := access.HasAction(c, "applications", "read"); err != nil {
 		return err
 	}
 	limit, offset, err := GetLimitAndOffset(c, 20)
@@ -68,7 +68,7 @@ func GetApplications(c *fiber.Ctx) error {
 //
 //	@Security		Authorization
 func GetApplicationById(c *fiber.Ctx) error {
-	if err := access.IsAdmin(c); err != nil {
+	if err := access.HasAction(c, "applications", "read"); err != nil {
 		return err
 	}
 	id, err := strconv.Atoi(c.Params("id"))
@@ -103,7 +103,7 @@ func GetApplicationById(c *fiber.Ctx) error {
 //
 //	@Security		Authorization
 func PostCreateApplication(c *fiber.Ctx) error {
-	if err := access.IsAdmin(c); err != nil {
+	if err := access.HasAction(c, "applications", "write"); err != nil {
 		return err
 	}
 	var createApplication model.CreateApplicationST
@@ -138,7 +138,7 @@ func PostCreateApplication(c *fiber.Ctx) error {
 //
 //	@Security		Authorization
 func PatchUpdateApplication(c *fiber.Ctx) error {
-	if err := access.IsAdmin(c); err != nil {
+	if err := access.HasAction(c, "applications", "write"); err != nil {
 		return err
 	}
 	id, err := strconv.Atoi(c.Params("id"))
@@ -178,7 +178,7 @@ func PatchUpdateApplication(c *fiber.Ctx) error {
 //
 //	@Security		Authorization
 func DeleteApplication(c *fiber.Ctx) error {
-	if err := access.IsAdmin(c); err != nil {
+	if err := access.HasAction(c, "applications", "write"); err != nil {
 		return err
 	}
 	id, err := strconv.Atoi(c.Params("id"))

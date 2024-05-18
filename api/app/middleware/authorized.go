@@ -54,13 +54,13 @@ func AuthorizedMiddleware() fiber.Handler {
 				log.Printf("failed to fetch user: %v", err)
 				return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 			}
-			permissions, err := repository.GetUserPermissions(user.Id, application.Id)
+			permissions, err := repository.GetUserPermissions(user.Id)
 			if err != nil {
 				log.Printf("failed to fetch user permissions: %v", err)
 				return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 			}
 			c.Locals(permissionsLocalKey, permissions)
-			c.Locals(permissionsMapLocalKey, repository.PermissionsToMap(permissions))
+			c.Locals(permissionsMapLocalKey, PermissionsFromRows(permissions))
 			c.Locals(userLocalKey, user)
 		case jwt.ServiceAccountSubject:
 			serviceAccount, err := repository.GetServiceAccountById(claims.Subject)
@@ -68,13 +68,13 @@ func AuthorizedMiddleware() fiber.Handler {
 				log.Printf("failed to fetch service account: %v", err)
 				return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 			}
-			permissions, err := repository.GetServiceAccountPermissions(serviceAccount.Id, application.Id)
+			permissions, err := repository.GetServiceAccountPermissions(serviceAccount.Id)
 			if err != nil {
 				log.Printf("failed to fetch user permissions: %v", err)
 				return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 			}
 			c.Locals(permissionsLocalKey, permissions)
-			c.Locals(permissionsMapLocalKey, repository.PermissionsToMap(permissions))
+			c.Locals(permissionsMapLocalKey, PermissionsFromRows(permissions))
 			c.Locals(serviceAccountLocalKey, serviceAccount)
 		}
 		return c.Next()
@@ -128,9 +128,8 @@ func GetPermissions(c *fiber.Ctx) []repository.PermissionRowST {
 	return permissions.([]repository.PermissionRowST)
 }
 
-func GetPermissionsMap(c *fiber.Ctx) map[string]bool {
-	permissionsMap := c.Locals(permissionsMapLocalKey)
-	return permissionsMap.(map[string]bool)
+func GetPermissionsMap(c *fiber.Ctx) map[string][]string {
+	return c.Locals(permissionsMapLocalKey).(map[string][]string)
 }
 
 func IsUserMiddleware() fiber.Handler {
@@ -149,4 +148,18 @@ func IsServiceAccountMiddleware() fiber.Handler {
 		}
 		return model.NewError(http.StatusForbidden).AddError("authorization", "invalid")
 	}
+}
+
+type PermissionsST = map[string][]string
+
+func PermissionsFromRows(rows []repository.PermissionRowST) PermissionsST {
+	permissionsMap := make(PermissionsST)
+	for _, row := range rows {
+		if actions, ok := permissionsMap[row.Resource]; ok {
+			permissionsMap[row.Resource] = append(actions, row.Actions...)
+		} else {
+			permissionsMap[row.Resource] = row.Actions
+		}
+	}
+	return permissionsMap
 }

@@ -64,10 +64,10 @@ export interface UserWithPermissions {
     id: number;
     /**
      * 
-     * @type {Array<string>}
+     * @type {{ [key: string]: Array<string>; }}
      * @memberof UserWithPermissions
      */
-    permissions: Array<string>;
+    permissions: { [key: string]: Array<string>; };
     /**
      * 
      * @type {PhoneNumber}

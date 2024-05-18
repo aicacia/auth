@@ -38,7 +38,7 @@ type UserST struct {
 
 type UserWithPermissionsST struct {
 	UserST
-	Permissions []string `json:"permissions" validate:"required"`
+	Permissions map[string][]string `json:"permissions" validate:"required"`
 } // @name UserWithPermissions
 
 func UserFromRow(userRow repository.UserRowST, emailRows []repository.EmailRowST, phoneNumberRows []repository.PhoneNumberRowST) UserST {
@@ -46,7 +46,7 @@ func UserFromRow(userRow repository.UserRowST, emailRows []repository.EmailRowST
 	emails := make([]EmailST, 0, len(emailRows))
 	for _, emailRow := range emailRows {
 		email := EmailFromRow(emailRow)
-		if userRow.EmailId.Valid && userRow.EmailId.Int32 == emailRow.Id {
+		if userRow.EmailId != nil && *userRow.EmailId == emailRow.Id {
 			primaryEmail = &email
 		} else {
 			emails = append(emails, email)
@@ -56,7 +56,7 @@ func UserFromRow(userRow repository.UserRowST, emailRows []repository.EmailRowST
 	phoneNumbers := make([]PhoneNumberST, 0, len(phoneNumberRows))
 	for _, phoneNumberRow := range phoneNumberRows {
 		phoneNumber := PhoneNumberFromRow(phoneNumberRow)
-		if userRow.PhoneNumberId.Valid && userRow.PhoneNumberId.Int32 == phoneNumberRow.Id {
+		if userRow.PhoneNumberId != nil && *userRow.PhoneNumberId == phoneNumberRow.Id {
 			primaryPhoneNumber = &phoneNumber
 		} else {
 			phoneNumbers = append(phoneNumbers, phoneNumber)

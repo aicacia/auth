@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"database/sql"
 	"strings"
 	"time"
 
@@ -10,14 +9,14 @@ import (
 )
 
 type UserRowST struct {
-	Id                int32         `db:"id"`
-	ApplicationId     int32         `db:"application_id"`
-	EmailId           sql.NullInt32 `db:"email_id"`
-	PhoneNumberId     sql.NullInt32 `db:"phone_number_id"`
-	Username          string        `db:"username"`
-	EncryptedPassword string        `db:"encrypted_password"`
-	UpdatedAt         time.Time     `db:"updated_at"`
-	CreatedAt         time.Time     `db:"created_at"`
+	Id                int32     `db:"id"`
+	ApplicationId     int32     `db:"application_id"`
+	EmailId           *int32    `db:"email_id"`
+	PhoneNumberId     *int32    `db:"phone_number_id"`
+	Username          string    `db:"username"`
+	EncryptedPassword string    `db:"encrypted_password"`
+	UpdatedAt         time.Time `db:"updated_at"`
+	CreatedAt         time.Time `db:"created_at"`
 }
 
 func GetUsers(applicationId int32, limit, offset int) ([]UserRowST, error) {

@@ -31,7 +31,7 @@ import (
 //
 //	@Security		Authorization
 func GetUsers(c *fiber.Ctx) error {
-	if err := access.IsAdmin(c); err != nil {
+	if err := access.HasAction(c, "users", "read"); err != nil {
 		return err
 	}
 	limit, offset, err := GetLimitAndOffset(c, 20)
@@ -127,7 +127,7 @@ func GetUserById(c *fiber.Ctx) error {
 //
 //	@Security		Authorization
 func PostCreateUser(c *fiber.Ctx) error {
-	if err := access.IsAdmin(c); err != nil {
+	if err := access.HasAction(c, "users", "write"); err != nil {
 		return err
 	}
 	applicationId, err := strconv.Atoi(c.Params("applicationId"))

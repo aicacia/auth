@@ -28,24 +28,19 @@ import (
 //	@Security		Authorization
 func GetCurrentUser(c *fiber.Ctx) error {
 	user := middleware.GetUser(c)
-	application := middleware.GetApplication(c)
 	emails, phoneNumbers, err := getUserEmailsAndPhoneNumbersById(user.Id)
 	if err != nil {
 		log.Printf("failed to get user emails and phone numbers: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
-	permissionRows, err := repository.GetUserPermissions(user.Id, application.Id)
+	permissionRows, err := repository.GetUserPermissions(user.Id)
 	if err != nil {
 		log.Printf("failed to get user permissions: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
-	permissions := make([]string, 0, len(permissionRows))
-	for _, permissionRow := range permissionRows {
-		permissions = append(permissions, permissionRow.Uri)
-	}
 	userWithPermissions := model.UserWithPermissionsST{
 		UserST:      model.UserFromRow(*user, emails, phoneNumbers),
-		Permissions: permissions,
+		Permissions: middleware.PermissionsFromRows(permissionRows),
 	}
 	return c.JSON(userWithPermissions)
 }

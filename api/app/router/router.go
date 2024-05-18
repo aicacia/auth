@@ -64,13 +64,6 @@ func InstallRouter(fiberApp *fiber.App) {
 	tenents.Patch("/:id", controller.PatchUpdateTenent)
 	tenents.Delete("/:id", controller.DeleteTenent)
 
-	permissions := applications.Group("/:applicationId/permissions")
-	permissions.Get("", controller.GetPermissions)
-	permissions.Get("/:id", controller.GetPermissionById)
-	permissions.Post("", controller.PostCreatePermission)
-	permissions.Patch("/:id", controller.PatchUpdatePermission)
-	permissions.Delete("/:id", controller.DeletePermission)
-
 	users := applications.Group("/:applicationId/users")
 	users.Get("", controller.GetUsers)
 	users.Get("/:id", controller.GetUserById)

@@ -2,25 +2,20 @@ package access
 
 import (
 	"net/http"
+	"slices"
 
 	"github.com/aicacia/auth/api/app/middleware"
 	"github.com/aicacia/auth/api/app/model"
 	"github.com/gofiber/fiber/v2"
 )
 
-func HasPermission(c *fiber.Ctx, permissions ...string) bool {
-	permissionsMap := middleware.GetPermissionsMap(c)
-	for _, permission := range permissions {
-		if !permissionsMap[permission] {
-			return false
+func HasAction(c *fiber.Ctx, resource string, actions ...string) *model.ErrorST {
+	if allowedActions, ok := middleware.GetPermissionsMap(c)[resource]; ok {
+		for _, action := range allowedActions {
+			if !slices.Contains(allowedActions, action) {
+				return model.NewError(http.StatusForbidden).AddError("authorization", "invalid")
+			}
 		}
-	}
-	return true
-}
-
-func IsAdmin(c *fiber.Ctx) *model.ErrorST {
-	if !HasPermission(c, "admin") {
-		return model.NewError(http.StatusForbidden).AddError("authorization", "invalid")
 	}
 	return nil
 }

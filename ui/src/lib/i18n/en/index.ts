@@ -10,7 +10,8 @@ const en = {
 			username: 'Username',
 			password: 'Password',
 			passwordConfirmation: 'Password confirmation',
-			phoneNumber: 'Phone Number'
+			phoneNumber: 'Phone Number',
+			authorization: 'Authorization'
 		},
 		message: {
 			application: 'if it presists please contact support',

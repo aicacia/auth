@@ -49,6 +49,10 @@ type RootTranslation = {
 			 * P​h​o​n​e​ ​N​u​m​b​e​r
 			 */
 			phoneNumber: string
+			/**
+			 * A​u​t​h​o​r​i​z​a​t​i​o​n
+			 */
+			authorization: string
 		}
 		message: {
 			/**
@@ -536,6 +540,10 @@ export type TranslationFunctions = {
 			 * Phone Number
 			 */
 			phoneNumber: () => LocalizedString
+			/**
+			 * Authorization
+			 */
+			authorization: () => LocalizedString
 		}
 		message: {
 			/**

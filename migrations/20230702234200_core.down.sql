@@ -1,6 +1,9 @@
 DROP TABLE IF EXISTS "service_account_roles" cascade;
 DROP TABLE IF EXISTS "service_accounts" cascade;
 
+DROP TABLE IF EXISTS "user_mfas" cascade;
+DROP TYPE IF EXISTS MFA_TYPE cascade;
+
 DROP TABLE IF EXISTS "user_roles" cascade;
 DROP TABLE IF EXISTS "users" cascade;
 DROP TABLE IF EXISTS "emails" cascade;

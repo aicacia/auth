@@ -61,5 +61,11 @@ func PostRegistration(c *fiber.Ctx) error {
 		log.Printf("failed to add user to application: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
-	return sendToken(c, model.PasswordGrantType, "openid", application, tenent, &createResult.User, nil)
+	return sendToken(c, sendTokenST{
+		issuedTokenType: model.PasswordGrantType,
+		scope:           "openid",
+		application:     application,
+		tenent:          tenent,
+		user:            &createResult.User,
+	})
 }

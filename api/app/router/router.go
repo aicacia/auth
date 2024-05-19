@@ -32,6 +32,10 @@ func InstallRouter(fiberApp *fiber.App) {
 	registration.Use(middleware.TenentMiddleware())
 	registration.Post("", controller.PostRegistration)
 
+	mfa := root.Group("/mfa")
+	mfa.Use(middleware.MFAAuthorizedMiddleware())
+	mfa.Post("", controller.PostValidateMFA)
+
 	wellKnown := root.Group("/.well-known")
 	wellKnown.Use(middleware.TenentMiddleware())
 	wellKnown.Get("/openid-configuration", controller.GetOpenIDConfiguration)

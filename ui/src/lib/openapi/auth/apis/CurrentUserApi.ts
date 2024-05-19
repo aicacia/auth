@@ -23,6 +23,7 @@ import type {
   Errors,
   PhoneNumber,
   ResetPassword,
+  TOTP,
   UpdateUser,
   UpdateUserInfoRequest,
   UserInfo,
@@ -45,6 +46,8 @@ import {
     PhoneNumberToJSON,
     ResetPasswordFromJSON,
     ResetPasswordToJSON,
+    TOTPFromJSON,
+    TOTPToJSON,
     UpdateUserFromJSON,
     UpdateUserToJSON,
     UpdateUserInfoRequestFromJSON,
@@ -180,6 +183,20 @@ export interface CurrentUserApiInterface {
 
     /**
      * 
+     * @summary Create user TOTP
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CurrentUserApiInterface
+     */
+    createTotpRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TOTP>>;
+
+    /**
+     * Create user TOTP
+     */
+    createTotp(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TOTP>;
+
+    /**
+     * 
      * @summary Get current user
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -235,6 +252,20 @@ export interface CurrentUserApiInterface {
      * Delete user phone number
      */
     deletePhoneNumber(id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * 
+     * @summary Create user TOTP
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CurrentUserApiInterface
+     */
+    deleteTotpRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     * Create user TOTP
+     */
+    deleteTotp(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -523,6 +554,36 @@ export class CurrentUserApi extends runtime.BaseAPI implements CurrentUserApiInt
     }
 
     /**
+     * Create user TOTP
+     */
+    async createTotpRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TOTP>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // Authorization authentication
+        }
+
+        const response = await this.request({
+            path: `/user/totp`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TOTPFromJSON(jsonValue));
+    }
+
+    /**
+     * Create user TOTP
+     */
+    async createTotp(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TOTP> {
+        const response = await this.createTotpRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Get current user
      */
     async currentUserRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserWithPermissions>> {
@@ -652,6 +713,35 @@ export class CurrentUserApi extends runtime.BaseAPI implements CurrentUserApiInt
      */
     async deletePhoneNumber(id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deletePhoneNumberRaw({ id: id }, initOverrides);
+    }
+
+    /**
+     * Create user TOTP
+     */
+    async deleteTotpRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // Authorization authentication
+        }
+
+        const response = await this.request({
+            path: `/user/totp`,
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Create user TOTP
+     */
+    async deleteTotp(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteTotpRaw(initOverrides);
     }
 
     /**

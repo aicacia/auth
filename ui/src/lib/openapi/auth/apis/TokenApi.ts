@@ -16,12 +16,15 @@
 import * as runtime from '../runtime';
 import type {
   Errors,
+  ModelValidateMFAST,
   Token,
   TokenRequest,
 } from '../models/index';
 import {
     ErrorsFromJSON,
     ErrorsToJSON,
+    ModelValidateMFASTFromJSON,
+    ModelValidateMFASTToJSON,
     TokenFromJSON,
     TokenToJSON,
     TokenRequestFromJSON,
@@ -30,6 +33,10 @@ import {
 
 export interface CreateTokenRequest {
     tokenRequest: TokenRequest;
+}
+
+export interface ValidateMfaRequest {
+    mfa: ModelValidateMFAST;
 }
 
 /**
@@ -53,6 +60,22 @@ export interface TokenApiInterface {
      * Create JWT Token
      */
     createToken(tokenRequest: TokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Token>;
+
+    /**
+     * Multi-factor authentication
+     * @summary Multi-factor authentication
+     * @param {ModelValidateMFAST} mfa mfa validation
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TokenApiInterface
+     */
+    validateMfaRaw(requestParameters: ValidateMfaRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Token>>;
+
+    /**
+     * Multi-factor authentication
+     * Multi-factor authentication
+     */
+    validateMfa(mfa: ModelValidateMFAST, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Token>;
 
 }
 
@@ -98,6 +121,48 @@ export class TokenApi extends runtime.BaseAPI implements TokenApiInterface {
      */
     async createToken(tokenRequest: TokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Token> {
         const response = await this.createTokenRaw({ tokenRequest: tokenRequest }, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Multi-factor authentication
+     * Multi-factor authentication
+     */
+    async validateMfaRaw(requestParameters: ValidateMfaRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Token>> {
+        if (requestParameters['mfa'] == null) {
+            throw new runtime.RequiredError(
+                'mfa',
+                'Required parameter "mfa" was null or undefined when calling validateMfa().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // Authorization authentication
+        }
+
+        const response = await this.request({
+            path: `/mfa`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ModelValidateMFASTToJSON(requestParameters['mfa']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TokenFromJSON(jsonValue));
+    }
+
+    /**
+     * Multi-factor authentication
+     * Multi-factor authentication
+     */
+    async validateMfa(mfa: ModelValidateMFAST, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Token> {
+        const response = await this.validateMfaRaw({ mfa: mfa }, initOverrides);
         return await response.value();
     }
 

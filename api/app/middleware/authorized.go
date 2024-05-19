@@ -33,7 +33,7 @@ func AuthorizedMiddleware() fiber.Handler {
 			log.Printf("failed to fetch application tenent: %v", err)
 			return model.NewError(http.StatusUnauthorized).AddError("authorization", "invalid")
 		}
-		claims, err := jwt.ParseClaimsFromToken(tokenString, tenent)
+		claims, err := jwt.ParseClaimsFromToken[jwt.Claims](tokenString, tenent)
 		if err != nil {
 			log.Printf("failed to parse claims from token: %v", err)
 			return model.NewError(http.StatusUnauthorized).AddError("authorization", "invalid")
@@ -90,13 +90,13 @@ func OpenIdMiddleware() fiber.Handler {
 	}
 }
 
-func GetClaims(c *fiber.Ctx) *jwt.Claims {
+func GetClaims[C any](c *fiber.Ctx) *C {
 	claims := c.Locals(baseClaimsLocalKey)
-	return claims.(*jwt.Claims)
+	return claims.(*C)
 }
 
 func HasScope(c *fiber.Ctx, scope ...string) bool {
-	claims := GetClaims(c)
+	claims := GetClaims[jwt.Claims](c)
 	for _, s := range scope {
 		if !slices.Contains(claims.Scope, s) {
 			return false
@@ -106,7 +106,7 @@ func HasScope(c *fiber.Ctx, scope ...string) bool {
 }
 
 func IsUserSubject(c *fiber.Ctx) bool {
-	return GetClaims(c).SubjectType == jwt.UserSubject
+	return GetClaims[jwt.Claims](c).SubjectType == jwt.UserSubject
 }
 
 func GetUser(c *fiber.Ctx) *repository.UserRowST {
@@ -115,7 +115,7 @@ func GetUser(c *fiber.Ctx) *repository.UserRowST {
 }
 
 func IsServiceAccount(c *fiber.Ctx) bool {
-	return GetClaims(c).SubjectType == jwt.ServiceAccountSubject
+	return GetClaims[jwt.Claims](c).SubjectType == jwt.ServiceAccountSubject
 }
 
 func GetServiceAccount(c *fiber.Ctx) *repository.ServiceAccountRowST {

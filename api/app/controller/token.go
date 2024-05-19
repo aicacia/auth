@@ -68,7 +68,19 @@ func passwordToken(c *fiber.Ctx, tokenRequest model.TokenRequestST) error {
 		}
 		return model.NewError(http.StatusUnauthorized).AddError("username", "invalid").AddError("password", "invalid")
 	}
-	return sendToken(c, tokenRequest.GrantType, tokenRequest.Scope, application, middleware.GetTenent(c), user, nil)
+	mfa, err := repository.GetMFA(user.Id)
+	if err != nil {
+		log.Printf("failed to get mfa: %v\n", err)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
+	}
+	return sendToken(c, sendTokenST{
+		mfa:             mfa != nil,
+		issuedTokenType: tokenRequest.GrantType,
+		scope:           tokenRequest.Scope,
+		application:     application,
+		tenent:          middleware.GetTenent(c),
+		user:            user,
+	})
 }
 
 func serviceAccountToken(c *fiber.Ctx, tokenRequest model.TokenRequestST) error {
@@ -89,12 +101,18 @@ func serviceAccountToken(c *fiber.Ctx, tokenRequest model.TokenRequestST) error 
 		}
 		return model.NewError(http.StatusUnauthorized).AddError("key", "invalid").AddError("secret", "invalid")
 	}
-	return sendToken(c, tokenRequest.GrantType, tokenRequest.Scope, middleware.GetApplication(c), middleware.GetTenent(c), nil, serviceAccount)
+	return sendToken(c, sendTokenST{
+		issuedTokenType: tokenRequest.GrantType,
+		scope:           tokenRequest.Scope,
+		application:     middleware.GetApplication(c),
+		tenent:          middleware.GetTenent(c),
+		serviceAccount:  serviceAccount,
+	})
 }
 
 func refreshToken(c *fiber.Ctx, tokenRequest model.TokenRequestST) error {
 	tenent := middleware.GetTenent(c)
-	claims, err := jwt.ParseClaimsFromToken(tokenRequest.RefreshToken, tenent)
+	claims, err := jwt.ParseClaimsFromToken[jwt.Claims](tokenRequest.RefreshToken, tenent)
 	if err != nil {
 		log.Printf("failed to get refresh token claims: %v\n", err)
 		return model.NewError(http.StatusUnauthorized).AddError("refresh_token", "invalid")
@@ -104,65 +122,94 @@ func refreshToken(c *fiber.Ctx, tokenRequest model.TokenRequestST) error {
 		log.Printf("failed to get user: %v\n", err)
 		return model.NewError(http.StatusUnauthorized).AddError("refresh_token", "invalid")
 	}
-	return sendToken(c, tokenRequest.GrantType, tokenRequest.Scope, middleware.GetApplication(c), tenent, user, nil)
+	return sendToken(c, sendTokenST{
+		issuedTokenType: tokenRequest.GrantType,
+		scope:           tokenRequest.Scope,
+		application:     middleware.GetApplication(c),
+		tenent:          tenent,
+		user:            user,
+	})
+}
+
+type sendTokenST struct {
+	mfa             bool
+	issuedTokenType string
+	scope           string
+	application     *repository.ApplicationRowST
+	tenent          *repository.TenentRowST
+	user            *repository.UserRowST
+	serviceAccount  *repository.ServiceAccountRowST
 }
 
 func sendToken(
 	c *fiber.Ctx,
-	issuedTokenType, scope string,
-	application *repository.ApplicationRowST,
-	tenent *repository.TenentRowST,
-	user *repository.UserRowST,
-	serviceAccount *repository.ServiceAccountRowST,
+	params sendTokenST,
 ) error {
 	now := time.Now().UTC()
-	scopes := jwt.ParseScopes(scope)
+	scopes := jwt.ParseScopes(params.scope)
 	audiences := []string{
-		application.Uri,
+		params.application.Uri,
 	}
-	if application.Website != nil {
-		audiences = append(audiences, *application.Website)
+	if params.application.Website != nil {
+		audiences = append(audiences, *params.application.Website)
 	}
 	var subject int32
 	var subjectType string
-	if user != nil {
-		subject = user.Id
+	if params.user != nil {
+		subject = params.user.Id
 		subjectType = jwt.UserSubject
-	} else if serviceAccount != nil {
-		subject = serviceAccount.Id
+	} else if params.serviceAccount != nil {
+		subject = params.serviceAccount.Id
 		subjectType = jwt.ServiceAccountSubject
 	}
-	claims := jwt.Claims{
+	baseClaims := jwt.Claims{
 		Subject:          subject,
 		SubjectType:      subjectType,
 		Type:             jwt.BearerTokenType,
-		ClientId:         tenent.ClientId,
+		ClientId:         params.tenent.ClientId,
 		Audiences:        audiences,
 		NotBeforeSeconds: now.Unix(),
 		IssuedAtSeconds:  now.Unix(),
-		ExpiresAtSeconds: now.Unix() + int64(tenent.ExpiresInSeconds),
+		ExpiresAtSeconds: now.Unix() + int64(params.tenent.ExpiresInSeconds),
 		Issuer:           config.Get().URL,
 		Scope:            scopes,
 	}
-	accessToken, err := jwt.CreateToken(&claims, tenent)
+	tokenType := jwt.BearerTokenType
+	var claims jwt.ToMapClaims = &baseClaims
+	if params.mfa {
+		baseClaims.Type = jwt.MFATokenType
+		tokenType = jwt.MFATokenType
+		mfaClaims := jwt.MFAClaims{
+			Claims:    baseClaims,
+			GrantType: params.issuedTokenType,
+		}
+		claims = &mfaClaims
+	}
+	accessToken, err := jwt.CreateToken(claims, params.tenent)
 	if err != nil {
 		log.Printf("failed to create access token: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
-	refreshToken, err := jwt.CreateToken(claims.ToRefreshClaims(application, tenent), tenent)
-	if err != nil {
-		log.Printf("failed to create refresh token: %v\n", err)
-		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
+	var refreshToken *string
+	var refreshTokenExpiresIn *int64
+	if !params.mfa {
+		token, err := jwt.CreateToken(baseClaims.ToRefreshClaims(params.application, params.tenent), params.tenent)
+		if err != nil {
+			log.Printf("failed to create refresh token: %v\n", err)
+			return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
+		}
+		refreshToken = &token
+		refreshTokenExpiresIn = &params.tenent.RefreshExpiresInSeconds
 	}
 	var idToken *string
-	if slices.Contains(scopes, "openid") {
+	if !params.mfa && slices.Contains(scopes, "openid") {
 		if subjectType == jwt.UserSubject {
-			openIdClaims, err := jwt.OpenIdClaimsForUser(&claims, user.Id)
+			openIdClaims, err := jwt.OpenIdClaimsForUser(&baseClaims, params.user.Id)
 			if err != nil {
 				log.Printf("failed to create id claims: %v\n", err)
 				return model.NewError(http.StatusInternalServerError)
 			}
-			token, err := jwt.CreateToken(openIdClaims, tenent)
+			token, err := jwt.CreateToken(openIdClaims, params.tenent)
 			if err != nil {
 				log.Printf("failed to create id token: %v\n", err)
 				return model.NewError(http.StatusInternalServerError)
@@ -172,14 +219,15 @@ func sendToken(
 			return model.NewError(http.StatusBadRequest).AddError("scope", "invalid")
 		}
 	}
+	c.Status(http.StatusOK)
 	return c.JSON(model.TokenST{
 		AccessToken:           accessToken,
-		TokenType:             jwt.BearerTokenType,
-		IssuedTokenType:       issuedTokenType,
-		ExpiresIn:             tenent.ExpiresInSeconds,
+		TokenType:             tokenType,
+		IssuedTokenType:       params.issuedTokenType,
+		ExpiresIn:             params.tenent.ExpiresInSeconds,
 		Scope:                 scopes,
 		RefreshToken:          refreshToken,
-		RefreshTokenExpiresIn: tenent.RefreshExpiresInSeconds,
+		RefreshTokenExpiresIn: refreshTokenExpiresIn,
 		IdToken:               idToken,
 	})
 }

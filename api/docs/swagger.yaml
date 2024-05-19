@@ -295,6 +295,27 @@ definitions:
     - password
     - password_confirmation
     type: object
+  TOTP:
+    properties:
+      created_at:
+        format: date-time
+        type: string
+      secret:
+        type: string
+      tenent_id:
+        type: integer
+      updated_at:
+        format: date-time
+        type: string
+      user_id:
+        type: integer
+    required:
+    - created_at
+    - secret
+    - tenent_id
+    - updated_at
+    - user_id
+    type: object
   Tenent:
     properties:
       algorithm:
@@ -653,6 +674,13 @@ definitions:
     required:
     - email
     - phoneNumber
+    type: object
+  model.ValidateMFAST:
+    properties:
+      code:
+        type: string
+    required:
+    - code
     type: object
 info:
   contact:
@@ -1455,6 +1483,47 @@ paths:
       summary: Get Health Check
       tags:
       - app
+  /mfa:
+    post:
+      consumes:
+      - application/json
+      description: Multi-factor authentication
+      operationId: validate-mfa
+      parameters:
+      - description: mfa validation
+        in: body
+        name: mfa
+        required: true
+        schema:
+          $ref: '#/definitions/model.ValidateMFAST'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/Token'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Multi-factor authentication
+      tags:
+      - token
   /password-reset:
     post:
       consumes:
@@ -2179,6 +2248,69 @@ paths:
       security:
       - Authorization: []
       summary: Resets a user's password
+      tags:
+      - current-user
+  /user/totp:
+    delete:
+      consumes:
+      - application/json
+      operationId: delete-totp
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Create user TOTP
+      tags:
+      - current-user
+    post:
+      consumes:
+      - application/json
+      operationId: create-totp
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/TOTP'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Create user TOTP
       tags:
       - current-user
   /version:

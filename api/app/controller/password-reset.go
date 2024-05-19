@@ -113,7 +113,7 @@ func PostPasswordReset(c *fiber.Ctx) error {
 		return errors
 	}
 	tenent := middleware.GetTenent(c)
-	claims, err := jwt.ParseClaimsFromToken(passwordReset.Token, tenent)
+	claims, err := jwt.ParseClaimsFromToken[jwt.Claims](passwordReset.Token, tenent)
 	if err != nil {
 		log.Printf("invalid password reset token: %v\n", err)
 		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
@@ -128,5 +128,11 @@ func PostPasswordReset(c *fiber.Ctx) error {
 		log.Printf("error setting user reset password token: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
-	return sendToken(c, jwt.PasswordResetTokenType, "openid", application, tenent, user, nil)
+	return sendToken(c, sendTokenST{
+		issuedTokenType: jwt.PasswordResetTokenType,
+		scope:           "openid",
+		application:     application,
+		tenent:          tenent,
+		user:            user,
+	})
 }

@@ -32,7 +32,7 @@ type TokenST struct {
 	IssuedTokenType       string   `json:"issued_token_type" validate:"required"`
 	ExpiresIn             int64    `json:"expires_in" validate:"required"`
 	Scope                 []string `json:"scope" validate:"required"`
-	RefreshToken          string   `json:"refresh_token" validate:"required"`
-	RefreshTokenExpiresIn int64    `json:"refresh_token_expires_in" validate:"required"`
+	RefreshToken          *string  `json:"refresh_token,omitempty" validate:"required"`
+	RefreshTokenExpiresIn *int64   `json:"refresh_token_expires_in,omitempty" validate:"required"`
 	IdToken               *string  `json:"id_token,omitempty"`
 } // @name Token

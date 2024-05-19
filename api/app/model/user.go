@@ -24,6 +24,14 @@ type PhoneNumberST struct {
 	CreatedAt     time.Time `json:"created_at" validate:"required" format:"date-time"`
 } // @name PhoneNumber
 
+type TOTPST struct {
+	TenentId  int32     `json:"tenent_id" validate:"required"`
+	UserId    int32     `json:"user_id" validate:"required"`
+	Secret    string    `json:"secret" validate:"required"`
+	UpdatedAt time.Time `json:"updated_at" validate:"required" format:"date-time"`
+	CreatedAt time.Time `json:"created_at" validate:"required" format:"date-time"`
+} // @name TOTP
+
 type UserST struct {
 	Id            int32           `json:"id" validate:"required"`
 	ApplicationId int32           `json:"application_id" validate:"required"`

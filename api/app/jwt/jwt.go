@@ -38,6 +38,7 @@ var (
 	BearerTokenType        = "bearer"
 	RefreshTokenType       = "refresh"
 	PasswordResetTokenType = "password-reset"
+	MFATokenType           = "mfa"
 )
 
 type Claims struct {
@@ -61,6 +62,15 @@ func (claims *Claims) ToRefreshClaims(application *repository.ApplicationRowST, 
 	claims.ExpiresAtSeconds = claims.IssuedAtSeconds + tenent.RefreshExpiresInSeconds
 	claims.Type = RefreshTokenType
 	return claims
+}
+
+type MFAClaims struct {
+	Claims
+	GrantType string `json:"grant_type" validate:"required"`
+}
+
+func (claims *MFAClaims) ToMapClaims() (jwt.MapClaims, error) {
+	return anyToMapClaims(claims)
 }
 
 type OpenIdClaimsAddress struct {
@@ -162,7 +172,7 @@ func ParseScopes(scope string) []string {
 	return scopes
 }
 
-func ParseClaimsFromToken[C Claims](tokenString string, tenent *repository.TenentRowST) (*C, error) {
+func ParseClaimsFromToken[C any](tokenString string, tenent *repository.TenentRowST) (*C, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method %v", token.Header["alg"])

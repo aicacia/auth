@@ -15,3 +15,8 @@ type VersionST struct {
 	Version string `json:"version" validate:"required"`
 	Build   string `json:"build" validate:"required"`
 } // @name Version
+
+type OffsetAndLimitQueryST struct {
+	Offset *int `query:"offset"`
+	Limit  *int `query:"limit"`
+} // @name OffsetAndLimitQuery

@@ -89,13 +89,11 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "limit",
                         "name": "limit",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "description": "offset",
                         "name": "offset",
                         "in": "query"
                     }
@@ -212,7 +210,7 @@ const docTemplate = `{
                     "tenent"
                 ],
                 "summary": "Get application tenents",
-                "operationId": "application-tenents",
+                "operationId": "tenents",
                 "parameters": [
                     {
                         "type": "integer",
@@ -223,13 +221,11 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "description": "limit",
                         "name": "limit",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "description": "offset",
                         "name": "offset",
                         "in": "query"
                     }
@@ -283,7 +279,7 @@ const docTemplate = `{
                     "tenent"
                 ],
                 "summary": "Create application tenent",
-                "operationId": "create-application-tenent",
+                "operationId": "create-tenent",
                 "parameters": [
                     {
                         "type": "integer",
@@ -353,7 +349,7 @@ const docTemplate = `{
                     "tenent"
                 ],
                 "summary": "Get application tenent by id",
-                "operationId": "application-tenent-by-id",
+                "operationId": "tenent-by-id",
                 "parameters": [
                     {
                         "type": "integer",
@@ -419,7 +415,7 @@ const docTemplate = `{
                     "tenent"
                 ],
                 "summary": "Delete application tenent",
-                "operationId": "delete-application-tenent",
+                "operationId": "delete-tenent",
                 "parameters": [
                     {
                         "type": "integer",
@@ -482,7 +478,7 @@ const docTemplate = `{
                     "tenent"
                 ],
                 "summary": "Update application tenent",
-                "operationId": "update-application-tenent",
+                "operationId": "update-tenent",
                 "parameters": [
                     {
                         "type": "integer",
@@ -570,13 +566,11 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "description": "limit",
                         "name": "limit",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "description": "offset",
                         "name": "offset",
                         "in": "query"
                     }
@@ -2447,6 +2441,61 @@ const docTemplate = `{
             }
         },
         "/user/totp": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "current-user"
+                ],
+                "summary": "Get user TOTPs",
+                "operationId": "totps",
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/TOTP"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/Errors"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Errors"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/Errors"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/Errors"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/totp/{tenentId}": {
             "post": {
                 "security": [
                     {
@@ -2464,11 +2513,20 @@ const docTemplate = `{
                 ],
                 "summary": "Create user TOTP",
                 "operationId": "create-totp",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "tenent id",
+                        "name": "tenentId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/TOTP"
+                            "$ref": "#/definitions/TOTPWithSecret"
                         }
                     },
                     "400": {
@@ -2512,11 +2570,140 @@ const docTemplate = `{
                 "tags": [
                     "current-user"
                 ],
-                "summary": "Create user TOTP",
+                "summary": "Delete user TOTP",
                 "operationId": "delete-totp",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "tenent id",
+                        "name": "tenentId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "204": {
                         "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/Errors"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Errors"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/Errors"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/Errors"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/totp/{tenentId}/enable": {
+            "delete": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "current-user"
+                ],
+                "summary": "Disables user TOTP",
+                "operationId": "disalbe-totp",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "tenent id",
+                        "name": "tenentId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/TOTPWithSecret"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/Errors"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Errors"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/Errors"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/Errors"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "current-user"
+                ],
+                "summary": "Enables user TOTP",
+                "operationId": "enable-totp",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "tenent id",
+                        "name": "tenentId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/TOTPWithSecret"
+                        }
                     },
                     "400": {
                         "description": "Bad Request",
@@ -3006,6 +3193,41 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "created_at",
+                "enabled",
+                "id",
+                "tenent_id",
+                "updated_at",
+                "user_id"
+            ],
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "tenent_id": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "TOTPWithSecret": {
+            "type": "object",
+            "required": [
+                "created_at",
+                "enabled",
+                "id",
                 "secret",
                 "tenent_id",
                 "updated_at",
@@ -3015,6 +3237,12 @@ const docTemplate = `{
                 "created_at": {
                     "type": "string",
                     "format": "date-time"
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "integer"
                 },
                 "secret": {
                     "type": "string"

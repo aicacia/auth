@@ -19,7 +19,21 @@ type UserRowST struct {
 	CreatedAt         time.Time `db:"created_at"`
 }
 
-func GetUsers(applicationId int32, limit, offset int) ([]UserRowST, error) {
+func GetUsers(applicationId int32, limit, offset *int) ([]UserRowST, error) {
+	if limit == nil && offset == nil {
+		return All[UserRowST](`SELECT u.* 
+			FROM users u 
+			WHERE u.application_id = $1
+			ORDER BY u.updated_at DESC;`, applicationId)
+	}
+	if limit == nil {
+		limit = new(int)
+		*limit = 10
+	}
+	if offset == nil {
+		offset = new(int)
+		*offset = 0
+	}
 	return All[UserRowST](`SELECT u.* 
 		FROM users u 
 		WHERE u.application_id = $1
@@ -27,7 +41,22 @@ func GetUsers(applicationId int32, limit, offset int) ([]UserRowST, error) {
 		LIMIT $2 OFFSET $3;`, applicationId, limit, offset)
 }
 
-func GetUsersEmails(applicationId int32, limit, offset int) ([]EmailRowST, error) {
+func GetUsersEmails(applicationId int32, limit, offset *int) ([]EmailRowST, error) {
+	if limit == nil && offset == nil {
+		return All[EmailRowST](`SELECT e.*
+			FROM emails e
+			JOIN users u ON e.user_id = u.id
+			JOIN applications a ON a.id = u.application_id
+			WHERE a.id = $1;`, applicationId)
+	}
+	if limit == nil {
+		limit = new(int)
+		*limit = 10
+	}
+	if offset == nil {
+		offset = new(int)
+		*offset = 0
+	}
 	return All[EmailRowST](`SELECT e.* 
 		FROM emails e
 		WHERE e.user_id in (
@@ -39,7 +68,22 @@ func GetUsersEmails(applicationId int32, limit, offset int) ([]EmailRowST, error
 		);`, applicationId, limit, offset)
 }
 
-func GetUsersPhoneNumbers(applicationId int32, limit, offset int) ([]PhoneNumberRowST, error) {
+func GetUsersPhoneNumbers(applicationId int32, limit, offset *int) ([]PhoneNumberRowST, error) {
+	if limit == nil && offset == nil {
+		return All[PhoneNumberRowST](`SELECT pn.*
+			FROM phone_numbers pn
+			JOIN users u ON pn.user_id = u.id
+			JOIN applications a ON a.id = u.application_id
+			WHERE a.id = $1;`, applicationId)
+	}
+	if limit == nil {
+		limit = new(int)
+		*limit = 10
+	}
+	if offset == nil {
+		offset = new(int)
+		*offset = 0
+	}
 	return All[PhoneNumberRowST](`SELECT pn.* 
 			FROM phone_numbers pn
 			WHERE pn.user_id in (

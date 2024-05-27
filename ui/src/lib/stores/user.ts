@@ -115,10 +115,6 @@ export async function tryGetCurrentUser() {
 authConfiguration.middleware?.push({
 	async post(context) {
 		switch (context.response.status) {
-			case 401:
-				signOut();
-				await goto(`${base}/signin`);
-				break;
 			case 503:
 				await goto(`${base}/maintenance`);
 		}

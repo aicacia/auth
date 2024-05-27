@@ -81,8 +81,8 @@ export interface ApplicationApiInterface {
     /**
      * 
      * @summary Get applications
-     * @param {number} [limit] limit
-     * @param {number} [offset] offset
+     * @param {number} [limit] 
+     * @param {number} [offset] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ApplicationApiInterface

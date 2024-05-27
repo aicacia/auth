@@ -1,11 +1,11 @@
 <svelte:options immutable />
 
 <script lang="ts">
-	import type { User, UserInfo } from '$lib/openapi/auth';
+	import type { TOTP, Tenent, User, UserInfo } from '$lib/openapi/auth';
 	import ResetPassword from './ResetPassword.svelte';
 	import Username from './Username.svelte';
 	import { updateCurrentUser } from '$lib/stores/user';
-	import { currentUserApi } from '$lib/openapi';
+	import { currentUserApi, tenentApi } from '$lib/openapi';
 	import { createNotification } from '$lib/stores/notifications';
 	import { get } from 'svelte/store';
 	import LL from '$lib/i18n/i18n-svelte';
@@ -15,6 +15,7 @@
 	import { onMount } from 'svelte';
 	import Spinner from '../Spinner.svelte';
 	import PhoneNumbers from './PhoneNumbers.svelte';
+	import TOTPs from './TOTPs.svelte';
 
 	export let user: User;
 
@@ -44,9 +45,15 @@
 
 	let loading = true;
 	let userInfo: UserInfo;
+	let totps: TOTP[] = [];
+	let tenents: Tenent[] = [];
 	onMount(async () => {
 		try {
-			userInfo = await currentUserApi.currentUserInfo();
+			[userInfo, totps, tenents] = await Promise.all([
+				currentUserApi.currentUserInfo(),
+				currentUserApi.totps(),
+				tenentApi.tenents(user.applicationId).then((p) => p.items)
+			]);
 		} finally {
 			loading = false;
 		}
@@ -80,6 +87,16 @@
 		<div class="mb-2">
 			<h3 class="mb-1">{$LL.profile.updatePhoneNumbers()}</h3>
 			<PhoneNumbers bind:user onUpdate={onPhoneNumberUpdate} />
+		</div>
+	</div>
+</div>
+<div class="flex flex-col justify-end px-4 md:justify-start">
+	<div
+		class="mx-auto mb-4 flex w-full max-w-lg flex-shrink flex-col bg-white p-4 shadow dark:bg-gray-800"
+	>
+		<div class="mb-2">
+			<h3 class="mb-1">{$LL.profile.updateTOTPs()}</h3>
+			<TOTPs bind:user bind:totps bind:tenents />
 		</div>
 	</div>
 </div>

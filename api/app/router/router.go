@@ -60,6 +60,13 @@ func InstallRouter(fiberApp *fiber.App) {
 	userPhoneNumbers.Post("", controller.PostCurrentUserCreatePhoneNumber)
 	userPhoneNumbers.Delete("/:id", controller.DeleteCurrentUserPhoneNumber)
 
+	userTOTP := user.Group("/totp")
+	userTOTP.Get("", controller.GetCurrentUserTOTPs)
+	userTOTP.Post("/:tenentId", controller.PostCurrentUserCreateTOTP)
+	userTOTP.Delete("/:tenentId", controller.DeleteCurrentUserTOTP)
+	userTOTP.Patch("/:tenentId/enable", controller.PatchCurrentUserEnableTOTP)
+	userTOTP.Delete("/:tenentId/enable", controller.DeleteCurrentUserDisableTOTP)
+
 	openid := user.Group("/info")
 	openid.Use(middleware.OpenIdMiddleware())
 	openid.Get("", controller.GetCurrentUserInfo)

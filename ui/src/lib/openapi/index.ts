@@ -7,7 +7,8 @@ import {
 	type ConfigurationParameters,
 	ApplicationApi,
 	RegistrationApi,
-	type Token
+	type Token,
+  TenentApi
 } from './auth';
 import { env } from '$env/dynamic/public';
 
@@ -44,6 +45,7 @@ export const authConfiguration = new Configuration(defaultAuthConfiguration);
 export const currentUserApi = new CurrentUserApi(authConfiguration);
 export const userApi = new UserApi(authConfiguration);
 export const tokenApi = new TokenApi(authConfiguration);
+export const tenentApi = new TenentApi(authConfiguration);
 export const registrationApi = new RegistrationApi(authConfiguration);
 export const applicationApi = new ApplicationApi(authConfiguration);
 export const wellKnownApi = new WellKnownApi(authConfiguration);

@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"slices"
@@ -74,7 +75,7 @@ func passwordToken(c *fiber.Ctx, tokenRequest model.TokenRequestST) error {
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	return sendToken(c, sendTokenST{
-		mfa:             mfa != nil,
+		mfa:             mfa,
 		issuedTokenType: tokenRequest.GrantType,
 		scope:           tokenRequest.Scope,
 		application:     application,
@@ -132,13 +133,17 @@ func refreshToken(c *fiber.Ctx, tokenRequest model.TokenRequestST) error {
 }
 
 type sendTokenST struct {
-	mfa             bool
+	mfa             *repository.MFARowST
 	issuedTokenType string
 	scope           string
 	application     *repository.ApplicationRowST
 	tenent          *repository.TenentRowST
 	user            *repository.UserRowST
 	serviceAccount  *repository.ServiceAccountRowST
+}
+
+func (sendToken *sendTokenST) MFAEnabled() bool {
+	return sendToken.mfa != nil && sendToken.mfa.Enabled
 }
 
 func sendToken(
@@ -176,9 +181,9 @@ func sendToken(
 	}
 	tokenType := jwt.BearerTokenType
 	var claims jwt.ToMapClaims = &baseClaims
-	if params.mfa {
+	if params.MFAEnabled() {
 		baseClaims.Type = jwt.MFATokenType
-		tokenType = jwt.MFATokenType
+		tokenType = fmt.Sprintf("%s:%s", jwt.MFATokenType, params.mfa.Type)
 		mfaClaims := jwt.MFAClaims{
 			Claims:    baseClaims,
 			GrantType: params.issuedTokenType,
@@ -192,7 +197,7 @@ func sendToken(
 	}
 	var refreshToken *string
 	var refreshTokenExpiresIn *int64
-	if !params.mfa {
+	if !params.MFAEnabled() {
 		token, err := jwt.CreateToken(baseClaims.ToRefreshClaims(params.application, params.tenent), params.tenent)
 		if err != nil {
 			log.Printf("failed to create refresh token: %v\n", err)
@@ -202,7 +207,7 @@ func sendToken(
 		refreshTokenExpiresIn = &params.tenent.RefreshExpiresInSeconds
 	}
 	var idToken *string
-	if !params.mfa && slices.Contains(scopes, "openid") {
+	if !params.MFAEnabled() && slices.Contains(scopes, "openid") {
 		if subjectType == jwt.UserSubject {
 			openIdClaims, err := jwt.OpenIdClaimsForUser(&baseClaims, params.user.Id)
 			if err != nil {

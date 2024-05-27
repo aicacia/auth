@@ -23,6 +23,7 @@ export * from './PhoneNumber';
 export * from './RegistrationRequest';
 export * from './ResetPassword';
 export * from './TOTP';
+export * from './TOTPWithSecret';
 export * from './Tenent';
 export * from './Token';
 export * from './TokenRequest';

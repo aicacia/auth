@@ -25,12 +25,36 @@ type PhoneNumberST struct {
 } // @name PhoneNumber
 
 type TOTPST struct {
+	Id        int32     `json:"id" validate:"required"`
 	TenentId  int32     `json:"tenent_id" validate:"required"`
 	UserId    int32     `json:"user_id" validate:"required"`
-	Secret    string    `json:"secret" validate:"required"`
+	Enabled   bool      `json:"enabled" validate:"required"`
 	UpdatedAt time.Time `json:"updated_at" validate:"required" format:"date-time"`
 	CreatedAt time.Time `json:"created_at" validate:"required" format:"date-time"`
 } // @name TOTP
+
+func TOTPFromRow(row repository.TOTPRowST) TOTPST {
+	return TOTPST{
+		Id:        row.Id,
+		TenentId:  row.TenentId,
+		UserId:    row.UserId,
+		Enabled:   row.Enabled,
+		UpdatedAt: row.UpdatedAt,
+		CreatedAt: row.CreatedAt,
+	}
+}
+
+type TOTPWithSecretST struct {
+	TOTPST
+	Secret string `json:"secret" validate:"required"`
+} // @name TOTPWithSecret
+
+func TOTPWithSecretFromRow(row repository.TOTPRowST) TOTPWithSecretST {
+	return TOTPWithSecretST{
+		TOTPST: TOTPFromRow(row),
+		Secret: row.Secret,
+	}
+}
 
 type UserST struct {
 	Id            int32           `json:"id" validate:"required"`

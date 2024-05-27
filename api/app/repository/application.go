@@ -14,7 +14,20 @@ type ApplicationRowST struct {
 	CreatedAt   time.Time `db:"created_at"`
 }
 
-func GetApplications(limit, offset int) ([]ApplicationRowST, error) {
+func GetApplications(limit, offset *int) ([]ApplicationRowST, error) {
+	if limit == nil && offset == nil {
+		return All[ApplicationRowST](`SELECT a.* 
+			FROM applications a 
+			ORDER BY a.updated_at DESC ;`)
+	}
+	if limit == nil {
+		limit = new(int)
+		*limit = 10
+	}
+	if offset == nil {
+		offset = new(int)
+		*offset = 0
+	}
 	return All[ApplicationRowST](`SELECT a.* 
 		FROM applications a 
 		ORDER BY a.updated_at DESC 

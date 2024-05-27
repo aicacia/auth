@@ -187,8 +187,8 @@ export interface UserApiInterface {
      * 
      * @summary Get users
      * @param {number} applicationId application id
-     * @param {number} [limit] limit
-     * @param {number} [offset] offset
+     * @param {number} [limit] 
+     * @param {number} [offset] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApiInterface

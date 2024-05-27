@@ -64,3 +64,8 @@ type CreateTenentST struct {
 type UpdateTenentST struct {
 	repository.UpdateTenentST
 } // @name UpdateTenent
+
+type TenentsIdsQueryST struct {
+	OffsetAndLimitQueryST
+	Ids []int32 `query:"ids"`
+} // @name TenentsIdsQuery

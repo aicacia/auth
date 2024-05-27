@@ -107,71 +107,71 @@
 </svelte:head>
 
 <div class="flex flex-grow flex-col justify-end md:justify-start">
-	<div
-		class="mx-auto my-10 flex w-full flex-shrink flex-col bg-white p-4 shadow dark:bg-gray-800 md:w-72"
-	>
-		<h1 class="mb-1">{$LL.auth.signUp()}</h1>
-		<p class="py-2">
-			<span>{$LL.auth.alreadyAMember()}</span>
-			<a href={`${base}/signin`} class="text-blue-500 underline">{$LL.auth.signIn()}</a>
-		</p>
-		<form on:submit|preventDefault={onSubmit}>
-			<div class="mb-2">
-				<input
-					class="w-full {cn('email')}"
-					type="email"
-					name="email"
-					autocomplete="email"
-					placeholder={$LL.auth.emailPlaceholder()}
-					bind:value={email}
-					on:input={onChange}
-				/>
-				<InputResults name="email" {result} />
-			</div>
-			<div class="mb-2">
-				<input
-					class="w-full {cn('username')}"
-					type="text"
-					name="username"
-					autocomplete="username"
-					placeholder={$LL.auth.usernamePlaceholder()}
-					bind:value={username}
-					on:input={onChange}
-				/>
-				<InputResults name="username" {result} />
-			</div>
-			<div class="mb-2">
-				<input
-					class="w-full {cn('password')}"
-					type="password"
-					name="password"
-					autocomplete="new-password"
-					placeholder={$LL.auth.passwordPlaceholder()}
-					bind:value={password}
-					on:input={onChange}
-				/>
-				<InputResults name="password" {result} />
-			</div>
-			<div class="mb-2">
-				<input
-					class="w-full {cn('passwordConfirmation')}"
-					type="password"
-					name="passwordConfirmation"
-					autocomplete="new-password"
-					placeholder={$LL.auth.passwordConfirmationPlaceholder()}
-					bind:value={passwordConfirmation}
-					on:input={onChange}
-				/>
-				<InputResults name="passwordConfirmation" {result} />
-			</div>
-			<div class="flex flex-row justify-end">
-				<button type="submit" class="btn primary flex flex-shrink" {disabled}>
-					{#if loading}<div class="mr-2 flex flex-row justify-center">
-							<div class="inline-block h-6 w-6"><Spinner /></div>
-						</div>{/if}
-					{$LL.auth.signUp()}
-				</button>
-			</div>
-		</form>
+	<div class="mx-auto flex w-full flex-shrink flex-col p-4 py-10 md:w-72">
+		<div class="flex flex-grow flex-col bg-white p-4 shadow dark:bg-gray-800">
+			<h1 class="mb-1">{$LL.auth.signUp()}</h1>
+			<p class="py-2">
+				<span>{$LL.auth.alreadyAMember()}</span>
+				<a href={`${base}/signin`} class="text-blue-500 underline">{$LL.auth.signIn()}</a>
+			</p>
+			<form on:submit|preventDefault={onSubmit}>
+				<div class="mb-2">
+					<input
+						class="w-full {cn('email')}"
+						type="email"
+						name="email"
+						autocomplete="email"
+						placeholder={$LL.auth.emailPlaceholder()}
+						bind:value={email}
+						on:input={onChange}
+					/>
+					<InputResults name="email" {result} />
+				</div>
+				<div class="mb-2">
+					<input
+						class="w-full {cn('username')}"
+						type="text"
+						name="username"
+						autocomplete="username"
+						placeholder={$LL.auth.usernamePlaceholder()}
+						bind:value={username}
+						on:input={onChange}
+					/>
+					<InputResults name="username" {result} />
+				</div>
+				<div class="mb-2">
+					<input
+						class="w-full {cn('password')}"
+						type="password"
+						name="password"
+						autocomplete="new-password"
+						placeholder={$LL.auth.passwordPlaceholder()}
+						bind:value={password}
+						on:input={onChange}
+					/>
+					<InputResults name="password" {result} />
+				</div>
+				<div class="mb-2">
+					<input
+						class="w-full {cn('passwordConfirmation')}"
+						type="password"
+						name="passwordConfirmation"
+						autocomplete="new-password"
+						placeholder={$LL.auth.passwordConfirmationPlaceholder()}
+						bind:value={passwordConfirmation}
+						on:input={onChange}
+					/>
+					<InputResults name="passwordConfirmation" {result} />
+				</div>
+				<div class="flex flex-row justify-end">
+					<button type="submit" class="btn primary flex flex-shrink" {disabled}>
+						{#if loading}<div class="mr-2 flex flex-row justify-center">
+								<div class="inline-block h-6 w-6"><Spinner /></div>
+							</div>{/if}
+						{$LL.auth.signUp()}
+					</button>
+				</div>
+			</form>
+		</div>
 	</div>
 </div>

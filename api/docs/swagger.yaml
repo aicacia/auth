@@ -300,6 +300,34 @@ definitions:
       created_at:
         format: date-time
         type: string
+      enabled:
+        type: boolean
+      id:
+        type: integer
+      tenent_id:
+        type: integer
+      updated_at:
+        format: date-time
+        type: string
+      user_id:
+        type: integer
+    required:
+    - created_at
+    - enabled
+    - id
+    - tenent_id
+    - updated_at
+    - user_id
+    type: object
+  TOTPWithSecret:
+    properties:
+      created_at:
+        format: date-time
+        type: string
+      enabled:
+        type: boolean
+      id:
+        type: integer
       secret:
         type: string
       tenent_id:
@@ -311,6 +339,8 @@ definitions:
         type: integer
     required:
     - created_at
+    - enabled
+    - id
     - secret
     - tenent_id
     - updated_at
@@ -727,12 +757,10 @@ paths:
       - application/json
       operationId: applications
       parameters:
-      - description: limit
-        in: query
+      - in: query
         name: limit
         type: integer
-      - description: offset
-        in: query
+      - in: query
         name: offset
         type: integer
       produces:
@@ -806,19 +834,17 @@ paths:
     get:
       consumes:
       - application/json
-      operationId: application-tenents
+      operationId: tenents
       parameters:
       - description: application id
         in: path
         name: applicationId
         required: true
         type: integer
-      - description: limit
-        in: query
+      - in: query
         name: limit
         type: integer
-      - description: offset
-        in: query
+      - in: query
         name: offset
         type: integer
       produces:
@@ -852,7 +878,7 @@ paths:
     post:
       consumes:
       - application/json
-      operationId: create-application-tenent
+      operationId: create-tenent
       parameters:
       - description: application id
         in: path
@@ -897,7 +923,7 @@ paths:
     delete:
       consumes:
       - application/json
-      operationId: delete-application-tenent
+      operationId: delete-tenent
       parameters:
       - description: application id
         in: path
@@ -938,7 +964,7 @@ paths:
     get:
       consumes:
       - application/json
-      operationId: application-tenent-by-id
+      operationId: tenent-by-id
       parameters:
       - description: application id
         in: path
@@ -981,7 +1007,7 @@ paths:
     patch:
       consumes:
       - application/json
-      operationId: update-application-tenent
+      operationId: update-tenent
       parameters:
       - description: application id
         in: path
@@ -1038,12 +1064,10 @@ paths:
         name: applicationId
         required: true
         type: integer
-      - description: limit
-        in: query
+      - in: query
         name: limit
         type: integer
-      - description: offset
-        in: query
+      - in: query
         name: offset
         type: integer
       produces:
@@ -2251,10 +2275,51 @@ paths:
       tags:
       - current-user
   /user/totp:
+    get:
+      consumes:
+      - application/json
+      operationId: totps
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            items:
+              $ref: '#/definitions/TOTP'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Get user TOTPs
+      tags:
+      - current-user
+  /user/totp/{tenentId}:
     delete:
       consumes:
       - application/json
       operationId: delete-totp
+      parameters:
+      - description: tenent id
+        in: path
+        name: tenentId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -2278,20 +2343,26 @@ paths:
             $ref: '#/definitions/Errors'
       security:
       - Authorization: []
-      summary: Create user TOTP
+      summary: Delete user TOTP
       tags:
       - current-user
     post:
       consumes:
       - application/json
       operationId: create-totp
+      parameters:
+      - description: tenent id
+        in: path
+        name: tenentId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/TOTP'
+            $ref: '#/definitions/TOTPWithSecret'
         "400":
           description: Bad Request
           schema:
@@ -2311,6 +2382,83 @@ paths:
       security:
       - Authorization: []
       summary: Create user TOTP
+      tags:
+      - current-user
+  /user/totp/{tenentId}/enable:
+    delete:
+      consumes:
+      - application/json
+      operationId: disalbe-totp
+      parameters:
+      - description: tenent id
+        in: path
+        name: tenentId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/TOTPWithSecret'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Disables user TOTP
+      tags:
+      - current-user
+    patch:
+      consumes:
+      - application/json
+      operationId: enable-totp
+      parameters:
+      - description: tenent id
+        in: path
+        name: tenentId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/TOTPWithSecret'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Enables user TOTP
       tags:
       - current-user
   /version:

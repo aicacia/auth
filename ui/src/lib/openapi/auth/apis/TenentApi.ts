@@ -34,28 +34,28 @@ import {
     UpdateTenentToJSON,
 } from '../models/index';
 
-export interface ApplicationTenentByIdRequest {
+export interface CreateTenentRequest {
+    applicationId: number;
+    application: CreateTenent;
+}
+
+export interface DeleteTenentRequest {
     applicationId: number;
     id: number;
 }
 
-export interface ApplicationTenentsRequest {
+export interface TenentByIdRequest {
+    applicationId: number;
+    id: number;
+}
+
+export interface TenentsRequest {
     applicationId: number;
     limit?: number;
     offset?: number;
 }
 
-export interface CreateApplicationTenentRequest {
-    applicationId: number;
-    application: CreateTenent;
-}
-
-export interface DeleteApplicationTenentRequest {
-    applicationId: number;
-    id: number;
-}
-
-export interface UpdateApplicationTenentRequest {
+export interface UpdateTenentRequest {
     applicationId: number;
     id: number;
     application: UpdateTenent;
@@ -70,39 +70,6 @@ export interface UpdateApplicationTenentRequest {
 export interface TenentApiInterface {
     /**
      * 
-     * @summary Get application tenent by id
-     * @param {number} applicationId application id
-     * @param {number} id application tenent id
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof TenentApiInterface
-     */
-    applicationTenentByIdRaw(requestParameters: ApplicationTenentByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Tenent>>;
-
-    /**
-     * Get application tenent by id
-     */
-    applicationTenentById(applicationId: number, id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Tenent>;
-
-    /**
-     * 
-     * @summary Get application tenents
-     * @param {number} applicationId application id
-     * @param {number} [limit] limit
-     * @param {number} [offset] offset
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof TenentApiInterface
-     */
-    applicationTenentsRaw(requestParameters: ApplicationTenentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PaginationTenent>>;
-
-    /**
-     * Get application tenents
-     */
-    applicationTenents(applicationId: number, limit?: number, offset?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PaginationTenent>;
-
-    /**
-     * 
      * @summary Create application tenent
      * @param {number} applicationId application id
      * @param {CreateTenent} application create application
@@ -110,12 +77,12 @@ export interface TenentApiInterface {
      * @throws {RequiredError}
      * @memberof TenentApiInterface
      */
-    createApplicationTenentRaw(requestParameters: CreateApplicationTenentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Tenent>>;
+    createTenentRaw(requestParameters: CreateTenentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Tenent>>;
 
     /**
      * Create application tenent
      */
-    createApplicationTenent(applicationId: number, application: CreateTenent, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Tenent>;
+    createTenent(applicationId: number, application: CreateTenent, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Tenent>;
 
     /**
      * 
@@ -126,12 +93,45 @@ export interface TenentApiInterface {
      * @throws {RequiredError}
      * @memberof TenentApiInterface
      */
-    deleteApplicationTenentRaw(requestParameters: DeleteApplicationTenentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+    deleteTenentRaw(requestParameters: DeleteTenentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
      * Delete application tenent
      */
-    deleteApplicationTenent(applicationId: number, id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    deleteTenent(applicationId: number, id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * 
+     * @summary Get application tenent by id
+     * @param {number} applicationId application id
+     * @param {number} id application tenent id
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TenentApiInterface
+     */
+    tenentByIdRaw(requestParameters: TenentByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Tenent>>;
+
+    /**
+     * Get application tenent by id
+     */
+    tenentById(applicationId: number, id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Tenent>;
+
+    /**
+     * 
+     * @summary Get application tenents
+     * @param {number} applicationId application id
+     * @param {number} [limit] 
+     * @param {number} [offset] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TenentApiInterface
+     */
+    tenentsRaw(requestParameters: TenentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PaginationTenent>>;
+
+    /**
+     * Get application tenents
+     */
+    tenents(applicationId: number, limit?: number, offset?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PaginationTenent>;
 
     /**
      * 
@@ -143,12 +143,12 @@ export interface TenentApiInterface {
      * @throws {RequiredError}
      * @memberof TenentApiInterface
      */
-    updateApplicationTenentRaw(requestParameters: UpdateApplicationTenentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Tenent>>;
+    updateTenentRaw(requestParameters: UpdateTenentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Tenent>>;
 
     /**
      * Update application tenent
      */
-    updateApplicationTenent(applicationId: number, id: number, application: UpdateTenent, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Tenent>;
+    updateTenent(applicationId: number, id: number, application: UpdateTenent, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Tenent>;
 
 }
 
@@ -158,20 +158,110 @@ export interface TenentApiInterface {
 export class TenentApi extends runtime.BaseAPI implements TenentApiInterface {
 
     /**
-     * Get application tenent by id
+     * Create application tenent
      */
-    async applicationTenentByIdRaw(requestParameters: ApplicationTenentByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Tenent>> {
+    async createTenentRaw(requestParameters: CreateTenentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Tenent>> {
         if (requestParameters['applicationId'] == null) {
             throw new runtime.RequiredError(
                 'applicationId',
-                'Required parameter "applicationId" was null or undefined when calling applicationTenentById().'
+                'Required parameter "applicationId" was null or undefined when calling createTenent().'
+            );
+        }
+
+        if (requestParameters['application'] == null) {
+            throw new runtime.RequiredError(
+                'application',
+                'Required parameter "application" was null or undefined when calling createTenent().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // Authorization authentication
+        }
+
+        const response = await this.request({
+            path: `/applications/{applicationId}/tenents`.replace(`{${"applicationId"}}`, encodeURIComponent(String(requestParameters['applicationId']))),
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CreateTenentToJSON(requestParameters['application']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TenentFromJSON(jsonValue));
+    }
+
+    /**
+     * Create application tenent
+     */
+    async createTenent(applicationId: number, application: CreateTenent, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Tenent> {
+        const response = await this.createTenentRaw({ applicationId: applicationId, application: application }, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Delete application tenent
+     */
+    async deleteTenentRaw(requestParameters: DeleteTenentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['applicationId'] == null) {
+            throw new runtime.RequiredError(
+                'applicationId',
+                'Required parameter "applicationId" was null or undefined when calling deleteTenent().'
             );
         }
 
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling applicationTenentById().'
+                'Required parameter "id" was null or undefined when calling deleteTenent().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // Authorization authentication
+        }
+
+        const response = await this.request({
+            path: `/applications/{applicationId}/tenents/{id}`.replace(`{${"applicationId"}}`, encodeURIComponent(String(requestParameters['applicationId']))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Delete application tenent
+     */
+    async deleteTenent(applicationId: number, id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteTenentRaw({ applicationId: applicationId, id: id }, initOverrides);
+    }
+
+    /**
+     * Get application tenent by id
+     */
+    async tenentByIdRaw(requestParameters: TenentByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Tenent>> {
+        if (requestParameters['applicationId'] == null) {
+            throw new runtime.RequiredError(
+                'applicationId',
+                'Required parameter "applicationId" was null or undefined when calling tenentById().'
+            );
+        }
+
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling tenentById().'
             );
         }
 
@@ -196,19 +286,19 @@ export class TenentApi extends runtime.BaseAPI implements TenentApiInterface {
     /**
      * Get application tenent by id
      */
-    async applicationTenentById(applicationId: number, id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Tenent> {
-        const response = await this.applicationTenentByIdRaw({ applicationId: applicationId, id: id }, initOverrides);
+    async tenentById(applicationId: number, id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Tenent> {
+        const response = await this.tenentByIdRaw({ applicationId: applicationId, id: id }, initOverrides);
         return await response.value();
     }
 
     /**
      * Get application tenents
      */
-    async applicationTenentsRaw(requestParameters: ApplicationTenentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PaginationTenent>> {
+    async tenentsRaw(requestParameters: TenentsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PaginationTenent>> {
         if (requestParameters['applicationId'] == null) {
             throw new runtime.RequiredError(
                 'applicationId',
-                'Required parameter "applicationId" was null or undefined when calling applicationTenents().'
+                'Required parameter "applicationId" was null or undefined when calling tenents().'
             );
         }
 
@@ -241,123 +331,33 @@ export class TenentApi extends runtime.BaseAPI implements TenentApiInterface {
     /**
      * Get application tenents
      */
-    async applicationTenents(applicationId: number, limit?: number, offset?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PaginationTenent> {
-        const response = await this.applicationTenentsRaw({ applicationId: applicationId, limit: limit, offset: offset }, initOverrides);
+    async tenents(applicationId: number, limit?: number, offset?: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PaginationTenent> {
+        const response = await this.tenentsRaw({ applicationId: applicationId, limit: limit, offset: offset }, initOverrides);
         return await response.value();
-    }
-
-    /**
-     * Create application tenent
-     */
-    async createApplicationTenentRaw(requestParameters: CreateApplicationTenentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Tenent>> {
-        if (requestParameters['applicationId'] == null) {
-            throw new runtime.RequiredError(
-                'applicationId',
-                'Required parameter "applicationId" was null or undefined when calling createApplicationTenent().'
-            );
-        }
-
-        if (requestParameters['application'] == null) {
-            throw new runtime.RequiredError(
-                'application',
-                'Required parameter "application" was null or undefined when calling createApplicationTenent().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
-
-        const response = await this.request({
-            path: `/applications/{applicationId}/tenents`.replace(`{${"applicationId"}}`, encodeURIComponent(String(requestParameters['applicationId']))),
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: CreateTenentToJSON(requestParameters['application']),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => TenentFromJSON(jsonValue));
-    }
-
-    /**
-     * Create application tenent
-     */
-    async createApplicationTenent(applicationId: number, application: CreateTenent, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Tenent> {
-        const response = await this.createApplicationTenentRaw({ applicationId: applicationId, application: application }, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Delete application tenent
-     */
-    async deleteApplicationTenentRaw(requestParameters: DeleteApplicationTenentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters['applicationId'] == null) {
-            throw new runtime.RequiredError(
-                'applicationId',
-                'Required parameter "applicationId" was null or undefined when calling deleteApplicationTenent().'
-            );
-        }
-
-        if (requestParameters['id'] == null) {
-            throw new runtime.RequiredError(
-                'id',
-                'Required parameter "id" was null or undefined when calling deleteApplicationTenent().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.apiKey) {
-            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // Authorization authentication
-        }
-
-        const response = await this.request({
-            path: `/applications/{applicationId}/tenents/{id}`.replace(`{${"applicationId"}}`, encodeURIComponent(String(requestParameters['applicationId']))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     * Delete application tenent
-     */
-    async deleteApplicationTenent(applicationId: number, id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteApplicationTenentRaw({ applicationId: applicationId, id: id }, initOverrides);
     }
 
     /**
      * Update application tenent
      */
-    async updateApplicationTenentRaw(requestParameters: UpdateApplicationTenentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Tenent>> {
+    async updateTenentRaw(requestParameters: UpdateTenentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Tenent>> {
         if (requestParameters['applicationId'] == null) {
             throw new runtime.RequiredError(
                 'applicationId',
-                'Required parameter "applicationId" was null or undefined when calling updateApplicationTenent().'
+                'Required parameter "applicationId" was null or undefined when calling updateTenent().'
             );
         }
 
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling updateApplicationTenent().'
+                'Required parameter "id" was null or undefined when calling updateTenent().'
             );
         }
 
         if (requestParameters['application'] == null) {
             throw new runtime.RequiredError(
                 'application',
-                'Required parameter "application" was null or undefined when calling updateApplicationTenent().'
+                'Required parameter "application" was null or undefined when calling updateTenent().'
             );
         }
 
@@ -385,8 +385,8 @@ export class TenentApi extends runtime.BaseAPI implements TenentApiInterface {
     /**
      * Update application tenent
      */
-    async updateApplicationTenent(applicationId: number, id: number, application: UpdateTenent, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Tenent> {
-        const response = await this.updateApplicationTenentRaw({ applicationId: applicationId, id: id, application: application }, initOverrides);
+    async updateTenent(applicationId: number, id: number, application: UpdateTenent, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Tenent> {
+        const response = await this.updateTenentRaw({ applicationId: applicationId, id: id, application: application }, initOverrides);
         return await response.value();
     }
 

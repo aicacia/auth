@@ -53,6 +53,10 @@ type RootTranslation = {
 			 * A​u​t​h​o​r​i​z​a​t​i​o​n
 			 */
 			authorization: string
+			/**
+			 * M​u​l​t​i​-​f​a​c​t​o​r​ ​A​u​t​h​o​r​i​z​a​t​i​o​n
+			 */
+			mfa: string
 		}
 		message: {
 			/**
@@ -91,6 +95,10 @@ type RootTranslation = {
 			 * C​a​n​ ​n​o​t​ ​d​e​l​e​t​e​ ​A​d​m​i​n​ ​A​p​p​l​i​c​a​t​i​o​n​.
 			 */
 			cannotDeleteAdmin: string
+			/**
+			 * D​i​s​a​b​l​e​d
+			 */
+			disabled: string
 		}
 	}
 	auth: {
@@ -156,6 +164,18 @@ type RootTranslation = {
 		 */
 		checkYourEmailMessage: RequiredParams<'email'>
 	}
+	mfa: {
+		/**
+		 * M​u​l​t​i​-​f​a​c​t​o​r​ ​A​u​t​h​e​n​t​i​c​a​t​i​o​n
+		 */
+		title: string
+		totp: {
+			/**
+			 * O​n​e​-​t​i​m​e​ ​C​o​d​e
+			 */
+			codePlaceHolder: string
+		}
+	}
 	home: {
 		/**
 		 * A​u​t​h
@@ -210,17 +230,21 @@ type RootTranslation = {
 		 */
 		submitUpdateUsername: string
 		/**
-		 * U​p​d​a​t​e​ ​I​n​f​o
+		 * I​n​f​o
 		 */
 		updateUserInfo: string
 		/**
-		 * U​p​d​a​t​e​ ​E​m​a​i​l​s
+		 * E​m​a​i​l​s
 		 */
 		updateEmails: string
 		/**
-		 * U​p​d​a​t​e​ ​P​h​o​n​e​ ​N​u​m​b​e​r​s
+		 * P​h​o​n​e​ ​N​u​m​b​e​r​s
 		 */
 		updatePhoneNumbers: string
+		/**
+		 * T​i​m​e​-​b​a​s​e​d​ ​o​n​e​-​t​i​m​e​ ​p​a​s​s​w​o​r​d​s
+		 */
+		updateTOTPs: string
 		emails: {
 			/**
 			 * C​a​n​c​e​l
@@ -290,6 +314,35 @@ type RootTranslation = {
 			 * @param {string} 0
 			 */
 			deletePhoneNumber: RequiredParams<'0'>
+		}
+		totps: {
+			/**
+			 * C​a​n​c​e​l
+			 */
+			cancel: string
+			/**
+			 * A​d​d
+			 */
+			add: string
+			/**
+			 * D​e​l​e​t​e
+			 */
+			'delete': string
+			/**
+			 * D​e​l​e​t​e​ ​T​O​T​P​ ​f​o​r​ ​{​0​}​?
+			 * @param {string} 0
+			 */
+			deleteTOTP: RequiredParams<'0'>
+		}
+		mfa: {
+			/**
+			 * E​n​a​b​l​e​d
+			 */
+			enabled: string
+			/**
+			 * D​i​s​a​b​l​e​d
+			 */
+			disabled: string
 		}
 		notification: {
 			/**
@@ -544,6 +597,10 @@ export type TranslationFunctions = {
 			 * Authorization
 			 */
 			authorization: () => LocalizedString
+			/**
+			 * Multi-factor Authorization
+			 */
+			mfa: () => LocalizedString
 		}
 		message: {
 			/**
@@ -582,6 +639,10 @@ export type TranslationFunctions = {
 			 * Can not delete Admin Application.
 			 */
 			cannotDeleteAdmin: () => LocalizedString
+			/**
+			 * Disabled
+			 */
+			disabled: () => LocalizedString
 		}
 	}
 	auth: {
@@ -646,6 +707,18 @@ export type TranslationFunctions = {
 		 */
 		checkYourEmailMessage: (arg: { email: string }) => LocalizedString
 	}
+	mfa: {
+		/**
+		 * Multi-factor Authentication
+		 */
+		title: () => LocalizedString
+		totp: {
+			/**
+			 * One-time Code
+			 */
+			codePlaceHolder: () => LocalizedString
+		}
+	}
 	home: {
 		/**
 		 * Auth
@@ -700,17 +773,21 @@ export type TranslationFunctions = {
 		 */
 		submitUpdateUsername: () => LocalizedString
 		/**
-		 * Update Info
+		 * Info
 		 */
 		updateUserInfo: () => LocalizedString
 		/**
-		 * Update Emails
+		 * Emails
 		 */
 		updateEmails: () => LocalizedString
 		/**
-		 * Update Phone Numbers
+		 * Phone Numbers
 		 */
 		updatePhoneNumbers: () => LocalizedString
+		/**
+		 * Time-based one-time passwords
+		 */
+		updateTOTPs: () => LocalizedString
 		emails: {
 			/**
 			 * Cancel
@@ -778,6 +855,34 @@ export type TranslationFunctions = {
 			 * Delete {0}?
 			 */
 			deletePhoneNumber: (arg0: string) => LocalizedString
+		}
+		totps: {
+			/**
+			 * Cancel
+			 */
+			cancel: () => LocalizedString
+			/**
+			 * Add
+			 */
+			add: () => LocalizedString
+			/**
+			 * Delete
+			 */
+			'delete': () => LocalizedString
+			/**
+			 * Delete TOTP for {0}?
+			 */
+			deleteTOTP: (arg0: string) => LocalizedString
+		}
+		mfa: {
+			/**
+			 * Enabled
+			 */
+			enabled: () => LocalizedString
+			/**
+			 * Disabled
+			 */
+			disabled: () => LocalizedString
 		}
 		notification: {
 			/**

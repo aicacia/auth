@@ -11,7 +11,8 @@ const en = {
 			password: 'Password',
 			passwordConfirmation: 'Password confirmation',
 			phoneNumber: 'Phone Number',
-			authorization: 'Authorization'
+			authorization: 'Authorization',
+			mfa: 'Multi-factor Authorization'
 		},
 		message: {
 			application: 'if it presists please contact support',
@@ -22,7 +23,8 @@ const en = {
 			noChange: 'No change',
 			mismatch: 'Passwords do not match',
 			alreayUsed: 'Already used',
-			cannotDeleteAdmin: 'Can not delete Admin Application.'
+			cannotDeleteAdmin: 'Can not delete Admin Application.',
+			disabled: 'Disabled'
 		}
 	},
 	auth: {
@@ -41,6 +43,12 @@ const en = {
 		sendResetRequest: 'Send',
 		checkYourEmail: 'Please check your Email',
 		checkYourEmailMessage: 'An email to reset your password was sent to <b>{email:string}</b>.'
+	},
+	mfa: {
+		title: 'Multi-factor Authentication',
+		totp: {
+			codePlaceHolder: 'One-time Code'
+		}
 	},
 	home: {
 		title: 'Auth'
@@ -62,9 +70,10 @@ const en = {
 		title: 'Profile',
 		updateUsername: 'Update Username',
 		submitUpdateUsername: 'Update',
-		updateUserInfo: 'Update Info',
-		updateEmails: 'Update Emails',
-		updatePhoneNumbers: 'Update Phone Numbers',
+		updateUserInfo: 'Info',
+		updateEmails: 'Emails',
+		updatePhoneNumbers: 'Phone Numbers',
+		updateTOTPs: 'Time-based one-time passwords',
 		emails: {
 			cancel: 'Cancel',
 			add: 'Add',
@@ -84,6 +93,16 @@ const en = {
 			checkYourPhone: 'Check your Phone',
 			confirmCode: 'Confirm',
 			deletePhoneNumber: 'Delete {0:string}?'
+		},
+		totps: {
+			cancel: 'Cancel',
+			add: 'Add',
+			delete: 'Delete',
+			deleteTOTP: 'Delete TOTP for {0:string}?'
+		},
+		mfa: {
+			enabled: 'Enabled',
+			disabled: 'Disabled'
 		},
 		notification: {
 			usernameChangedSuccess: 'Username changed',

@@ -15,13 +15,12 @@ import (
 // GetTenents
 //
 //	@Summary		Get application tenents
-//	@ID				application-tenents
+//	@ID				tenents
 //	@Tags			tenent
 //	@Accept			json
 //	@Produce		json
 //	@Param			applicationId	path		int	true	"application id"
-//	@Param			limit	query		int	false	"limit"
-//	@Param			offset	query		int	false	"offset"
+//	@Param			query	query		model.OffsetAndLimitQueryST	false	"query"
 //	@Success		200	{object}   	model.PaginationST[model.TenentST]
 //	@Failure		400	{object}	model.ErrorST
 //	@Failure		401	{object}	model.ErrorST
@@ -36,22 +35,25 @@ func GetTenents(c *fiber.Ctx) error {
 	}
 	applicationId, err := strconv.Atoi(c.Params("applicationId"))
 	if err != nil {
+		log.Printf("failed to parse applicationId: %v\n", err)
 		return model.NewError(http.StatusBadRequest).AddError("applicationId", "invalid")
 	}
-	limit, offset, err := GetLimitAndOffset(c, 20)
-	if err != nil {
-		if err == errParseLimitOffset {
-			return nil
-		}
-		return err
+	var offsetAndLimit model.OffsetAndLimitQueryST
+	if err := c.QueryParser(&offsetAndLimit); err != nil {
+		log.Printf("failed to parse query: %v\n", err)
+		return model.NewError(http.StatusBadRequest).AddError("query", "invalid")
 	}
-	tenents, err := repository.GetTenents(int32(applicationId), limit, offset)
+	tenents, err := repository.GetTenents(int32(applicationId), offsetAndLimit.Limit, offsetAndLimit.Offset)
 	if err != nil {
 		log.Printf("failed to get applications: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
+	hasMore := false
+	if offsetAndLimit.Limit != nil && *offsetAndLimit.Limit == len(tenents) {
+		hasMore = true
+	}
 	return c.JSON(model.PaginationST[model.TenentST]{
-		HasMore: len(tenents) == limit,
+		HasMore: hasMore,
 		Items:   util.Map(tenents, model.TenentFromRow),
 	})
 }
@@ -59,7 +61,7 @@ func GetTenents(c *fiber.Ctx) error {
 // GetTenentById
 //
 //	@Summary		Get application tenent by id
-//	@ID				application-tenent-by-id
+//	@ID				tenent-by-id
 //	@Tags			tenent
 //	@Accept			json
 //	@Produce		json
@@ -99,7 +101,7 @@ func GetTenentById(c *fiber.Ctx) error {
 // PostCreateTenent
 //
 //	@Summary		Create application tenent
-//	@ID				create-application-tenent
+//	@ID				create-tenent
 //	@Tags			tenent
 //	@Accept			json
 //	@Produce		json
@@ -138,7 +140,7 @@ func PostCreateTenent(c *fiber.Ctx) error {
 // PatchUpdateTenent
 //
 //	@Summary		Update application tenent
-//	@ID				update-application-tenent
+//	@ID				update-tenent
 //	@Tags			tenent
 //	@Accept			json
 //	@Produce		json
@@ -184,7 +186,7 @@ func PatchUpdateTenent(c *fiber.Ctx) error {
 // DeleteTenent
 //
 //	@Summary		Delete application tenent
-//	@ID				delete-application-tenent
+//	@ID				delete-tenent
 //	@Tags			tenent
 //	@Accept			json
 //	@Produce		json

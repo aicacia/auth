@@ -16,65 +16,72 @@ import { mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface TOTP
+ * @interface TOTPWithSecret
  */
-export interface TOTP {
+export interface TOTPWithSecret {
     /**
      * 
      * @type {Date}
-     * @memberof TOTP
+     * @memberof TOTPWithSecret
      */
     createdAt: Date;
     /**
      * 
      * @type {boolean}
-     * @memberof TOTP
+     * @memberof TOTPWithSecret
      */
     enabled: boolean;
     /**
      * 
      * @type {number}
-     * @memberof TOTP
+     * @memberof TOTPWithSecret
      */
     id: number;
     /**
      * 
+     * @type {string}
+     * @memberof TOTPWithSecret
+     */
+    secret: string;
+    /**
+     * 
      * @type {number}
-     * @memberof TOTP
+     * @memberof TOTPWithSecret
      */
     tenentId: number;
     /**
      * 
      * @type {Date}
-     * @memberof TOTP
+     * @memberof TOTPWithSecret
      */
     updatedAt: Date;
     /**
      * 
      * @type {number}
-     * @memberof TOTP
+     * @memberof TOTPWithSecret
      */
     userId: number;
 }
 
 /**
- * Check if a given object implements the TOTP interface.
+ * Check if a given object implements the TOTPWithSecret interface.
  */
-export function instanceOfTOTP(value: object): boolean {
+export function instanceOfTOTPWithSecret(value: object): boolean {
     if (!('createdAt' in value)) return false;
     if (!('enabled' in value)) return false;
     if (!('id' in value)) return false;
+    if (!('secret' in value)) return false;
     if (!('tenentId' in value)) return false;
     if (!('updatedAt' in value)) return false;
     if (!('userId' in value)) return false;
     return true;
 }
 
-export function TOTPFromJSON(json: any): TOTP {
-    return TOTPFromJSONTyped(json, false);
+export function TOTPWithSecretFromJSON(json: any): TOTPWithSecret {
+    return TOTPWithSecretFromJSONTyped(json, false);
 }
 
-export function TOTPFromJSONTyped(json: any, ignoreDiscriminator: boolean): TOTP {
+export function TOTPWithSecretFromJSONTyped(json: any, ignoreDiscriminator: boolean): TOTPWithSecret {
     if (json == null) {
         return json;
     }
@@ -83,13 +90,14 @@ export function TOTPFromJSONTyped(json: any, ignoreDiscriminator: boolean): TOTP
         'createdAt': (new Date(json['created_at'])),
         'enabled': json['enabled'],
         'id': json['id'],
+        'secret': json['secret'],
         'tenentId': json['tenent_id'],
         'updatedAt': (new Date(json['updated_at'])),
         'userId': json['user_id'],
     };
 }
 
-export function TOTPToJSON(value?: TOTP | null): any {
+export function TOTPWithSecretToJSON(value?: TOTPWithSecret | null): any {
     if (value == null) {
         return value;
     }
@@ -98,6 +106,7 @@ export function TOTPToJSON(value?: TOTP | null): any {
         'created_at': ((value['createdAt']).toISOString()),
         'enabled': value['enabled'],
         'id': value['id'],
+        'secret': value['secret'],
         'tenent_id': value['tenentId'],
         'updated_at': ((value['updatedAt']).toISOString()),
         'user_id': value['userId'],

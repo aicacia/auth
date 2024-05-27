@@ -19,8 +19,7 @@ import (
 //	@Tags			application
 //	@Accept			json
 //	@Produce		json
-//	@Param			limit	query		int	false	"limit"
-//	@Param			offset	query		int	false	"offset"
+//	@Param			query	query		model.OffsetAndLimitQueryST	false	"query"
 //	@Success		200	{object}   	model.PaginationST[model.ApplicationST]
 //	@Failure		400	{object}	model.ErrorST
 //	@Failure		401	{object}	model.ErrorST
@@ -33,20 +32,22 @@ func GetApplications(c *fiber.Ctx) error {
 	if err := access.HasAction(c, "applications", "read"); err != nil {
 		return err
 	}
-	limit, offset, err := GetLimitAndOffset(c, 20)
-	if err != nil {
-		if err == errParseLimitOffset {
-			return nil
-		}
-		return err
+	var offsetAndLimit model.OffsetAndLimitQueryST
+	if err := c.QueryParser(&offsetAndLimit); err != nil {
+		log.Printf("failed to parse query: %v\n", err)
+		return model.NewError(http.StatusBadRequest).AddError("query", "invalid")
 	}
-	applications, err := repository.GetApplications(limit, offset)
+	applications, err := repository.GetApplications(offsetAndLimit.Limit, offsetAndLimit.Offset)
 	if err != nil {
 		log.Printf("failed to get applications: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
+	hasMore := false
+	if offsetAndLimit.Limit != nil && *offsetAndLimit.Limit == len(applications) {
+		hasMore = true
+	}
 	return c.JSON(model.PaginationST[model.ApplicationST]{
-		HasMore: len(applications) == limit,
+		HasMore: hasMore,
 		Items:   util.Map(applications, model.ApplicationFromRow),
 	})
 }

@@ -27,7 +27,21 @@ type TenentRowST struct {
 	CreatedAt                     time.Time `db:"created_at"`
 }
 
-func GetTenents(applicationId int32, limit, offset int) ([]TenentRowST, error) {
+func GetTenents(applicationId int32, limit, offset *int) ([]TenentRowST, error) {
+	if limit == nil && offset == nil {
+		return All[TenentRowST](`SELECT at.* 
+			FROM tenents at 
+			WHERE at.application_id = $1 
+			ORDER BY at.updated_at DESC ;`, applicationId)
+	}
+	if limit == nil {
+		limit = new(int)
+		*limit = 10
+	}
+	if offset == nil {
+		offset = new(int)
+		*offset = 0
+	}
 	return All[TenentRowST](`SELECT at.* 
 		FROM tenents at 
 		WHERE at.application_id = $1 

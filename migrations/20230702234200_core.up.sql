@@ -240,30 +240,30 @@ ALTER TABLE "users" ADD CONSTRAINT "users_phone_number_id_fk" FOREIGN KEY("phone
 CREATE UNIQUE INDEX "users_phone_number_id_unique_idx" ON "users" ("phone_number_id");
 
 
-CREATE TABLE "user_tenent_totps"(
+CREATE TABLE "totps"(
+	"id" SERIAL PRIMARY KEY,
 	"user_id" INT4 NOT NULL,
 	"tenent_id" INT4 NOT NULL,
 	"secret" VARCHAR(255) NOT NULL,
 	"updated_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	"created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	CONSTRAINT "user_tenent_totps_user_id_fk" FOREIGN KEY("user_id") REFERENCES "users"("id") ON DELETE CASCADE,
-	CONSTRAINT "user_tenent_totps_tenent_id_fk" FOREIGN KEY("tenent_id") REFERENCES "tenents"("id") ON DELETE CASCADE,
-	PRIMARY KEY("user_id", "tenent_id")
+	CONSTRAINT "totps_user_id_fk" FOREIGN KEY("user_id") REFERENCES "users"("id") ON DELETE CASCADE,
+	CONSTRAINT "totps_tenent_id_fk" FOREIGN KEY("tenent_id") REFERENCES "tenents"("id") ON DELETE CASCADE
 );
-CREATE TRIGGER "user_tenent_totps_updated_at_tgr" BEFORE UPDATE ON "user_tenent_totps" FOR EACH ROW EXECUTE PROCEDURE "trigger_updated_at"();
+CREATE UNIQUE INDEX "totps_user_id_tenent_id_unique_idx" ON "totps" ("user_id", "tenent_id");
+CREATE TRIGGER "totps_updated_at_tgr" BEFORE UPDATE ON "totps" FOR EACH ROW EXECUTE PROCEDURE "trigger_updated_at"();
 
 
 CREATE TYPE MFA_TYPE AS ENUM ('totp');
 
 
 CREATE TABLE "user_mfas"(
-	"user_id" INT4 NOT NULL,
+	"user_id" INT4 NOT NULL PRIMARY KEY,
 	"id" INT4 NOT NULL,
 	"type" MFA_TYPE NOT NULL,
 	"updated_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	"created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	CONSTRAINT "user_mfas_user_id_fk" FOREIGN KEY("user_id") REFERENCES "users"("id") ON DELETE CASCADE,
-	PRIMARY KEY("user_id", "id", "type")
+	CONSTRAINT "user_mfas_user_id_fk" FOREIGN KEY("user_id") REFERENCES "users"("id") ON DELETE CASCADE
 );
 CREATE TRIGGER "user_mfas_updated_at_tgr" BEFORE UPDATE ON "user_mfas" FOR EACH ROW EXECUTE PROCEDURE "trigger_updated_at"();
 

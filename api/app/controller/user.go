@@ -20,8 +20,7 @@ import (
 //	@Accept			json
 //	@Produce		json
 //	@Param			applicationId	path		int	true	"application id"
-//	@Param			limit	query		int	false	"limit"
-//	@Param			offset	query		int	false	"offset"
+//	@Param			query	query		model.OffsetAndLimitQueryST	false	"query"
 //	@Success		200	{object}   	model.PaginationST[model.UserST]
 //	@Failure		400	{object}	model.ErrorST
 //	@Failure		401	{object}	model.ErrorST
@@ -34,23 +33,21 @@ func GetUsers(c *fiber.Ctx) error {
 	if err := access.HasAction(c, "users", "read"); err != nil {
 		return err
 	}
-	limit, offset, err := GetLimitAndOffset(c, 20)
-	if err != nil {
-		if err == errParseLimitOffset {
-			return nil
-		}
-		return err
+	var offsetAndLimit model.OffsetAndLimitQueryST
+	if err := c.QueryParser(&offsetAndLimit); err != nil {
+		log.Printf("failed to parse query: %v\n", err)
+		return model.NewError(http.StatusBadRequest).AddError("query", "invalid")
 	}
 	applicationId, err := strconv.Atoi(c.Params("applicationId"))
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("applicationId", "invalid")
 	}
-	userRows, err := repository.GetUsers(int32(applicationId), limit, offset)
+	userRows, err := repository.GetUsers(int32(applicationId), offsetAndLimit.Limit, offsetAndLimit.Offset)
 	if err != nil {
 		log.Printf("failed to get users: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
-	emails, err := repository.GetUsersEmails(int32(applicationId), limit, offset)
+	emails, err := repository.GetUsersEmails(int32(applicationId), offsetAndLimit.Limit, offsetAndLimit.Offset)
 	if err != nil {
 		log.Printf("failed to get users emails: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
@@ -59,7 +56,7 @@ func GetUsers(c *fiber.Ctx) error {
 	for _, email := range emails {
 		emailsByUserId[email.UserId] = append(emailsByUserId[email.UserId], email)
 	}
-	phoneNumbers, err := repository.GetUsersPhoneNumbers(int32(applicationId), limit, offset)
+	phoneNumbers, err := repository.GetUsersPhoneNumbers(int32(applicationId), offsetAndLimit.Limit, offsetAndLimit.Offset)
 	if err != nil {
 		log.Printf("failed to get users phone numbers: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
@@ -72,8 +69,12 @@ func GetUsers(c *fiber.Ctx) error {
 	for _, userRow := range userRows {
 		users = append(users, model.UserFromRow(userRow, emailsByUserId[userRow.Id], phoneNumbersByUserId[userRow.Id]))
 	}
+	hasMore := false
+	if offsetAndLimit.Limit != nil && *offsetAndLimit.Limit == len(users) {
+		hasMore = true
+	}
 	return c.JSON(model.PaginationST[model.UserST]{
-		HasMore: len(users) == limit,
+		HasMore: hasMore,
 		Items:   users,
 	})
 }

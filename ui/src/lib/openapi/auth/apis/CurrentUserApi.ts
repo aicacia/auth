@@ -24,6 +24,7 @@ import type {
   PhoneNumber,
   ResetPassword,
   TOTP,
+  TOTPWithSecret,
   UpdateUser,
   UpdateUserInfoRequest,
   UserInfo,
@@ -48,6 +49,8 @@ import {
     ResetPasswordToJSON,
     TOTPFromJSON,
     TOTPToJSON,
+    TOTPWithSecretFromJSON,
+    TOTPWithSecretToJSON,
     UpdateUserFromJSON,
     UpdateUserToJSON,
     UpdateUserInfoRequestFromJSON,
@@ -76,12 +79,28 @@ export interface CreatePhoneNumberRequest {
     createPhoneNumber: CreatePhoneNumber;
 }
 
+export interface CreateTotpRequest {
+    tenentId: number;
+}
+
 export interface DeleteEmailRequest {
     id: number;
 }
 
 export interface DeletePhoneNumberRequest {
     id: number;
+}
+
+export interface DeleteTotpRequest {
+    tenentId: number;
+}
+
+export interface DisalbeTotpRequest {
+    tenentId: number;
+}
+
+export interface EnableTotpRequest {
+    tenentId: number;
 }
 
 export interface ResetPasswordRequest {
@@ -184,16 +203,17 @@ export interface CurrentUserApiInterface {
     /**
      * 
      * @summary Create user TOTP
+     * @param {number} tenentId tenent id
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CurrentUserApiInterface
      */
-    createTotpRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TOTP>>;
+    createTotpRaw(requestParameters: CreateTotpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TOTPWithSecret>>;
 
     /**
      * Create user TOTP
      */
-    createTotp(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TOTP>;
+    createTotp(tenentId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TOTPWithSecret>;
 
     /**
      * 
@@ -255,17 +275,48 @@ export interface CurrentUserApiInterface {
 
     /**
      * 
-     * @summary Create user TOTP
+     * @summary Delete user TOTP
+     * @param {number} tenentId tenent id
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CurrentUserApiInterface
      */
-    deleteTotpRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+    deleteTotpRaw(requestParameters: DeleteTotpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
-     * Create user TOTP
+     * Delete user TOTP
      */
-    deleteTotp(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    deleteTotp(tenentId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * 
+     * @summary Disables user TOTP
+     * @param {number} tenentId tenent id
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CurrentUserApiInterface
+     */
+    disalbeTotpRaw(requestParameters: DisalbeTotpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TOTPWithSecret>>;
+
+    /**
+     * Disables user TOTP
+     */
+    disalbeTotp(tenentId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TOTPWithSecret>;
+
+    /**
+     * 
+     * @summary Enables user TOTP
+     * @param {number} tenentId tenent id
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CurrentUserApiInterface
+     */
+    enableTotpRaw(requestParameters: EnableTotpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TOTPWithSecret>>;
+
+    /**
+     * Enables user TOTP
+     */
+    enableTotp(tenentId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TOTPWithSecret>;
 
     /**
      * 
@@ -341,6 +392,20 @@ export interface CurrentUserApiInterface {
      * Set a confirmed phone to primary
      */
     setPrimaryPhoneNumber(id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * 
+     * @summary Get user TOTPs
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CurrentUserApiInterface
+     */
+    totpsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<TOTP>>>;
+
+    /**
+     * Get user TOTPs
+     */
+    totps(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<TOTP>>;
 
     /**
      * 
@@ -556,7 +621,14 @@ export class CurrentUserApi extends runtime.BaseAPI implements CurrentUserApiInt
     /**
      * Create user TOTP
      */
-    async createTotpRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TOTP>> {
+    async createTotpRaw(requestParameters: CreateTotpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TOTPWithSecret>> {
+        if (requestParameters['tenentId'] == null) {
+            throw new runtime.RequiredError(
+                'tenentId',
+                'Required parameter "tenentId" was null or undefined when calling createTotp().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -566,20 +638,20 @@ export class CurrentUserApi extends runtime.BaseAPI implements CurrentUserApiInt
         }
 
         const response = await this.request({
-            path: `/user/totp`,
+            path: `/user/totp/{tenentId}`.replace(`{${"tenentId"}}`, encodeURIComponent(String(requestParameters['tenentId']))),
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => TOTPFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => TOTPWithSecretFromJSON(jsonValue));
     }
 
     /**
      * Create user TOTP
      */
-    async createTotp(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TOTP> {
-        const response = await this.createTotpRaw(initOverrides);
+    async createTotp(tenentId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TOTPWithSecret> {
+        const response = await this.createTotpRaw({ tenentId: tenentId }, initOverrides);
         return await response.value();
     }
 
@@ -716,9 +788,16 @@ export class CurrentUserApi extends runtime.BaseAPI implements CurrentUserApiInt
     }
 
     /**
-     * Create user TOTP
+     * Delete user TOTP
      */
-    async deleteTotpRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async deleteTotpRaw(requestParameters: DeleteTotpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters['tenentId'] == null) {
+            throw new runtime.RequiredError(
+                'tenentId',
+                'Required parameter "tenentId" was null or undefined when calling deleteTotp().'
+            );
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -728,7 +807,7 @@ export class CurrentUserApi extends runtime.BaseAPI implements CurrentUserApiInt
         }
 
         const response = await this.request({
-            path: `/user/totp`,
+            path: `/user/totp/{tenentId}`.replace(`{${"tenentId"}}`, encodeURIComponent(String(requestParameters['tenentId']))),
             method: 'DELETE',
             headers: headerParameters,
             query: queryParameters,
@@ -738,10 +817,84 @@ export class CurrentUserApi extends runtime.BaseAPI implements CurrentUserApiInt
     }
 
     /**
-     * Create user TOTP
+     * Delete user TOTP
      */
-    async deleteTotp(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteTotpRaw(initOverrides);
+    async deleteTotp(tenentId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteTotpRaw({ tenentId: tenentId }, initOverrides);
+    }
+
+    /**
+     * Disables user TOTP
+     */
+    async disalbeTotpRaw(requestParameters: DisalbeTotpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TOTPWithSecret>> {
+        if (requestParameters['tenentId'] == null) {
+            throw new runtime.RequiredError(
+                'tenentId',
+                'Required parameter "tenentId" was null or undefined when calling disalbeTotp().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // Authorization authentication
+        }
+
+        const response = await this.request({
+            path: `/user/totp/{tenentId}/enable`.replace(`{${"tenentId"}}`, encodeURIComponent(String(requestParameters['tenentId']))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TOTPWithSecretFromJSON(jsonValue));
+    }
+
+    /**
+     * Disables user TOTP
+     */
+    async disalbeTotp(tenentId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TOTPWithSecret> {
+        const response = await this.disalbeTotpRaw({ tenentId: tenentId }, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Enables user TOTP
+     */
+    async enableTotpRaw(requestParameters: EnableTotpRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TOTPWithSecret>> {
+        if (requestParameters['tenentId'] == null) {
+            throw new runtime.RequiredError(
+                'tenentId',
+                'Required parameter "tenentId" was null or undefined when calling enableTotp().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // Authorization authentication
+        }
+
+        const response = await this.request({
+            path: `/user/totp/{tenentId}/enable`.replace(`{${"tenentId"}}`, encodeURIComponent(String(requestParameters['tenentId']))),
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => TOTPWithSecretFromJSON(jsonValue));
+    }
+
+    /**
+     * Enables user TOTP
+     */
+    async enableTotp(tenentId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TOTPWithSecret> {
+        const response = await this.enableTotpRaw({ tenentId: tenentId }, initOverrides);
+        return await response.value();
     }
 
     /**
@@ -925,6 +1078,36 @@ export class CurrentUserApi extends runtime.BaseAPI implements CurrentUserApiInt
      */
     async setPrimaryPhoneNumber(id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.setPrimaryPhoneNumberRaw({ id: id }, initOverrides);
+    }
+
+    /**
+     * Get user TOTPs
+     */
+    async totpsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<TOTP>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // Authorization authentication
+        }
+
+        const response = await this.request({
+            path: `/user/totp`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(TOTPFromJSON));
+    }
+
+    /**
+     * Get user TOTPs
+     */
+    async totps(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<TOTP>> {
+        const response = await this.totpsRaw(initOverrides);
+        return await response.value();
     }
 
     /**

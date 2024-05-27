@@ -57,6 +57,8 @@ jobs:
       - working-directory: ./ui
         run: echo "PUBLIC_AUTH_API_URL=http://localhost:3000" >> .env
       - working-directory: ./ui
+        run: echo "PUBLIC_TENENT_ID=cbf7bbef-5132-4b2c-8622-06e28359c291" >> .env
+      - working-directory: ./ui
         run: pnpm build
       - working-directory: ./ui
         run: pnpm preview &

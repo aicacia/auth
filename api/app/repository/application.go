@@ -7,7 +7,7 @@ import (
 type ApplicationRowST struct {
 	Id          int32     `db:"id"`
 	Description string    `db:"description"`
-	Uri         string    `db:"uri"`
+	URI         string    `db:"uri"`
 	IsAdmin     bool      `db:"is_admin"`
 	Website     *string   `db:"website"`
 	UpdatedAt   time.Time `db:"updated_at"`
@@ -57,7 +57,7 @@ func GetUserApplications(userId int32, limit, offset int) ([]ApplicationRowST, e
 
 type CreateApplicationST struct {
 	Description string `json:"description" validate:"required"`
-	Uri         string `json:"uri" validate:"required"`
+	URI         string `json:"uri" validate:"required"`
 }
 
 func CreateApplication(create CreateApplicationST) (ApplicationRowST, error) {
@@ -66,12 +66,12 @@ func CreateApplication(create CreateApplicationST) (ApplicationRowST, error) {
 		VALUES 
 		($1, $2) 
 		RETURNING *;`,
-		create.Description, create.Uri)
+		create.Description, create.URI)
 }
 
 type UpdateApplicationST struct {
 	Description *string `json:"description"`
-	Uri         *string `json:"uri"`
+	URI         *string `json:"uri"`
 }
 
 func UpdateApplication(id int32, update UpdateApplicationST) (*ApplicationRowST, error) {
@@ -80,7 +80,7 @@ func UpdateApplication(id int32, update UpdateApplicationST) (*ApplicationRowST,
 			uri=COALESCE($3, uri)
 		WHERE id=$1
 		RETURNING *;`,
-		id, update.Description, update.Uri)
+		id, update.Description, update.URI)
 }
 
 func DeleteApplication(id int32) (bool, error) {

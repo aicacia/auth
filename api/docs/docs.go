@@ -2873,6 +2873,9 @@ const docTemplate = `{
                 "expires_in_seconds": {
                     "type": "integer"
                 },
+                "password_reset_expires_in_seconds": {
+                    "type": "integer"
+                },
                 "phone_number_endpoint": {
                     "type": "string"
                 },
@@ -2887,9 +2890,6 @@ const docTemplate = `{
                 },
                 "registration_website": {
                     "type": "string"
-                },
-                "reset_expires_in_seconds": {
-                    "type": "integer"
                 },
                 "uri": {
                     "type": "string"
@@ -3458,6 +3458,9 @@ const docTemplate = `{
                 "expires_in_seconds": {
                     "type": "integer"
                 },
+                "password_reset_expires_in_seconds": {
+                    "type": "integer"
+                },
                 "phone_number_endpoint": {
                     "type": "string"
                 },
@@ -3472,9 +3475,6 @@ const docTemplate = `{
                 },
                 "registration_website": {
                     "type": "string"
-                },
-                "reset_expires_in_seconds": {
-                    "type": "integer"
                 },
                 "uri": {
                     "type": "string"

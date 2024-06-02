@@ -11,7 +11,7 @@ type TenentST struct {
 	Id                            int32     `json:"id" validate:"required"`
 	ApplicationId                 int32     `json:"application_id" validate:"required"`
 	Description                   string    `json:"description" validate:"required"`
-	Uri                           string    `json:"uri" validate:"required"`
+	URI                           string    `json:"uri" validate:"required"`
 	AuthorizationWebsite          string    `json:"authorization_website" validate:"required"`
 	RegistrationWebsite           *string   `json:"registration_website"`
 	ClientId                      uuid.UUID `json:"client_id" validate:"required"`
@@ -35,7 +35,7 @@ func TenentFromRow(row repository.TenentRowST) TenentST {
 		Id:                            row.Id,
 		ApplicationId:                 row.ApplicationId,
 		Description:                   row.Description,
-		Uri:                           row.Uri,
+		URI:                           row.URI,
 		AuthorizationWebsite:          row.AuthorizationWebsite,
 		RegistrationWebsite:           row.RegistrationWebsite,
 		Algorithm:                     row.Algorithm,

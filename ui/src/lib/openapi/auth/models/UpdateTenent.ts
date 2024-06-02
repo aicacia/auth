@@ -57,6 +57,12 @@ export interface UpdateTenent {
     expiresInSeconds?: number;
     /**
      * 
+     * @type {number}
+     * @memberof UpdateTenent
+     */
+    passwordResetExpiresInSeconds?: number;
+    /**
+     * 
      * @type {string}
      * @memberof UpdateTenent
      */
@@ -85,12 +91,6 @@ export interface UpdateTenent {
      * @memberof UpdateTenent
      */
     registrationWebsite?: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof UpdateTenent
-     */
-    resetExpiresInSeconds?: number;
     /**
      * 
      * @type {string}
@@ -124,12 +124,12 @@ export function UpdateTenentFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'description': json['description'],
         'emailEndpoint': json['email_endpoint'] == null ? undefined : json['email_endpoint'],
         'expiresInSeconds': json['expires_in_seconds'] == null ? undefined : json['expires_in_seconds'],
+        'passwordResetExpiresInSeconds': json['password_reset_expires_in_seconds'] == null ? undefined : json['password_reset_expires_in_seconds'],
         'phoneNumberEndpoint': json['phone_number_endpoint'] == null ? undefined : json['phone_number_endpoint'],
         'privateKey': json['private_key'] == null ? undefined : json['private_key'],
         'publicKey': json['public_key'] == null ? undefined : json['public_key'],
         'refreshExpiresInSeconds': json['refresh_expires_in_seconds'] == null ? undefined : json['refresh_expires_in_seconds'],
         'registrationWebsite': json['registration_website'] == null ? undefined : json['registration_website'],
-        'resetExpiresInSeconds': json['reset_expires_in_seconds'] == null ? undefined : json['reset_expires_in_seconds'],
         'uri': json['uri'],
     };
 }
@@ -146,12 +146,12 @@ export function UpdateTenentToJSON(value?: UpdateTenent | null): any {
         'description': value['description'],
         'email_endpoint': value['emailEndpoint'],
         'expires_in_seconds': value['expiresInSeconds'],
+        'password_reset_expires_in_seconds': value['passwordResetExpiresInSeconds'],
         'phone_number_endpoint': value['phoneNumberEndpoint'],
         'private_key': value['privateKey'],
         'public_key': value['publicKey'],
         'refresh_expires_in_seconds': value['refreshExpiresInSeconds'],
         'registration_website': value['registrationWebsite'],
-        'reset_expires_in_seconds': value['resetExpiresInSeconds'],
         'uri': value['uri'],
     };
 }

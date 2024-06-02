@@ -10,7 +10,7 @@ type ResourceRowST struct {
 	Id            int32          `db:"id"`
 	ApplicationId int32          `db:"application_id"`
 	Description   string         `db:"description"`
-	Uri           string         `db:"uri"`
+	URI           string         `db:"uri"`
 	Actions       pq.StringArray `db:"actions"`
 	UpdatedAt     time.Time      `db:"updated_at"`
 	CreatedAt     time.Time      `db:"created_at"`
@@ -33,7 +33,7 @@ func GetResourceById(id int32) ([]ResourceRowST, error) {
 type CreateResourceST struct {
 	ApplicationId int32          `db:"application_id"`
 	Description   string         `db:"description"`
-	Uri           string         `db:"uri"`
+	URI           string         `db:"uri"`
 	Actions       pq.StringArray `db:"actions"`
 }
 
@@ -46,7 +46,7 @@ func CreateResource(params CreateResourceST) (ResourceRowST, error) {
 type UpdateResourceST struct {
 	Id          int32     `db:"id"`
 	Description *string   `db:"description"`
-	Uri         *string   `db:"uri"`
+	URI         *string   `db:"uri"`
 	Actions     *[]string `db:"actions"`
 }
 

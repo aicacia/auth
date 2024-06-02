@@ -75,6 +75,8 @@ definitions:
         type: string
       expires_in_seconds:
         type: integer
+      password_reset_expires_in_seconds:
+        type: integer
       phone_number_endpoint:
         type: string
       private_key:
@@ -85,8 +87,6 @@ definitions:
         type: integer
       registration_website:
         type: string
-      reset_expires_in_seconds:
-        type: integer
       uri:
         type: string
     required:
@@ -481,6 +481,8 @@ definitions:
         type: string
       expires_in_seconds:
         type: integer
+      password_reset_expires_in_seconds:
+        type: integer
       phone_number_endpoint:
         type: string
       private_key:
@@ -491,8 +493,6 @@ definitions:
         type: integer
       registration_website:
         type: string
-      reset_expires_in_seconds:
-        type: integer
       uri:
         type: string
     required:

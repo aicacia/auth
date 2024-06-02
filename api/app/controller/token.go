@@ -153,7 +153,7 @@ func sendToken(
 	now := time.Now().UTC()
 	scopes := jwt.ParseScopes(params.scope)
 	audiences := []string{
-		params.application.Uri,
+		params.application.URI,
 	}
 	if params.application.Website != nil {
 		audiences = append(audiences, *params.application.Website)

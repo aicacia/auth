@@ -113,6 +113,7 @@
 </table>
 
 <Modal bind:open={editOpen}>
+	<h4 slot="title">{editTenent?.description}</h4>
 	{#if editTenent}
 		<TenentEditor bind:tenent={editTenent} onUpdate={onTenentUpdate} />
 	{/if}

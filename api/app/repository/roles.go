@@ -8,7 +8,7 @@ type RoleRowST struct {
 	Id            int32     `db:"id"`
 	ApplicationId int32     `db:"application_id"`
 	Description   string    `db:"description"`
-	Uri           string    `db:"uri"`
+	URI           string    `db:"uri"`
 	UpdatedAt     time.Time `db:"updated_at"`
 	CreatedAt     time.Time `db:"created_at"`
 }
@@ -30,7 +30,7 @@ func GetRoleById(id int32) ([]RoleRowST, error) {
 type CreateRoleST struct {
 	ApplicationId int32  `db:"application_id"`
 	Description   string `db:"description"`
-	Uri           string `db:"uri"`
+	URI           string `db:"uri"`
 }
 
 func CreateRole(params CreateRoleST) (RoleRowST, error) {
@@ -42,7 +42,7 @@ func CreateRole(params CreateRoleST) (RoleRowST, error) {
 type UpdateRoleST struct {
 	Id          int32     `db:"id"`
 	Description *string   `db:"description"`
-	Uri         *string   `db:"uri"`
+	URI         *string   `db:"uri"`
 	Actions     *[]string `db:"actions"`
 }
 

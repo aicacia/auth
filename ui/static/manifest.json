@@ -1,7 +1,7 @@
 {
 	"name": "Auth",
 	"short_name": "Auth",
-	"description": "Auth: The Fitness Logger App",
+	"description": "Auth: The Authentication App",
 	"version": "1.0",
 	"manifest_version": 3,
 	"icons": [

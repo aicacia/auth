@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "tidyvanity.fullname" . }}-environment
+  name: {{ include "auth.fullname" . }}-environment
   labels:
-    {{- include "tidyvanity.labels" . | nindent 4 }}
+    {{- include "auth.labels" . | nindent 4 }}
 data:
 {{ toYaml .Values.env | indent 2 }}

@@ -17,8 +17,10 @@ spec:
       labels:
         {{- include "auth_ui.selectorLabels" . | nindent 8 }}
     spec:
+      {{- if .Values.image.pullSecrets }}
       imagePullSecrets:
-        - name: docker-registry
+        - name: {{ .Values.image.pullSecrets }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"

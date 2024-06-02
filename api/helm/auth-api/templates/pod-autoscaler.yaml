@@ -1,13 +1,13 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "tidyvanity.fullname" . }}
-  labels: {{- include "tidyvanity.labels" . | nindent 4 }}
+  name: {{ include "auth.fullname" . }}
+  labels: {{- include "auth.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "tidyvanity.fullname" . }}
+    name: {{ include "auth.fullname" . }}
   minReplicas: {{ .Values.replicas.min }}
   maxReplicas: {{ .Values.replicas.max }}
   behavior:

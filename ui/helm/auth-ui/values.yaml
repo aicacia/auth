@@ -12,12 +12,13 @@ replicas:
     stabilizationWindowSeconds: 15
 
 env:
-  PUBLIC_AUTH_API_URL: https://api.auth.com
+  PUBLIC_AUTH_API_URL: https://api.auth.aicacia.com
 
 image:
   repository: ghcr.io/aicacia/auth
   tag: latest
   pullPolicy: Always
+  pullSecrets: github-registry
   hash: sha256:13ba025b6c186da3fdce3db68f192721fef8300ae02f2ae76c953d771b7180e4
 
 ingress:
@@ -28,14 +29,14 @@ ingress:
     cert-manager.io/cluster-issuer: letsencrypt
     nginx.ingress.kubernetes.io/from-to-www-redirect: 'true'
   hosts:
-    - host: auth.com
+    - host: auth.aicacia.com
       paths:
         - /
   tls:
-    - secretName: auth-com-tls
+    - secretName: auth-aicacia-com-tls
       hosts:
-        - auth.com
-        - www.auth.com
+        - auth.aicacia.com
+        - www.auth.aicacia.com
 
 resources:
   requests:

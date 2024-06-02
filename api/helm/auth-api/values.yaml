@@ -12,14 +12,14 @@ replicas:
     stabilizationWindowSeconds: 15
 
 image:
-  repository: ghcr.io/faucett-gmbh/tidyvanity-api
+  repository: ghcr.io/aicacia/auth-api
   tag: latest
   pullPolicy: Always
   pullSecrets: github-registry
   hash: sha256:13ba025b6c186da3fdce3db68f192721fef8300ae02f2ae76c953d771b7180e4
 
 env:
-  DATABASE_URL: "postgresql://postgres:postgres@localhost/tidyvanity_prod?pool=20"
+  DATABASE_URL: "postgresql://postgres:postgres@localhost/auth_prod?pool=20"
 
 ingress:
   enabled: true
@@ -29,13 +29,13 @@ ingress:
     cert-manager.io/cluster-issuer: letsencrypt
     nginx.ingress.kubernetes.io/proxy-body-size: "10m"
   hosts:
-    - host: api.tidyvanity.com
+    - host: api.aicacia.com
       paths:
         - /
   tls:
-    - secretName: api-tidyvanity-com-tls
+    - secretName: api-auth-aicacia-com-tls
       hosts:
-        - api.tidyvanity.com
+        - api.aicacia.com
 
 resources:
   requests:

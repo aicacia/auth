@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "tidyvanity.fullname" . }}
+  name: {{ include "auth.fullname" . }}
   labels:
-    {{- include "tidyvanity.labels" . | nindent 4 }}
+    {{- include "auth.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "tidyvanity.selectorLabels" . | nindent 6 }}
+      {{- include "auth.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
         checksum/config-environment: {{ include (print $.Template.BasePath "/config-environment.yaml") . | sha256sum }}
         image/hash: {{ .Values.image.hash }}
       labels:
-        {{- include "tidyvanity.selectorLabels" . | nindent 8 }}
+        {{- include "auth.selectorLabels" . | nindent 8 }}
     spec:
       {{- if .Values.image.pullSecrets }}
       imagePullSecrets:
@@ -27,7 +27,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           envFrom:
             - configMapRef:
-                name: {{ include "tidyvanity.fullname" . }}-environment
+                name: {{ include "auth.fullname" . }}-environment
             {{- if .Values.envSecret }}
             - secretRef:
                 name: {{ .Values.envSecret }}

@@ -17,7 +17,7 @@ let authToken: Token | undefined;
 const defaultConfiguration: ConfigurationParameters = {
 	middleware: [
 		{
-			pre: async (context) => ({ ...context, init: { ...context.init, mode: 'cors' } })
+			pre: async (context) => ({ ...context, init: { ...context.init, mode: 'cors' }})
 		}
 	],
 	apiKey(name: string) {

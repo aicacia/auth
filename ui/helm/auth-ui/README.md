@@ -1,4 +1,4 @@
-# auth api
+# auth ui
 
 - A `Deployment` is used to create a Replica Set of nginx pods.
   ([templates/deployment.yaml](templates/deployment.yaml))

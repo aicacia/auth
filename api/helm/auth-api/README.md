@@ -1,4 +1,4 @@
-# tidyvanity api
+# auth api
 
 - A `Deployment` is used to create a Replica Set of nginx pods.
   ([templates/deployment.yaml](templates/deployment.yaml))
@@ -12,4 +12,4 @@ The [templates/\_helpers.tpl](templates/_helpers.tpl) file contains helper templ
 
 Helpers (usually called "partials" in template languages) are an advanced way for developers to structure their templates for optimal reuse.
 
-You can deploy this chart with `helm install tidyvanity_api`. Or you can see how this chart would render with `helm install --dry-run --debug tidyvanity_api`.
+You can deploy this chart with `helm install auth_api`. Or you can see how this chart would render with `helm install --dry-run --debug auth_api`.

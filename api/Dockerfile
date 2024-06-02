@@ -1,4 +1,4 @@
-FROM golang:1.22-alpine3.18 as go-builder
+FROM golang:1.22-alpine3.19 as go-builder
 
 RUN apk add build-base
 
@@ -19,7 +19,7 @@ ENV VERSION=$VERSION
 ENV CGO_ENABLED=0
 RUN go build -ldflags "-s -w -X main.Version=$VERSION -X main.Build=$(date +%s)" -o auth-api
 
-FROM --platform=linux/amd64 alpine:3.18
+FROM --platform=linux/amd64 alpine:3.19
 LABEL org.opencontainers.image.source "https://github.com/aicacia/auth"
 
 WORKDIR /opt/app

@@ -34,10 +34,13 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          cache-all-crates: true
       - uses: actions/setup-node@v1
         with:
           node-version: 22
-      - run: npm install -g pnpm@8
+      - run: npm install -g pnpm@9
 
       - run: go install github.com/playwright-community/playwright-go/cmd/playwright@latest
       - run: playwright install chromium

@@ -1,5 +1,5 @@
-FROM --platform=linux/amd64 node:21-alpine3.18 as node-builder
-RUN npm install -g pnpm@8
+FROM --platform=linux/amd64 node:22-alpine3.19 as node-builder
+RUN npm install -g pnpm@9
 
 WORKDIR /app
 
@@ -19,7 +19,7 @@ COPY postcss.config.cjs svelte.config.js tailwind.config.cjs vite.config.js ./
 
 RUN pnpm run build
 
-FROM --platform=linux/amd64 nginx:1.25-alpine3.18-slim
+FROM --platform=linux/amd64 nginx:1.27-alpine3.19-slim
 LABEL org.opencontainers.image.source https://github.com/aicacia/auth
 
 ARG MAINTENANCE_MODE=false

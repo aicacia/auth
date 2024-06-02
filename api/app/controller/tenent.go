@@ -61,7 +61,7 @@ func GetTenents(c *fiber.Ctx) error {
 // GetTenentById
 //
 //	@Summary		Get application tenent by id
-//	@ID				tenent-by-id
+//	@ID				tenent
 //	@Tags			tenent
 //	@Accept			json
 //	@Produce		json
@@ -106,7 +106,7 @@ func GetTenentById(c *fiber.Ctx) error {
 //	@Accept			json
 //	@Produce		json
 //	@Param			applicationId	path		int	true	"application id"
-//	@Param			application	body		model.CreateTenentST	true	"create application"
+//	@Param			tenent	body		model.CreateTenentST	true	"create application"
 //	@Success		201	{object}   	model.TenentST
 //	@Failure		400	{object}	model.ErrorST
 //	@Failure		401	{object}	model.ErrorST
@@ -146,7 +146,7 @@ func PostCreateTenent(c *fiber.Ctx) error {
 //	@Produce		json
 //	@Param			applicationId	path		int	true	"application id"
 //	@Param			id	path		int	true	"application tenent id"
-//	@Param			application	body		model.UpdateTenentST	true	"update application"
+//	@Param			tenent	body		model.UpdateTenentST	true	"update application"
 //	@Success		200	{object}   	model.TenentST
 //	@Failure		400	{object}	model.ErrorST
 //	@Failure		401	{object}	model.ErrorST

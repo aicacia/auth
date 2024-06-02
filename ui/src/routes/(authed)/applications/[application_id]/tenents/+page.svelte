@@ -3,12 +3,29 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import ArrowLeft from 'lucide-svelte/icons/arrow-left';
+	import Plus from 'lucide-svelte/icons/plus';
 	import LL from '$lib/i18n/i18n-svelte';
 	import { base } from '$app/paths';
+	import Tenents from '$lib/components/Tenents/Tenents.svelte';
+	import NewTenent from '$lib/components/Tenents/NewTenent.svelte';
+	import type { CreateTenent, Tenent } from '$lib/openapi/auth';
+	import Modal from '$lib/components/Modal.svelte';
+	import { tenentApi } from '$lib/openapi';
 
 	export let data: PageData;
 
 	$: application = data.application;
+	let tenents: Tenent[] = [];
+
+	let newTenentOpen = false;
+	function onNewTenentOpen() {
+		newTenentOpen = true;
+	}
+	async function onNewTenent(create: CreateTenent) {
+		const tenent = await tenentApi.createTenent(application.id, create);
+		tenents = [tenent, ...tenents];
+		newTenentOpen = false;
+	}
 </script>
 
 <svelte:head>
@@ -26,6 +43,24 @@
 				</a>
 				<h4>{application.description} / {$LL.tenents.title()}</h4>
 			</div>
+			<div>
+				<button class="btn icon primary" on:click={onNewTenentOpen}>
+					<Plus />
+				</button>
+			</div>
 		</div>
 	</div>
 </div>
+
+<div class="flex flex-grow flex-col px-4 pb-16">
+	<div
+		class="mx-auto mt-4 flex w-full max-w-6xl flex-grow flex-col bg-white p-4 shadow dark:bg-gray-800"
+	>
+		<Tenents bind:application bind:tenents />
+	</div>
+</div>
+
+<Modal bind:open={newTenentOpen}>
+	<h4 slot="title">{$LL.tenents.newTenent.title()}</h4>
+	<NewTenent onCreate={onNewTenent} />
+</Modal>

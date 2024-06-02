@@ -82,7 +82,7 @@ func GetUsers(c *fiber.Ctx) error {
 // GetUserById
 //
 //	@Summary		Get user by id
-//	@ID				user-by-id
+//	@ID				user
 //	@Tags			user
 //	@Accept			json
 //	@Produce		json
@@ -158,7 +158,7 @@ func PostCreateUser(c *fiber.Ctx) error {
 // PatchUpdateUserById
 //
 //	@Summary		Updates a user's username
-//	@ID				update-user-by-id
+//	@ID				update-user
 //	@Tags			user
 //	@Accept			json
 //	@Produce		json
@@ -205,7 +205,7 @@ func PatchUpdateUserById(c *fiber.Ctx) error {
 // DeleteUserById
 //
 //	@Summary		Delets a user by id
-//	@ID				delete-user-by-id
+//	@ID				delete-user
 //	@Tags			user
 //	@Accept			json
 //	@Produce		json

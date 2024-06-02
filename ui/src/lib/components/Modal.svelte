@@ -48,7 +48,7 @@
 		>
 			<div class="flex min-h-full items-end justify-center p-4 sm:items-center sm:p-0">
 				<div
-					class="relative w-full rounded bg-white shadow-lg dark:bg-gray-800 sm:my-8 sm:max-w-lg"
+					class="relative w-full rounded bg-white shadow-lg sm:my-8 sm:max-w-lg dark:bg-gray-800"
 					class:m-auto={small}
 					bind:this={container}
 				>
@@ -56,7 +56,7 @@
 						<div class="flex flex-grow flex-col">
 							<slot name="title" />
 						</div>
-						<button class="btn primary icon" on:click|stopPropagation={close}>
+						<button class="btn icon" on:click|stopPropagation={close}>
 							<div class="h-6 w-6"><X /></div>
 						</button>
 					</div>

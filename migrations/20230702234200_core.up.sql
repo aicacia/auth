@@ -91,7 +91,7 @@ CREATE TRIGGER "tenents_updated_at_tgr" BEFORE UPDATE ON "tenents" FOR EACH ROW 
 
 INSERT INTO "tenents" ("client_id", "application_id", "description", "uri", "authorization_website") 
 	VALUES
-	('cbf7bbef-5132-4b2c-8622-06e28359c291', (SELECT id FROM "applications" WHERE uri='admin' LIMIT 1), 'Admin', 'admin', 'http://localhost:5173/signin');
+	('cbf7bbef-5132-4b2c-8622-06e28359c291', (SELECT id FROM "applications" WHERE uri='admin' LIMIT 1), 'Admin UI', 'admin-ui', 'http://localhost:5173/signin');
 
 
 CREATE TABLE "resources"(

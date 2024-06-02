@@ -887,7 +887,7 @@ paths:
         type: integer
       - description: create application
         in: body
-        name: application
+        name: tenent
         required: true
         schema:
           $ref: '#/definitions/CreateTenent'
@@ -964,7 +964,7 @@ paths:
     get:
       consumes:
       - application/json
-      operationId: tenent-by-id
+      operationId: tenent
       parameters:
       - description: application id
         in: path
@@ -1021,7 +1021,7 @@ paths:
         type: integer
       - description: update application
         in: body
-        name: application
+        name: tenent
         required: true
         schema:
           $ref: '#/definitions/UpdateTenent'
@@ -1146,7 +1146,7 @@ paths:
     delete:
       consumes:
       - application/json
-      operationId: delete-user-by-id
+      operationId: delete-user
       parameters:
       - description: application id
         in: path
@@ -1187,7 +1187,7 @@ paths:
     get:
       consumes:
       - application/json
-      operationId: user-by-id
+      operationId: user
       parameters:
       - description: application id
         in: path
@@ -1230,7 +1230,7 @@ paths:
     patch:
       consumes:
       - application/json
-      operationId: update-user-by-id
+      operationId: update-user
       parameters:
       - description: application id
         in: path
@@ -1409,7 +1409,7 @@ paths:
     get:
       consumes:
       - application/json
-      operationId: application-by-id
+      operationId: application
       parameters:
       - description: application id
         in: path

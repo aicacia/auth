@@ -54,7 +54,7 @@
 	</div>
 </div>
 
-<div class="flex flex-grow flex-col px-4">
+<div class="flex flex-grow flex-col px-4 pb-16">
 	<div
 		class="mx-auto mt-4 flex w-full max-w-6xl flex-grow flex-col bg-white p-4 shadow dark:bg-gray-800"
 	>

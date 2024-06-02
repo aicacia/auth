@@ -416,7 +416,7 @@ type RootTranslation = {
 			 */
 			dangerZone: string
 			/**
-			 * T​h​i​s​ ​o​p​e​r​a​t​i​o​n​ ​i​s​ ​p​e​r​m​a​n​e​n​t​ ​a​n​d​ ​w​i​l​l​ ​d​e​l​e​t​e​ ​a​l​l​ ​p​e​r​m​i​s​s​i​o​n​s​ ​a​n​d​ ​d​a​t​a​ ​a​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​a​p​p​l​i​c​a​t​i​o​n​.
+			 * T​h​i​s​ ​o​p​e​r​a​t​i​o​n​ ​i​s​ ​p​e​r​m​a​n​e​n​t​ ​a​n​d​ ​w​i​l​l​ ​d​e​l​e​t​e​ ​a​l​l​ ​R​B​A​C​s​,​ ​u​s​e​r​s​,​ ​t​e​n​e​n​t​s​ ​a​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​a​p​p​l​i​c​a​t​i​o​n​.
 			 */
 			dangerZoneMessage: string
 			/**
@@ -489,7 +489,7 @@ type RootTranslation = {
 			 */
 			confirmTitle: string
 			/**
-			 * T​h​i​s​ ​o​p​e​r​a​t​i​o​n​ ​i​s​ ​p​e​r​m​a​n​e​n​t​ ​a​n​d​ ​w​i​l​l​ ​d​e​l​e​t​e​ ​e​v​e​n​y​t​h​i​n​g​ ​a​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​u​s​e​r​ ​{​0​}​.
+			 * T​h​i​s​ ​o​p​e​r​a​t​i​o​n​ ​i​s​ ​p​e​r​m​a​n​e​n​t​ ​a​n​d​ ​w​i​l​l​ ​d​e​l​e​t​e​ ​e​v​e​r​y​t​h​i​n​g​ ​a​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​u​s​e​r​ ​{​0​}​.
 			 * @param {string} 0
 			 */
 			confirmMessage: RequiredParams<'0'>
@@ -499,9 +499,9 @@ type RootTranslation = {
 			confirm: string
 		}
 	}
-	permissions: {
+	rbac: {
 		/**
-		 * P​e​r​m​i​s​s​i​o​n​s
+		 * R​B​A​C
 		 */
 		title: string
 	}
@@ -510,6 +510,65 @@ type RootTranslation = {
 		 * T​e​n​e​n​t​s
 		 */
 		title: string
+		/**
+		 * I​d
+		 */
+		id: string
+		/**
+		 * D​e​s​c​r​i​p​t​i​o​n
+		 */
+		description: string
+		/**
+		 * U​R​I
+		 */
+		uri: string
+		/**
+		 * D​e​s​c​r​i​p​t​i​o​n
+		 */
+		descriptionPlaceholder: string
+		/**
+		 * U​R​I
+		 */
+		uriPlaceholder: string
+		newTenent: {
+			/**
+			 * N​e​w​ ​T​e​n​e​n​t
+			 */
+			title: string
+			/**
+			 * C​r​e​a​t​e
+			 */
+			button: string
+		}
+		edit: {
+			/**
+			 * E​d​i​t​ ​T​e​n​e​n​t
+			 */
+			title: string
+			/**
+			 * E​d​i​t
+			 */
+			button: string
+		}
+		'delete': {
+			/**
+			 * D​e​l​e​t​e
+			 */
+			button: string
+			/**
+			 * D​e​l​e​t​e​ ​T​e​n​e​n​t​?
+			 */
+			confirmTitle: string
+			/**
+			 * T​h​i​s​ ​o​p​e​r​a​t​i​o​n​ ​i​s​ ​p​e​r​m​a​n​e​n​t​ ​a​n​d​ ​w​i​l​l​ ​d​e​l​e​t​e​ ​e​v​e​r​y​t​h​i​n​g​ ​a​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​t​e​n​e​n​t​ ​{​0​}​.
+			 * @param {string} 0
+			 */
+			confirmMessage: RequiredParams<'0'>
+			/**
+			 * D​e​l​e​t​e
+			 */
+			confirm: string
+		}
 	}
 	templates: {
 		/**
@@ -956,7 +1015,7 @@ export type TranslationFunctions = {
 			 */
 			dangerZone: () => LocalizedString
 			/**
-			 * This operation is permanent and will delete all permissions and data associated with application.
+			 * This operation is permanent and will delete all RBACs, users, tenents associated with application.
 			 */
 			dangerZoneMessage: () => LocalizedString
 			/**
@@ -1028,7 +1087,7 @@ export type TranslationFunctions = {
 			 */
 			confirmTitle: () => LocalizedString
 			/**
-			 * This operation is permanent and will delete evenything associated with user {0}.
+			 * This operation is permanent and will delete everything associated with user {0}.
 			 */
 			confirmMessage: (arg0: string) => LocalizedString
 			/**
@@ -1037,9 +1096,9 @@ export type TranslationFunctions = {
 			confirm: () => LocalizedString
 		}
 	}
-	permissions: {
+	rbac: {
 		/**
-		 * Permissions
+		 * RBAC
 		 */
 		title: () => LocalizedString
 	}
@@ -1048,6 +1107,64 @@ export type TranslationFunctions = {
 		 * Tenents
 		 */
 		title: () => LocalizedString
+		/**
+		 * Id
+		 */
+		id: () => LocalizedString
+		/**
+		 * Description
+		 */
+		description: () => LocalizedString
+		/**
+		 * URI
+		 */
+		uri: () => LocalizedString
+		/**
+		 * Description
+		 */
+		descriptionPlaceholder: () => LocalizedString
+		/**
+		 * URI
+		 */
+		uriPlaceholder: () => LocalizedString
+		newTenent: {
+			/**
+			 * New Tenent
+			 */
+			title: () => LocalizedString
+			/**
+			 * Create
+			 */
+			button: () => LocalizedString
+		}
+		edit: {
+			/**
+			 * Edit Tenent
+			 */
+			title: () => LocalizedString
+			/**
+			 * Edit
+			 */
+			button: () => LocalizedString
+		}
+		'delete': {
+			/**
+			 * Delete
+			 */
+			button: () => LocalizedString
+			/**
+			 * Delete Tenent?
+			 */
+			confirmTitle: () => LocalizedString
+			/**
+			 * This operation is permanent and will delete everything associated with tenent {0}.
+			 */
+			confirmMessage: (arg0: string) => LocalizedString
+			/**
+			 * Delete
+			 */
+			confirm: () => LocalizedString
+		}
 	}
 	templates: {
 		/**

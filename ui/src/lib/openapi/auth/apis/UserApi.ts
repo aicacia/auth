@@ -45,12 +45,12 @@ export interface CreateUserRequest {
     createUser: CreateUser;
 }
 
-export interface DeleteUserByIdRequest {
+export interface DeleteUserRequest {
     applicationId: number;
     id: number;
 }
 
-export interface UpdateUserByIdRequest {
+export interface UpdateUserRequest {
     applicationId: number;
     id: number;
     updateUser: UpdateUser;
@@ -62,7 +62,7 @@ export interface UpdateUserInfoOperationRequest {
     userinfoUpdates: UpdateUserInfoRequest;
 }
 
-export interface UserByIdRequest {
+export interface UserRequest {
     applicationId: number;
     id: number;
 }
@@ -110,12 +110,12 @@ export interface UserApiInterface {
      * @throws {RequiredError}
      * @memberof UserApiInterface
      */
-    deleteUserByIdRaw(requestParameters: DeleteUserByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+    deleteUserRaw(requestParameters: DeleteUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
     /**
      * Delets a user by id
      */
-    deleteUserById(applicationId: number, id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    deleteUser(applicationId: number, id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -127,12 +127,12 @@ export interface UserApiInterface {
      * @throws {RequiredError}
      * @memberof UserApiInterface
      */
-    updateUserByIdRaw(requestParameters: UpdateUserByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<User>>;
+    updateUserRaw(requestParameters: UpdateUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<User>>;
 
     /**
      * Updates a user\'s username
      */
-    updateUserById(applicationId: number, id: number, updateUser: UpdateUser, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<User>;
+    updateUser(applicationId: number, id: number, updateUser: UpdateUser, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<User>;
 
     /**
      * 
@@ -160,12 +160,12 @@ export interface UserApiInterface {
      * @throws {RequiredError}
      * @memberof UserApiInterface
      */
-    userByIdRaw(requestParameters: UserByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<User>>;
+    userRaw(requestParameters: UserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<User>>;
 
     /**
      * Get user by id
      */
-    userById(applicationId: number, id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<User>;
+    user(applicationId: number, id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<User>;
 
     /**
      * 
@@ -257,18 +257,18 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
     /**
      * Delets a user by id
      */
-    async deleteUserByIdRaw(requestParameters: DeleteUserByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async deleteUserRaw(requestParameters: DeleteUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         if (requestParameters['applicationId'] == null) {
             throw new runtime.RequiredError(
                 'applicationId',
-                'Required parameter "applicationId" was null or undefined when calling deleteUserById().'
+                'Required parameter "applicationId" was null or undefined when calling deleteUser().'
             );
         }
 
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling deleteUserById().'
+                'Required parameter "id" was null or undefined when calling deleteUser().'
             );
         }
 
@@ -293,32 +293,32 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
     /**
      * Delets a user by id
      */
-    async deleteUserById(applicationId: number, id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.deleteUserByIdRaw({ applicationId: applicationId, id: id }, initOverrides);
+    async deleteUser(applicationId: number, id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteUserRaw({ applicationId: applicationId, id: id }, initOverrides);
     }
 
     /**
      * Updates a user\'s username
      */
-    async updateUserByIdRaw(requestParameters: UpdateUserByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<User>> {
+    async updateUserRaw(requestParameters: UpdateUserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<User>> {
         if (requestParameters['applicationId'] == null) {
             throw new runtime.RequiredError(
                 'applicationId',
-                'Required parameter "applicationId" was null or undefined when calling updateUserById().'
+                'Required parameter "applicationId" was null or undefined when calling updateUser().'
             );
         }
 
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling updateUserById().'
+                'Required parameter "id" was null or undefined when calling updateUser().'
             );
         }
 
         if (requestParameters['updateUser'] == null) {
             throw new runtime.RequiredError(
                 'updateUser',
-                'Required parameter "updateUser" was null or undefined when calling updateUserById().'
+                'Required parameter "updateUser" was null or undefined when calling updateUser().'
             );
         }
 
@@ -346,8 +346,8 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
     /**
      * Updates a user\'s username
      */
-    async updateUserById(applicationId: number, id: number, updateUser: UpdateUser, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<User> {
-        const response = await this.updateUserByIdRaw({ applicationId: applicationId, id: id, updateUser: updateUser }, initOverrides);
+    async updateUser(applicationId: number, id: number, updateUser: UpdateUser, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<User> {
+        const response = await this.updateUserRaw({ applicationId: applicationId, id: id, updateUser: updateUser }, initOverrides);
         return await response.value();
     }
 
@@ -408,18 +408,18 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
     /**
      * Get user by id
      */
-    async userByIdRaw(requestParameters: UserByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<User>> {
+    async userRaw(requestParameters: UserRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<User>> {
         if (requestParameters['applicationId'] == null) {
             throw new runtime.RequiredError(
                 'applicationId',
-                'Required parameter "applicationId" was null or undefined when calling userById().'
+                'Required parameter "applicationId" was null or undefined when calling user().'
             );
         }
 
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling userById().'
+                'Required parameter "id" was null or undefined when calling user().'
             );
         }
 
@@ -444,8 +444,8 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
     /**
      * Get user by id
      */
-    async userById(applicationId: number, id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<User> {
-        const response = await this.userByIdRaw({ applicationId: applicationId, id: id }, initOverrides);
+    async user(applicationId: number, id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<User> {
+        const response = await this.userRaw({ applicationId: applicationId, id: id }, initOverrides);
         return await response.value();
     }
 

@@ -290,7 +290,7 @@ const docTemplate = `{
                     },
                     {
                         "description": "create application",
-                        "name": "application",
+                        "name": "tenent",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -349,7 +349,7 @@ const docTemplate = `{
                     "tenent"
                 ],
                 "summary": "Get application tenent by id",
-                "operationId": "tenent-by-id",
+                "operationId": "tenent",
                 "parameters": [
                     {
                         "type": "integer",
@@ -496,7 +496,7 @@ const docTemplate = `{
                     },
                     {
                         "description": "update application",
-                        "name": "application",
+                        "name": "tenent",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -694,7 +694,7 @@ const docTemplate = `{
                     "user"
                 ],
                 "summary": "Get user by id",
-                "operationId": "user-by-id",
+                "operationId": "user",
                 "parameters": [
                     {
                         "type": "integer",
@@ -760,7 +760,7 @@ const docTemplate = `{
                     "user"
                 ],
                 "summary": "Delets a user by id",
-                "operationId": "delete-user-by-id",
+                "operationId": "delete-user",
                 "parameters": [
                     {
                         "type": "integer",
@@ -823,7 +823,7 @@ const docTemplate = `{
                     "user"
                 ],
                 "summary": "Updates a user's username",
-                "operationId": "update-user-by-id",
+                "operationId": "update-user",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1043,7 +1043,7 @@ const docTemplate = `{
                     "application"
                 ],
                 "summary": "Get application by id",
-                "operationId": "application-by-id",
+                "operationId": "application",
                 "parameters": [
                     {
                         "type": "integer",

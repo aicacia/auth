@@ -282,7 +282,7 @@
                     },
                     {
                         "description": "create application",
-                        "name": "application",
+                        "name": "tenent",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -341,7 +341,7 @@
                     "tenent"
                 ],
                 "summary": "Get application tenent by id",
-                "operationId": "tenent-by-id",
+                "operationId": "tenent",
                 "parameters": [
                     {
                         "type": "integer",
@@ -488,7 +488,7 @@
                     },
                     {
                         "description": "update application",
-                        "name": "application",
+                        "name": "tenent",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -686,7 +686,7 @@
                     "user"
                 ],
                 "summary": "Get user by id",
-                "operationId": "user-by-id",
+                "operationId": "user",
                 "parameters": [
                     {
                         "type": "integer",
@@ -752,7 +752,7 @@
                     "user"
                 ],
                 "summary": "Delets a user by id",
-                "operationId": "delete-user-by-id",
+                "operationId": "delete-user",
                 "parameters": [
                     {
                         "type": "integer",
@@ -815,7 +815,7 @@
                     "user"
                 ],
                 "summary": "Updates a user's username",
-                "operationId": "update-user-by-id",
+                "operationId": "update-user",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1035,7 +1035,7 @@
                     "application"
                 ],
                 "summary": "Get application by id",
-                "operationId": "application-by-id",
+                "operationId": "application",
                 "parameters": [
                     {
                         "type": "integer",

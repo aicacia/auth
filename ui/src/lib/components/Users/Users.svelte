@@ -57,7 +57,7 @@
 		if (deleteUser) {
 			try {
 				deleting = true;
-				await userApi.deleteUserById(application.id, deleteUser.id);
+				await userApi.deleteUser(application.id, deleteUser.id);
 				onUserDelete(deleteUser);
 				await invalidateAll();
 				deleteOpen = false;

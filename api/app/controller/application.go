@@ -55,7 +55,7 @@ func GetApplications(c *fiber.Ctx) error {
 // GetApplicationById
 //
 //	@Summary		Get application by id
-//	@ID				application-by-id
+//	@ID				application
 //	@Tags			application
 //	@Accept			json
 //	@Produce		json

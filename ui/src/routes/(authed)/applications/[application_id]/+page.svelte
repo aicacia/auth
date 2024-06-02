@@ -47,16 +47,16 @@
 				</a>
 				<a
 					class="btn primary me-2 flex flex-row"
-					href={`${base}/applications/${application.id}/permissions`}
+					href={`${base}/applications/${application.id}/rbac`}
 				>
 					<Lock class="me-2" />
-					{$LL.permissions.title()}
+					{$LL.rbac.title()}
 				</a>
 			</div>
 		</div>
 	</div>
 </div>
 
-<div class="flex flex-grow flex-col px-4">
+<div class="flex flex-grow flex-col px-4 pb-16">
 	<Application bind:application />
 </div>

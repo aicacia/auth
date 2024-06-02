@@ -91,10 +91,10 @@
 								<KeySquare /><span class="ms-4">{$LL.tenents.title()}</span>
 							</a>
 							<a
-								href={`${base}/applications/${application.id}/permissions`}
+								href={`${base}/applications/${application.id}/rbac`}
 								class="default flex cursor-pointer flex-row justify-between p-2 hover:bg-gray-200 dark:hover:bg-gray-600"
 							>
-								<Lock /><span class="ms-4">{$LL.permissions.title()}</span>
+								<Lock /><span class="ms-4">{$LL.rbac.title()}</span>
 							</a>
 						</Dropdown>
 					</div>

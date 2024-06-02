@@ -17,7 +17,7 @@
 	export let onUpdate: (user: User) => void;
 
 	async function onUsernameUpdate(username: string) {
-		await userApi.updateUserById(user.applicationId, user.id, { username });
+		await userApi.updateUser(user.applicationId, user.id, { username });
 		if (user.id === get(currentUser)?.id) {
 			user.username = username;
 			updateCurrentUser(user);

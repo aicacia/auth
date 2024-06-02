@@ -34,7 +34,7 @@ import {
     UpdateApplicationToJSON,
 } from '../models/index';
 
-export interface ApplicationByIdRequest {
+export interface ApplicationRequest {
     id: number;
 }
 
@@ -71,12 +71,12 @@ export interface ApplicationApiInterface {
      * @throws {RequiredError}
      * @memberof ApplicationApiInterface
      */
-    applicationByIdRaw(requestParameters: ApplicationByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Application>>;
+    applicationRaw(requestParameters: ApplicationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Application>>;
 
     /**
      * Get application by id
      */
-    applicationById(id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Application>;
+    application(id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Application>;
 
     /**
      * 
@@ -150,11 +150,11 @@ export class ApplicationApi extends runtime.BaseAPI implements ApplicationApiInt
     /**
      * Get application by id
      */
-    async applicationByIdRaw(requestParameters: ApplicationByIdRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Application>> {
+    async applicationRaw(requestParameters: ApplicationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Application>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
-                'Required parameter "id" was null or undefined when calling applicationById().'
+                'Required parameter "id" was null or undefined when calling application().'
             );
         }
 
@@ -179,8 +179,8 @@ export class ApplicationApi extends runtime.BaseAPI implements ApplicationApiInt
     /**
      * Get application by id
      */
-    async applicationById(id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Application> {
-        const response = await this.applicationByIdRaw({ id: id }, initOverrides);
+    async application(id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Application> {
+        const response = await this.applicationRaw({ id: id }, initOverrides);
         return await response.value();
     }
 

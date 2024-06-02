@@ -128,7 +128,7 @@ const en = {
 		delete: {
 			dangerZone: 'Danger Zone',
 			dangerZoneMessage:
-				'This operation is permanent and will delete all permissions and data associated with application.',
+				'This operation is permanent and will delete all RBACs, users, tenents associated with application.',
 			dangerZoneDeleteApplication: 'Delete Application',
 			confirmTitle: 'Delete Application?',
 			confirmMessage: 'Enter `{:uri}` to confirm delete.',
@@ -153,15 +153,35 @@ const en = {
 			button: 'Delete',
 			confirmTitle: 'Delete User?',
 			confirmMessage:
-				'This operation is permanent and will delete evenything associated with user {0:string}.',
+				'This operation is permanent and will delete everything associated with user {0:string}.',
 			confirm: 'Delete'
 		}
 	},
-	permissions: {
-		title: 'Permissions'
+	rbac: {
+		title: 'RBAC'
 	},
 	tenents: {
-		title: 'Tenents'
+		title: 'Tenents',
+		id: 'Id',
+		description: 'Description',
+		uri: 'URI',
+		descriptionPlaceholder: 'Description',
+		uriPlaceholder: 'URI',
+		newTenent: {
+			title: 'New Tenent',
+			button: 'Create'
+		},
+		edit: {
+			title: 'Edit Tenent',
+			button: 'Edit'
+		},
+		delete: {
+			button: 'Delete',
+			confirmTitle: 'Delete Tenent?',
+			confirmMessage:
+				'This operation is permanent and will delete everything associated with tenent {0:string}.',
+			confirm: 'Delete'
+		}
 	},
 	templates: {
 		title: 'Templates'

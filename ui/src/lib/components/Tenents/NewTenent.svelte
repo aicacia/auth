@@ -6,6 +6,7 @@
 	export interface NewTenentForm {
 		description: string;
 		uri: string;
+		authorizationWebsite: string;
 	}
 
 	const createSuite = (LL: TranslationFunctions) =>
@@ -20,6 +21,9 @@
 			});
 			test('uri', LL.errors.message.required(), () => {
 				enforce(data.uri).isNotBlank();
+			});
+			test('authorizationWebsite', LL.errors.message.required(), () => {
+				enforce(data.authorizationWebsite).isNotBlank();
 			});
 		});
 </script>
@@ -38,6 +42,7 @@
 
 	let description = '';
 	let uri = '';
+	let authorizationWebsite = '';
 
 	$: suite = createSuite($LL);
 	$: result = suite.get();
@@ -52,7 +57,7 @@
 
 	const fields = new Set<string>();
 	const validate = debounce(() => {
-		suite({ description, uri }, Array.from(fields)).done((r) => {
+		suite({ description, uri, authorizationWebsite }, Array.from(fields)).done((r) => {
 			result = r;
 		});
 		fields.clear();
@@ -74,7 +79,7 @@
 			loading = true;
 			validateAll();
 			if (result.isValid()) {
-				await onCreate({ description, uri });
+				await onCreate({ description, uri, authorizationWebsite });
 				description = uri = '';
 				suite.reset();
 				result = suite.get();
@@ -109,6 +114,18 @@
 			on:input={onChange}
 		/>
 		<InputResults name="uri" {result} />
+	</div>
+	<div class="mb-2">
+		<label for="authorizationWebsite">{$LL.tenents.authorizationWebsite()}</label>
+		<input
+			class="w-full {cn('authorizationWebsite')}"
+			type="text"
+			name="authorizationWebsite"
+			placeholder={$LL.tenents.authorizationWebsitePlaceholder()}
+			bind:value={authorizationWebsite}
+			on:input={onChange}
+		/>
+		<InputResults name="authorizationWebsite" {result} />
 	</div>
 	<div class="flex flex-row justify-end">
 		<button type="submit" class="btn primary flex flex-shrink" {disabled}>

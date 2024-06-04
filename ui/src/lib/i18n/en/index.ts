@@ -167,6 +167,16 @@ const en = {
 		uri: 'URI',
 		descriptionPlaceholder: 'Description',
 		uriPlaceholder: 'URI',
+		authorizationWebsite: 'Authorization Website',
+		authorizationWebsitePlaceholder: 'Authorization Website',
+		registrationWebsite: 'Registration Website',
+		registrationWebsitePlaceholder: 'Registration Website',
+		expiresInSeconds: 'Access Token Expires in Seconds',
+		expiresInSecondsPlaceholder: 'Access Token Expires in Seconds',
+		refreshExpiresInSeconds: 'Refresh Token Expires in Seconds',
+		refreshExpiresInSecondsPlaceholder: 'Refresh Token Expires in Seconds',
+		passwordResetExpiresInSeconds: 'Password Reset Token Expires in Seconds',
+		passwordResetExpiresInSecondsPlaceholder: 'Password Reset Token Expires in Seconds',
 		newTenent: {
 			title: 'New Tenent',
 			button: 'Create'

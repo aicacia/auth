@@ -84,7 +84,7 @@ type CreateTenentST struct {
 func CreateTenent(applicationId int32, create CreateTenentST) (TenentRowST, error) {
 	tenent, err := Get[TenentRowST](`INSERT INTO tenents 
 		(application_id, description, uri, authorization_website)
-		VALUES ($1, $2, $3, $5) 
+		VALUES ($1, $2, $3, $4) 
 		RETURNING *;`,
 		applicationId, create.Description, create.URI, create.AuthorizationWebsite,
 	)

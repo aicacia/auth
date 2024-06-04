@@ -530,6 +530,46 @@ type RootTranslation = {
 		 * U​R​I
 		 */
 		uriPlaceholder: string
+		/**
+		 * A​u​t​h​o​r​i​z​a​t​i​o​n​ ​W​e​b​s​i​t​e
+		 */
+		authorizationWebsite: string
+		/**
+		 * A​u​t​h​o​r​i​z​a​t​i​o​n​ ​W​e​b​s​i​t​e
+		 */
+		authorizationWebsitePlaceholder: string
+		/**
+		 * R​e​g​i​s​t​r​a​t​i​o​n​ ​W​e​b​s​i​t​e
+		 */
+		registrationWebsite: string
+		/**
+		 * R​e​g​i​s​t​r​a​t​i​o​n​ ​W​e​b​s​i​t​e
+		 */
+		registrationWebsitePlaceholder: string
+		/**
+		 * A​c​c​e​s​s​ ​T​o​k​e​n​ ​E​x​p​i​r​e​s​ ​i​n​ ​S​e​c​o​n​d​s
+		 */
+		expiresInSeconds: string
+		/**
+		 * A​c​c​e​s​s​ ​T​o​k​e​n​ ​E​x​p​i​r​e​s​ ​i​n​ ​S​e​c​o​n​d​s
+		 */
+		expiresInSecondsPlaceholder: string
+		/**
+		 * R​e​f​r​e​s​h​ ​T​o​k​e​n​ ​E​x​p​i​r​e​s​ ​i​n​ ​S​e​c​o​n​d​s
+		 */
+		refreshExpiresInSeconds: string
+		/**
+		 * R​e​f​r​e​s​h​ ​T​o​k​e​n​ ​E​x​p​i​r​e​s​ ​i​n​ ​S​e​c​o​n​d​s
+		 */
+		refreshExpiresInSecondsPlaceholder: string
+		/**
+		 * P​a​s​s​w​o​r​d​ ​R​e​s​e​t​ ​T​o​k​e​n​ ​E​x​p​i​r​e​s​ ​i​n​ ​S​e​c​o​n​d​s
+		 */
+		passwordResetExpiresInSeconds: string
+		/**
+		 * P​a​s​s​w​o​r​d​ ​R​e​s​e​t​ ​T​o​k​e​n​ ​E​x​p​i​r​e​s​ ​i​n​ ​S​e​c​o​n​d​s
+		 */
+		passwordResetExpiresInSecondsPlaceholder: string
 		newTenent: {
 			/**
 			 * N​e​w​ ​T​e​n​e​n​t
@@ -1127,6 +1167,46 @@ export type TranslationFunctions = {
 		 * URI
 		 */
 		uriPlaceholder: () => LocalizedString
+		/**
+		 * Authorization Website
+		 */
+		authorizationWebsite: () => LocalizedString
+		/**
+		 * Authorization Website
+		 */
+		authorizationWebsitePlaceholder: () => LocalizedString
+		/**
+		 * Registration Website
+		 */
+		registrationWebsite: () => LocalizedString
+		/**
+		 * Registration Website
+		 */
+		registrationWebsitePlaceholder: () => LocalizedString
+		/**
+		 * Access Token Expires in Seconds
+		 */
+		expiresInSeconds: () => LocalizedString
+		/**
+		 * Access Token Expires in Seconds
+		 */
+		expiresInSecondsPlaceholder: () => LocalizedString
+		/**
+		 * Refresh Token Expires in Seconds
+		 */
+		refreshExpiresInSeconds: () => LocalizedString
+		/**
+		 * Refresh Token Expires in Seconds
+		 */
+		refreshExpiresInSecondsPlaceholder: () => LocalizedString
+		/**
+		 * Password Reset Token Expires in Seconds
+		 */
+		passwordResetExpiresInSeconds: () => LocalizedString
+		/**
+		 * Password Reset Token Expires in Seconds
+		 */
+		passwordResetExpiresInSecondsPlaceholder: () => LocalizedString
 		newTenent: {
 			/**
 			 * New Tenent

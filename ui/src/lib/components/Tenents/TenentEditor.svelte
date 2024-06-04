@@ -18,6 +18,27 @@
 			test('uri', LL.errors.message.required(), () => {
 				enforce(data.uri).isNotBlank();
 			});
+			test('authorizationWebsite', LL.errors.message.required(), () => {
+				enforce(data.authorizationWebsite).isNotBlank();
+			});
+			test('expiresInSeconds', LL.errors.message.required(), () => {
+				enforce(data.expiresInSeconds).isNotBlank();
+			});
+			test('expiresInSeconds', LL.errors.message.invalid(), () => {
+				enforce(data.expiresInSeconds).greaterThanOrEquals(0);
+			});
+			test('refreshExpiresInSeconds', LL.errors.message.required(), () => {
+				enforce(data.refreshExpiresInSeconds).isNotBlank();
+			});
+			test('refreshExpiresInSeconds', LL.errors.message.invalid(), () => {
+				enforce(data.refreshExpiresInSeconds).greaterThanOrEquals(0);
+			});
+			test('passwordResetExpiresInSeconds', LL.errors.message.required(), () => {
+				enforce(data.passwordResetExpiresInSeconds).isNotBlank();
+			});
+			test('passwordResetExpiresInSeconds', LL.errors.message.invalid(), () => {
+				enforce(data.passwordResetExpiresInSeconds).greaterThanOrEquals(0);
+			});
 		});
 </script>
 
@@ -116,13 +137,76 @@
 		/>
 		<InputResults name="uri" {result} />
 	</div>
+	<div class="mb-2">
+		<label for="authorizationWebsite">{$LL.tenents.authorizationWebsite()}</label>
+		<input
+			class="w-full {cn('authorizationWebsite')}"
+			type="text"
+			name="authorizationWebsite"
+			placeholder={$LL.tenents.authorizationWebsitePlaceholder()}
+			bind:value={tenentUpdates.authorizationWebsite}
+			on:input={onChange}
+		/>
+		<InputResults name="authorizationWebsite" {result} />
+	</div>
+	<div class="mb-2">
+		<label for="registrationWebsite">{$LL.tenents.registrationWebsite()}</label>
+		<input
+			class="w-full {cn('registrationWebsite')}"
+			type="text"
+			name="registrationWebsite"
+			placeholder={$LL.tenents.registrationWebsitePlaceholder()}
+			bind:value={tenentUpdates.registrationWebsite}
+			on:input={onChange}
+		/>
+		<InputResults name="registrationWebsite" {result} />
+	</div>
+	<div class="mb-2">
+		<label for="expiresInSeconds">{$LL.tenents.expiresInSeconds()}</label>
+		<input
+			class="w-full {cn('expiresInSeconds')}"
+			type="number"
+			min={0}
+			name="expiresInSeconds"
+			placeholder={$LL.tenents.expiresInSecondsPlaceholder()}
+			bind:value={tenentUpdates.expiresInSeconds}
+			on:input={onChange}
+		/>
+		<InputResults name="expiresInSeconds" {result} />
+	</div>
+	<div class="mb-2">
+		<label for="refreshExpiresInSeconds">{$LL.tenents.refreshExpiresInSeconds()}</label>
+		<input
+			class="w-full {cn('refreshExpiresInSeconds')}"
+			type="number"
+			min={0}
+			name="refreshExpiresInSeconds"
+			placeholder={$LL.tenents.refreshExpiresInSecondsPlaceholder()}
+			bind:value={tenentUpdates.refreshExpiresInSeconds}
+			on:input={onChange}
+		/>
+		<InputResults name="refreshExpiresInSeconds" {result} />
+	</div>
+	<div class="mb-2">
+		<label for="passwordResetExpiresInSeconds">{$LL.tenents.passwordResetExpiresInSeconds()}</label>
+		<input
+			class="w-full {cn('passwordResetExpiresInSeconds')}"
+			type="number"
+			min={0}
+			name="passwordResetExpiresInSeconds"
+			placeholder={$LL.tenents.passwordResetExpiresInSecondsPlaceholder()}
+			bind:value={tenentUpdates.passwordResetExpiresInSeconds}
+			on:input={onChange}
+		/>
+		<InputResults name="passwordResetExpiresInSeconds" {result} />
+	</div>
 	<div class="flex flex-row justify-end">
 		{#if hasUpdates}
 			<button type="submit" class="btn primary flex flex-shrink" {disabled}>
 				{#if loading}<div class="mr-2 flex flex-row justify-center">
 						<div class="inline-block h-6 w-6"><Spinner /></div>
 					</div>{/if}
-				Update
+				{$LL.tenents.edit.button()}
 			</button>
 		{/if}
 	</div>

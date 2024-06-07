@@ -1,4 +1,4 @@
-import { MAX_INT, random } from '@aicacia/rand';
+import { MAX_INT, random, fillBytes } from '@aicacia/rand';
 
 export function createInsecureID() {
 	return (random() * MAX_INT) | 0;
@@ -35,4 +35,13 @@ export function formatPhoneNumber(phoneNumberString: string) {
 		return `${intlCode}(${match[2]}) ${match[3]}-${match[4]}`;
 	}
 	return phoneNumberString;
+}
+
+export function generateRandomBase64String(size: number): string {
+	const bytes = fillBytes(new Uint8Array(size));
+	let buffer = new Array(size);
+	for (let i = 0; i < bytes.length; i++) {
+		buffer.push(String.fromCharCode(bytes[i]));
+	}
+	return btoa(buffer.join(''));
 }

@@ -42,7 +42,7 @@ export interface UpdateTenent {
      * @type {string}
      * @memberof UpdateTenent
      */
-    description: string;
+    description?: string;
     /**
      * 
      * @type {string}
@@ -96,15 +96,13 @@ export interface UpdateTenent {
      * @type {string}
      * @memberof UpdateTenent
      */
-    uri: string;
+    uri?: string;
 }
 
 /**
  * Check if a given object implements the UpdateTenent interface.
  */
 export function instanceOfUpdateTenent(value: object): boolean {
-    if (!('description' in value)) return false;
-    if (!('uri' in value)) return false;
     return true;
 }
 
@@ -121,7 +119,7 @@ export function UpdateTenentFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'algorithm': json['algorithm'] == null ? undefined : json['algorithm'],
         'authorizationWebsite': json['authorization_website'] == null ? undefined : json['authorization_website'],
         'clientId': json['client_id'] == null ? undefined : json['client_id'],
-        'description': json['description'],
+        'description': json['description'] == null ? undefined : json['description'],
         'emailEndpoint': json['email_endpoint'] == null ? undefined : json['email_endpoint'],
         'expiresInSeconds': json['expires_in_seconds'] == null ? undefined : json['expires_in_seconds'],
         'passwordResetExpiresInSeconds': json['password_reset_expires_in_seconds'] == null ? undefined : json['password_reset_expires_in_seconds'],
@@ -130,7 +128,7 @@ export function UpdateTenentFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'publicKey': json['public_key'] == null ? undefined : json['public_key'],
         'refreshExpiresInSeconds': json['refresh_expires_in_seconds'] == null ? undefined : json['refresh_expires_in_seconds'],
         'registrationWebsite': json['registration_website'] == null ? undefined : json['registration_website'],
-        'uri': json['uri'],
+        'uri': json['uri'] == null ? undefined : json['uri'],
     };
 }
 

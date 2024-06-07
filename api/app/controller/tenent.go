@@ -87,15 +87,55 @@ func GetTenentById(c *fiber.Ctx) error {
 	if err != nil {
 		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
 	}
-	application, err := repository.GetTenentById(int32(id))
+	tenent, err := repository.GetTenentById(int32(id))
 	if err != nil {
-		log.Printf("failed to get application: %v\n", err)
+		log.Printf("failed to get tenent: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
-	if application == nil {
+	if tenent == nil {
 		return model.NewError(http.StatusNotFound).AddError("id", "invalid")
 	}
-	return c.JSON(model.TenentFromRow(*application))
+	return c.JSON(model.TenentFromRow(*tenent))
+}
+
+// GetTenentPrivateKeyById
+//
+//	@Summary		Get application tenent by id
+//	@ID				tenent-private-key
+//	@Tags			tenent
+//	@Accept			json
+//	@Produce		json
+//	@Param			applicationId	path		int	true	"application id"
+//	@Param			id	path		int	true	"application tenent id"
+//	@Success		200	{object}    string
+//	@Failure		400	{object}	model.ErrorST
+//	@Failure		401	{object}	model.ErrorST
+//	@Failure		403	{object}	model.ErrorST
+//	@Failure		500	{object}	model.ErrorST
+//	@Router			/applications/{applicationId}/tenents/{id}/private-key [get]
+//
+//	@Security		Authorization
+func GetTenentPrivateKeyById(c *fiber.Ctx) error {
+	if err := access.HasAction(c, "tenents", "read"); err != nil {
+		return err
+	}
+	_, err := strconv.Atoi(c.Params("applicationId"))
+	if err != nil {
+		return model.NewError(http.StatusBadRequest).AddError("applicationId", "invalid")
+	}
+	id, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return model.NewError(http.StatusBadRequest).AddError("id", "invalid")
+	}
+	tenent, err := repository.GetTenentById(int32(id))
+	if err != nil {
+		log.Printf("failed to get tenent: %v\n", err)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
+	}
+	if tenent == nil {
+		return model.NewError(http.StatusNotFound).AddError("id", "invalid")
+	}
+	return c.JSON(tenent.PrivateKey)
 }
 
 // PostCreateTenent
@@ -128,13 +168,13 @@ func PostCreateTenent(c *fiber.Ctx) error {
 		log.Printf("failed to parse body: %v\n", err)
 		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
-	application, err := repository.CreateTenent(int32(applicationId), createTenent.CreateTenentST)
+	tenent, err := repository.CreateTenent(int32(applicationId), createTenent.CreateTenentST)
 	if err != nil {
 		log.Printf("failed to create tenent: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	c.Status(http.StatusCreated)
-	return c.JSON(model.TenentFromRow(application))
+	return c.JSON(model.TenentFromRow(tenent))
 }
 
 // PatchUpdateTenent
@@ -172,15 +212,15 @@ func PatchUpdateTenent(c *fiber.Ctx) error {
 		log.Printf("failed to parse body: %v\n", err)
 		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
-	application, err := repository.UpdateTenent(int32(id), updateTenent.UpdateTenentST)
+	tenent, err := repository.UpdateTenent(int32(id), updateTenent.UpdateTenentST)
 	if err != nil {
 		log.Printf("failed to update tenent: %v\n", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
-	if application == nil {
+	if tenent == nil {
 		return model.NewError(http.StatusNotFound).AddError("id", "invalid")
 	}
-	return c.JSON(model.TenentFromRow(*application))
+	return c.JSON(model.TenentFromRow(*tenent))
 }
 
 // DeleteTenent

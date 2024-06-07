@@ -85,6 +85,7 @@ func InstallRouter(fiberApp *fiber.App) {
 	tenents := applications.Group("/:applicationId/tenents")
 	tenents.Get("", controller.GetTenents)
 	tenents.Get("/:id", controller.GetTenentById)
+	tenents.Get("/:id/private-key", controller.GetTenentPrivateKeyById)
 	tenents.Post("", controller.PostCreateTenent)
 	tenents.Patch("/:id", controller.PatchUpdateTenent)
 	tenents.Delete("/:id", controller.DeleteTenent)

@@ -24,12 +24,6 @@ type TenentST struct {
 	CreatedAt                     time.Time `json:"created_at" validate:"required" format:"date-time"`
 } // @name Tenent
 
-type TenentWithSecretsST struct {
-	TenentST
-	ClientSecret string `json:"client_secret"`
-	PrivateKey   string `json:"private_key" validate:"required"`
-} // @name TenentWithSecrets
-
 func TenentFromRow(row repository.TenentRowST) TenentST {
 	return TenentST{
 		Id:                            row.Id,
@@ -46,14 +40,6 @@ func TenentFromRow(row repository.TenentRowST) TenentST {
 		PasswordResetExpiresInSeconds: row.PasswordResetExpiresInSeconds,
 		UpdatedAt:                     row.UpdatedAt,
 		CreatedAt:                     row.CreatedAt,
-	}
-}
-
-func TenentWithSecretsFromRow(row repository.TenentRowST) TenentWithSecretsST {
-	return TenentWithSecretsST{
-		TenentST:     TenentFromRow(row),
-		ClientSecret: row.ClientSecret,
-		PrivateKey:   row.PrivateKey,
 	}
 }
 

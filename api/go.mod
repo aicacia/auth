@@ -7,8 +7,8 @@ toolchain go1.22.0
 require (
 	github.com/aicacia/go-atomic-value v0.0.0-20231227152303-49694219c5b5
 	github.com/alexedwards/argon2id v1.0.0
-	github.com/dgrijalva/jwt-go/v4 v4.0.0-preview1
 	github.com/gofiber/fiber/v2 v2.52.2
+	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/google/uuid v1.6.0
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/joho/godotenv v1.5.1

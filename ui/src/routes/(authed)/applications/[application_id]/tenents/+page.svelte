@@ -7,10 +7,10 @@
 	import LL from '$lib/i18n/i18n-svelte';
 	import { base } from '$app/paths';
 	import Tenents from '$lib/components/Tenents/Tenents.svelte';
-	import NewTenent from '$lib/components/Tenents/NewTenent.svelte';
-	import type { CreateTenent, Tenent } from '$lib/openapi/auth';
+	import type { Tenent } from '$lib/openapi/auth';
 	import Modal from '$lib/components/Modal.svelte';
 	import { tenentApi } from '$lib/openapi';
+	import TenentEditor, { type TenentEditorForm } from '$lib/components/Tenents/TenentEditor.svelte';
 
 	export let data: PageData;
 
@@ -21,8 +21,8 @@
 	function onNewTenentOpen() {
 		newTenentOpen = true;
 	}
-	async function onNewTenent(create: CreateTenent) {
-		const tenent = await tenentApi.createTenent(application.id, create);
+	async function onNewTenent(form: TenentEditorForm) {
+		const tenent = await tenentApi.createTenent(application.id, form);
 		tenents = [tenent, ...tenents];
 		newTenentOpen = false;
 	}
@@ -62,5 +62,5 @@
 
 <Modal bind:open={newTenentOpen}>
 	<h4 slot="title">{$LL.tenents.newTenent.title()}</h4>
-	<NewTenent onCreate={onNewTenent} />
+	<TenentEditor onUpdate={onNewTenent} />
 </Modal>

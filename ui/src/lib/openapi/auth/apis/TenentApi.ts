@@ -49,6 +49,11 @@ export interface TenentRequest {
     id: number;
 }
 
+export interface TenentPrivateKeyRequest {
+    applicationId: number;
+    id: number;
+}
+
 export interface TenentsRequest {
     applicationId: number;
     limit?: number;
@@ -115,6 +120,22 @@ export interface TenentApiInterface {
      * Get application tenent by id
      */
     tenent(applicationId: number, id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Tenent>;
+
+    /**
+     * 
+     * @summary Get application tenent by id
+     * @param {number} applicationId application id
+     * @param {number} id application tenent id
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TenentApiInterface
+     */
+    tenentPrivateKeyRaw(requestParameters: TenentPrivateKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>>;
+
+    /**
+     * Get application tenent by id
+     */
+    tenentPrivateKey(applicationId: number, id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
 
     /**
      * 
@@ -288,6 +309,54 @@ export class TenentApi extends runtime.BaseAPI implements TenentApiInterface {
      */
     async tenent(applicationId: number, id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Tenent> {
         const response = await this.tenentRaw({ applicationId: applicationId, id: id }, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get application tenent by id
+     */
+    async tenentPrivateKeyRaw(requestParameters: TenentPrivateKeyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
+        if (requestParameters['applicationId'] == null) {
+            throw new runtime.RequiredError(
+                'applicationId',
+                'Required parameter "applicationId" was null or undefined when calling tenentPrivateKey().'
+            );
+        }
+
+        if (requestParameters['id'] == null) {
+            throw new runtime.RequiredError(
+                'id',
+                'Required parameter "id" was null or undefined when calling tenentPrivateKey().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = await this.configuration.apiKey("Authorization"); // Authorization authentication
+        }
+
+        const response = await this.request({
+            path: `/applications/{applicationId}/tenents/{id}/private-key`.replace(`{${"applicationId"}}`, encodeURIComponent(String(requestParameters['applicationId']))).replace(`{${"id"}}`, encodeURIComponent(String(requestParameters['id']))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        if (this.isJsonMime(response.headers.get('content-type'))) {
+            return new runtime.JSONApiResponse<string>(response);
+        } else {
+            return new runtime.TextApiResponse(response) as any;
+        }
+    }
+
+    /**
+     * Get application tenent by id
+     */
+    async tenentPrivateKey(applicationId: number, id: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
+        const response = await this.tenentPrivateKeyRaw({ applicationId: applicationId, id: id }, initOverrides);
         return await response.value();
     }
 

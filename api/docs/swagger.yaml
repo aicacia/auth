@@ -495,9 +495,6 @@ definitions:
         type: string
       uri:
         type: string
-    required:
-    - description
-    - uri
     type: object
   UpdateUser:
     properties:
@@ -1051,6 +1048,50 @@ paths:
       security:
       - Authorization: []
       summary: Update application tenent
+      tags:
+      - tenent
+  /applications/{applicationId}/tenents/{id}/private-key:
+    get:
+      consumes:
+      - application/json
+      operationId: tenent-private-key
+      parameters:
+      - description: application id
+        in: path
+        name: applicationId
+        required: true
+        type: integer
+      - description: application tenent id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Errors'
+      security:
+      - Authorization: []
+      summary: Get application tenent by id
       tags:
       - tenent
   /applications/{applicationId}/users:

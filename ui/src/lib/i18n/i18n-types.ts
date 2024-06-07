@@ -570,6 +570,22 @@ type RootTranslation = {
 		 * P​a​s​s​w​o​r​d​ ​R​e​s​e​t​ ​T​o​k​e​n​ ​E​x​p​i​r​e​s​ ​i​n​ ​S​e​c​o​n​d​s
 		 */
 		passwordResetExpiresInSecondsPlaceholder: string
+		/**
+		 * A​l​g​o​r​i​t​h​m
+		 */
+		algorithm: string
+		/**
+		 * K​e​y
+		 */
+		key: string
+		/**
+		 * P​u​b​l​i​c​ ​K​e​y
+		 */
+		publicKey: string
+		/**
+		 * P​r​i​v​a​t​e​ ​K​e​y
+		 */
+		privateKey: string
 		newTenent: {
 			/**
 			 * N​e​w​ ​T​e​n​e​n​t
@@ -586,9 +602,21 @@ type RootTranslation = {
 			 */
 			title: string
 			/**
+			 * R​e​g​e​n​e​r​a​t​e​ ​K​e​y
+			 */
+			regenerateKey: string
+			/**
+			 * R​e​s​e​t
+			 */
+			reset: string
+			/**
 			 * E​d​i​t
 			 */
 			button: string
+			/**
+			 * S​a​v​e
+			 */
+			confirm: string
 		}
 		'delete': {
 			/**
@@ -654,6 +682,56 @@ type RootTranslation = {
 		 * C​r​e​a​t​e​d​ ​a​t
 		 */
 		createdAt: string
+	}
+	algorithms: {
+		/**
+		 * H​M​A​C​ ​u​s​i​n​g​ ​S​H​A​-​2​5​6
+		 */
+		HS256: string
+		/**
+		 * H​M​A​C​ ​u​s​i​n​g​ ​S​H​A​-​3​8​4
+		 */
+		HS384: string
+		/**
+		 * H​M​A​C​ ​u​s​i​n​g​ ​S​H​A​-​5​1​2
+		 */
+		HS512: string
+		/**
+		 * R​S​A​S​S​A​-​P​K​C​S​1​-​v​1​_​5​ ​u​s​i​n​g​ ​S​H​A​-​2​5​6
+		 */
+		RS256: string
+		/**
+		 * R​S​A​S​S​A​-​P​K​C​S​1​-​v​1​_​5​ ​u​s​i​n​g​ ​S​H​A​-​3​8​4
+		 */
+		RS384: string
+		/**
+		 * R​S​A​S​S​A​-​P​K​C​S​1​-​v​1​_​5​ ​u​s​i​n​g​ ​S​H​A​-​5​1​2
+		 */
+		RS512: string
+		/**
+		 * E​C​D​S​A​ ​u​s​i​n​g​ ​P​-​2​5​6​ ​a​n​d​ ​S​H​A​-​2​5​6
+		 */
+		ES256: string
+		/**
+		 * E​C​D​S​A​ ​u​s​i​n​g​ ​P​-​3​8​4​ ​a​n​d​ ​S​H​A​-​3​8​4
+		 */
+		ES384: string
+		/**
+		 * E​C​D​S​A​ ​u​s​i​n​g​ ​P​-​5​2​1​ ​a​n​d​ ​S​H​A​-​5​1​2
+		 */
+		ES512: string
+		/**
+		 * R​S​A​S​S​A​-​P​S​S​ ​u​s​i​n​g​ ​S​H​A​-​2​5​6​ ​a​n​d​ ​M​G​F​1​ ​w​i​t​h​ ​S​H​A​-​2​5​6
+		 */
+		PS256: string
+		/**
+		 * R​S​A​S​S​A​-​P​S​S​ ​u​s​i​n​g​ ​S​H​A​-​3​8​4​ ​a​n​d​ ​M​G​F​1​ ​w​i​t​h​ ​S​H​A​-​3​8​4
+		 */
+		PS384: string
+		/**
+		 * R​S​A​S​S​A​-​P​S​S​ ​u​s​i​n​g​ ​S​H​A​-​5​1​2​ ​a​n​d​ ​M​G​F​1​ ​w​i​t​h​ ​S​H​A​-​5​1​2
+		 */
+		PS512: string
 	}
 }
 
@@ -1207,6 +1285,22 @@ export type TranslationFunctions = {
 		 * Password Reset Token Expires in Seconds
 		 */
 		passwordResetExpiresInSecondsPlaceholder: () => LocalizedString
+		/**
+		 * Algorithm
+		 */
+		algorithm: () => LocalizedString
+		/**
+		 * Key
+		 */
+		key: () => LocalizedString
+		/**
+		 * Public Key
+		 */
+		publicKey: () => LocalizedString
+		/**
+		 * Private Key
+		 */
+		privateKey: () => LocalizedString
 		newTenent: {
 			/**
 			 * New Tenent
@@ -1223,9 +1317,21 @@ export type TranslationFunctions = {
 			 */
 			title: () => LocalizedString
 			/**
+			 * Regenerate Key
+			 */
+			regenerateKey: () => LocalizedString
+			/**
+			 * Reset
+			 */
+			reset: () => LocalizedString
+			/**
 			 * Edit
 			 */
 			button: () => LocalizedString
+			/**
+			 * Save
+			 */
+			confirm: () => LocalizedString
 		}
 		'delete': {
 			/**
@@ -1289,6 +1395,56 @@ export type TranslationFunctions = {
 		 * Created at
 		 */
 		createdAt: () => LocalizedString
+	}
+	algorithms: {
+		/**
+		 * HMAC using SHA-256
+		 */
+		HS256: () => LocalizedString
+		/**
+		 * HMAC using SHA-384
+		 */
+		HS384: () => LocalizedString
+		/**
+		 * HMAC using SHA-512
+		 */
+		HS512: () => LocalizedString
+		/**
+		 * RSASSA-PKCS1-v1_5 using SHA-256
+		 */
+		RS256: () => LocalizedString
+		/**
+		 * RSASSA-PKCS1-v1_5 using SHA-384
+		 */
+		RS384: () => LocalizedString
+		/**
+		 * RSASSA-PKCS1-v1_5 using SHA-512
+		 */
+		RS512: () => LocalizedString
+		/**
+		 * ECDSA using P-256 and SHA-256
+		 */
+		ES256: () => LocalizedString
+		/**
+		 * ECDSA using P-384 and SHA-384
+		 */
+		ES384: () => LocalizedString
+		/**
+		 * ECDSA using P-521 and SHA-512
+		 */
+		ES512: () => LocalizedString
+		/**
+		 * RSASSA-PSS using SHA-256 and MGF1 with SHA-256
+		 */
+		PS256: () => LocalizedString
+		/**
+		 * RSASSA-PSS using SHA-384 and MGF1 with SHA-384
+		 */
+		PS384: () => LocalizedString
+		/**
+		 * RSASSA-PSS using SHA-512 and MGF1 with SHA-512
+		 */
+		PS512: () => LocalizedString
 	}
 }
 

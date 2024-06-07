@@ -8,9 +8,12 @@
 	import { onMount } from 'svelte';
 	import Dropdown from '$lib/components/Dropdown.svelte';
 	import Modal from '../Modal.svelte';
-	import { invalidateAll } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { handleError } from '$lib/errors';
-	import TenentEditor from './TenentEditor.svelte';
+	import TenentEditor, { type TenentEditorForm } from './TenentEditor.svelte';
+	import TenentKey, { type TenentKeyForm } from './TenentKey.svelte';
+	import { PUBLIC_TENENT_ID } from '$env/static/public';
+	import { signOut } from '$lib/stores/user';
 
 	export let application: Application;
 	export let tenents: Tenent[] = [];
@@ -26,23 +29,36 @@
 		editOpen = true;
 		editTenent = tenent;
 	}
-
-	function onTenentUpdate(tenent: Tenent) {
-		const index = tenents.findIndex((u) => u.id === tenent.id);
-		if (index !== -1) {
-			const newTenents = tenents.slice();
-			newTenents[index] = tenent;
-			tenents = newTenents;
-			editTenent = tenent;
+	async function onTenentUpdate(form: TenentEditorForm) {
+		if (editTenent) {
+			const tenent = await tenentApi.updateTenent(editTenent.applicationId, editTenent.id, form);
+			tenentUpdate(tenent);
+			await invalidateAll();
 		}
 	}
-	function onTenentDelete(tenent: Tenent) {
-		const index = tenents.findIndex((u) => u.id === tenent.id);
-		if (index !== -1) {
-			const newTenents = tenents.slice();
-			newTenents.splice(index, 1);
-			tenents = newTenents;
-			editTenent = tenent;
+	function createGetTenentPrivateKey(tenent: Tenent) {
+		return async () => {
+			try {
+				return await tenentApi.tenentPrivateKey(tenent.applicationId, tenent.id);
+			} catch (error) {
+				await handleError(error);
+			}
+		};
+	}
+	async function onTenentKeyUpdate(data: TenentKeyForm) {
+		if (editTenent) {
+			try {
+				const tenent = await tenentApi.updateTenent(editTenent.applicationId, editTenent.id, data);
+				if (tenent.clientId === PUBLIC_TENENT_ID) {
+					signOut();
+					await goto('/signin');
+				} else {
+					tenentUpdate(tenent);
+					await invalidateAll();
+				}
+			} catch (error) {
+				await handleError(error);
+			}
 		}
 	}
 
@@ -58,7 +74,7 @@
 			try {
 				deleting = true;
 				await tenentApi.deleteTenent(application.id, deleteTenent.id);
-				onTenentDelete(deleteTenent);
+				tenentDelete(deleteTenent);
 				await invalidateAll();
 				deleteOpen = false;
 				deleteTenent = undefined;
@@ -67,6 +83,23 @@
 			} finally {
 				deleting = false;
 			}
+		}
+	}
+
+	function tenentUpdate(tenent: Tenent) {
+		const index = tenents.findIndex((u) => u.id === tenent.id);
+		if (index !== -1) {
+			const newTenents = tenents.slice();
+			newTenents[index] = tenent;
+			tenents = newTenents;
+		}
+	}
+	function tenentDelete(tenent: Tenent) {
+		const index = tenents.findIndex((u) => u.id === tenent.id);
+		if (index !== -1) {
+			const newTenents = tenents.slice();
+			newTenents.splice(index, 1);
+			tenents = newTenents;
 		}
 	}
 </script>
@@ -115,7 +148,23 @@
 <Modal bind:open={editOpen}>
 	<h4 slot="title">{editTenent?.description}</h4>
 	{#if editTenent}
-		<TenentEditor bind:tenent={editTenent} onUpdate={onTenentUpdate} />
+		<TenentEditor
+			description={editTenent.description}
+			uri={editTenent.uri}
+			authorizationWebsite={editTenent.authorizationWebsite}
+			registrationWebsite={editTenent.registrationWebsite}
+			expiresInSeconds={editTenent.expiresInSeconds}
+			refreshExpiresInSeconds={editTenent.refreshExpiresInSeconds}
+			passwordResetExpiresInSeconds={editTenent.passwordResetExpiresInSeconds}
+			onUpdate={onTenentUpdate}
+		/>
+		<h4>{$LL.tenents.key()}</h4>
+		<TenentKey
+			algorithm={editTenent.algorithm}
+			publicKey={editTenent.publicKey}
+			getPrivateKey={createGetTenentPrivateKey(editTenent)}
+			onUpdate={onTenentKeyUpdate}
+		/>
 	{/if}
 </Modal>
 

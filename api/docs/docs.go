@@ -538,6 +538,74 @@ const docTemplate = `{
                 }
             }
         },
+        "/applications/{applicationId}/tenents/{id}/private-key": {
+            "get": {
+                "security": [
+                    {
+                        "Authorization": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tenent"
+                ],
+                "summary": "Get application tenent by id",
+                "operationId": "tenent-private-key",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "application id",
+                        "name": "applicationId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "application tenent id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/Errors"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/Errors"
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "schema": {
+                            "$ref": "#/definitions/Errors"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/Errors"
+                        }
+                    }
+                }
+            }
+        },
         "/applications/{applicationId}/users": {
             "get": {
                 "security": [
@@ -3435,10 +3503,6 @@ const docTemplate = `{
         },
         "UpdateTenent": {
             "type": "object",
-            "required": [
-                "description",
-                "uri"
-            ],
             "properties": {
                 "algorithm": {
                     "type": "string"

@@ -3,10 +3,10 @@
 <script lang="ts" context="module">
 	import { create, test, enforce, only } from 'vest';
 
-	type UpdateTenentForm = UpdateTenent;
+	export type TenentEditorForm = UpdateTenent;
 
 	const createSuite = (LL: TranslationFunctions) =>
-		create((data: Partial<UpdateTenentForm> = {}, fields: string[]) => {
+		create((data: Partial<TenentEditorForm> = {}, fields: string[]) => {
 			if (!fields.length) {
 				return;
 			}
@@ -43,7 +43,7 @@
 </script>
 
 <script lang="ts">
-	import type { Tenent, UpdateTenent } from '$lib/openapi/auth';
+	import type { UpdateTenent } from '$lib/openapi/auth';
 	import type { TranslationFunctions } from '$lib/i18n/i18n-types';
 	import LL from '$lib/i18n/i18n-svelte';
 	import { debounce } from '@aicacia/debounce';
@@ -52,18 +52,36 @@
 	import { handleError } from '$lib/errors';
 	import Spinner from '../Spinner.svelte';
 	import deepEqual from 'deep-equal';
-	import { tenentApi } from '$lib/openapi';
 
-	export let tenent: Tenent;
-	export let onUpdate: (tenent: Tenent) => void;
+	export let onUpdate: (data: TenentEditorForm) => void;
 
-	$: tenentUpdates = {
-		...tenent
+	export let description = '';
+	export let uri = '';
+	export let authorizationWebsite = '';
+	export let registrationWebsite: string | undefined = undefined;
+	export let expiresInSeconds: number | undefined = undefined;
+	export let refreshExpiresInSeconds: number | undefined = undefined;
+	export let passwordResetExpiresInSeconds: number | undefined = undefined;
+
+	const original = {
+		description,
+		uri,
+		authorizationWebsite,
+		expiresInSeconds,
+		refreshExpiresInSeconds,
+		passwordResetExpiresInSeconds
 	};
-
+	$: updates = {
+		description,
+		uri,
+		authorizationWebsite,
+		expiresInSeconds,
+		refreshExpiresInSeconds,
+		passwordResetExpiresInSeconds
+	};
 	$: suite = createSuite($LL);
 	$: result = suite.get();
-	$: hasUpdates = !deepEqual(tenentUpdates, tenent);
+	$: hasUpdates = !deepEqual(updates, original);
 	$: disabled = loading;
 	$: cn = classNames(result, {
 		untested: 'untested',
@@ -75,14 +93,14 @@
 
 	const fields = new Set<string>();
 	const validate = debounce(() => {
-		suite(tenentUpdates, Array.from(fields)).done((r) => {
+		suite(updates, Array.from(fields)).done((r) => {
 			result = r;
 		});
 		fields.clear();
-		hasUpdates = !deepEqual(tenentUpdates, tenent);
+		hasUpdates = !deepEqual(updates, original);
 	}, 300);
 	function validateAll() {
-		for (const field of Object.keys(tenentUpdates)) {
+		for (const field of Object.keys(updates)) {
 			fields.add(field);
 		}
 		validate();
@@ -99,8 +117,7 @@
 			loading = true;
 			validateAll();
 			if (result.isValid()) {
-				tenent = await tenentApi.updateTenent(tenent.applicationId, tenent.id, tenentUpdates);
-				await onUpdate(tenent);
+				await onUpdate(updates);
 				suite.reset();
 				result = suite.get();
 			}
@@ -120,7 +137,7 @@
 			type="text"
 			name="description"
 			placeholder={$LL.tenents.descriptionPlaceholder()}
-			bind:value={tenentUpdates.description}
+			bind:value={description}
 			on:input={onChange}
 		/>
 		<InputResults name="description" {result} />
@@ -132,7 +149,7 @@
 			type="text"
 			name="uri"
 			placeholder={$LL.tenents.uriPlaceholder()}
-			bind:value={tenentUpdates.uri}
+			bind:value={uri}
 			on:input={onChange}
 		/>
 		<InputResults name="uri" {result} />
@@ -144,7 +161,7 @@
 			type="text"
 			name="authorizationWebsite"
 			placeholder={$LL.tenents.authorizationWebsitePlaceholder()}
-			bind:value={tenentUpdates.authorizationWebsite}
+			bind:value={authorizationWebsite}
 			on:input={onChange}
 		/>
 		<InputResults name="authorizationWebsite" {result} />
@@ -156,7 +173,7 @@
 			type="text"
 			name="registrationWebsite"
 			placeholder={$LL.tenents.registrationWebsitePlaceholder()}
-			bind:value={tenentUpdates.registrationWebsite}
+			bind:value={registrationWebsite}
 			on:input={onChange}
 		/>
 		<InputResults name="registrationWebsite" {result} />
@@ -169,7 +186,7 @@
 			min={0}
 			name="expiresInSeconds"
 			placeholder={$LL.tenents.expiresInSecondsPlaceholder()}
-			bind:value={tenentUpdates.expiresInSeconds}
+			bind:value={expiresInSeconds}
 			on:input={onChange}
 		/>
 		<InputResults name="expiresInSeconds" {result} />
@@ -182,7 +199,7 @@
 			min={0}
 			name="refreshExpiresInSeconds"
 			placeholder={$LL.tenents.refreshExpiresInSecondsPlaceholder()}
-			bind:value={tenentUpdates.refreshExpiresInSeconds}
+			bind:value={refreshExpiresInSeconds}
 			on:input={onChange}
 		/>
 		<InputResults name="refreshExpiresInSeconds" {result} />
@@ -195,7 +212,7 @@
 			min={0}
 			name="passwordResetExpiresInSeconds"
 			placeholder={$LL.tenents.passwordResetExpiresInSecondsPlaceholder()}
-			bind:value={tenentUpdates.passwordResetExpiresInSeconds}
+			bind:value={passwordResetExpiresInSeconds}
 			on:input={onChange}
 		/>
 		<InputResults name="passwordResetExpiresInSeconds" {result} />
@@ -206,7 +223,7 @@
 				{#if loading}<div class="mr-2 flex flex-row justify-center">
 						<div class="inline-block h-6 w-6"><Spinner /></div>
 					</div>{/if}
-				{$LL.tenents.edit.button()}
+				{$LL.tenents.edit.confirm()}
 			</button>
 		{/if}
 	</div>

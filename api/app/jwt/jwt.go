@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/aicacia/auth/api/app/repository"
-	"github.com/dgrijalva/jwt-go/v4"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )
 
@@ -174,11 +174,18 @@ func ParseScopes(scope string) []string {
 
 func ParseClaimsFromToken[C any](tokenString string, tenent *repository.TenentRowST) (*C, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("unexpected signing method %v", token.Header["alg"])
+		alg := token.Method.Alg()
+		if alg != tenent.Algorithm {
+			return nil, fmt.Errorf("invalid algorithm")
 		}
-		return []byte(tenent.PrivateKey), nil
-	}, jwt.WithoutAudienceValidation())
+		if alg == "HS256" || alg == "HS384" || alg == "HS512" {
+			return []byte(tenent.PrivateKey), nil
+		} else if tenent.PublicKey != nil {
+			return []byte(*tenent.PublicKey), nil
+		} else {
+			return nil, fmt.Errorf("invalid algorithm")
+		}
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -218,7 +225,7 @@ func CreateToken[C ToMapClaims](claims C, tenent *repository.TenentRowST) (strin
 	if err != nil {
 		return "", err
 	}
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, mapClaims)
+	token := jwt.NewWithClaims(jwt.GetSigningMethod(tenent.Algorithm), mapClaims)
 	tokenString, err := token.SignedString([]byte(tenent.PrivateKey))
 	if err != nil {
 		return "", err

@@ -114,8 +114,8 @@ type UpdateTenentST struct {
 	RegistrationWebsite           *string    `json:"registration_website"`
 	EmailEndpoint                 *string    `json:"email_endpoint"`
 	PhoneNumberEndpoint           *string    `json:"phone_number_endpoint"`
-	Description                   *string    `json:"description" validate:"required"`
-	URI                           *string    `json:"uri" validate:"required"`
+	Description                   *string    `json:"description"`
+	URI                           *string    `json:"uri"`
 	ClientId                      *uuid.UUID `json:"client_id"`
 	Algorithm                     *string    `json:"algorithm"`
 	PublicKey                     *string    `json:"public_key"`

@@ -5,6 +5,7 @@
 	import ArrowLeft from 'lucide-svelte/icons/arrow-left';
 	import LL from '$lib/i18n/i18n-svelte';
 	import { base } from '$app/paths';
+	import RBAC from '$lib/components/RBAC/RBAC.svelte';
 
 	export let data: PageData;
 
@@ -33,5 +34,7 @@
 <div class="flex flex-grow flex-col px-4 pb-16">
 	<div
 		class="mx-auto mt-4 flex w-full max-w-6xl flex-grow flex-col bg-white p-4 shadow dark:bg-gray-800"
-	></div>
+	>
+		<RBAC {application} />
+	</div>
 </div>

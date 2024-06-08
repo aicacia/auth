@@ -178,13 +178,11 @@ func ParseClaimsFromToken[C any](tokenString string, tenent *repository.TenentRo
 		if alg != tenent.Algorithm {
 			return nil, fmt.Errorf("invalid algorithm")
 		}
-		if alg == "HS256" || alg == "HS384" || alg == "HS512" {
-			return []byte(tenent.PrivateKey), nil
-		} else if tenent.PublicKey != nil {
-			return []byte(*tenent.PublicKey), nil
-		} else {
-			return nil, fmt.Errorf("invalid algorithm")
+		publicKey := ""
+		if tenent.PublicKey != nil {
+			publicKey = *tenent.PublicKey
 		}
+		return ParsePublicKey(tenent.Algorithm, publicKey, tenent.PrivateKey)
 	})
 	if err != nil {
 		return nil, err
@@ -226,9 +224,79 @@ func CreateToken[C ToMapClaims](claims C, tenent *repository.TenentRowST) (strin
 		return "", err
 	}
 	token := jwt.NewWithClaims(jwt.GetSigningMethod(tenent.Algorithm), mapClaims)
-	tokenString, err := token.SignedString([]byte(tenent.PrivateKey))
+	pk, err := ParsePrivateKey(tenent.Algorithm, tenent.PrivateKey)
+	if err != nil {
+		return "", err
+	}
+	tokenString, err := token.SignedString(pk)
 	if err != nil {
 		return "", err
 	}
 	return tokenString, nil
+}
+
+func ParsePublicKey(algorithm string, publicKey string, privateKey string) (interface{}, error) {
+	switch algorithm {
+	case "HS256":
+		fallthrough
+	case "HS384":
+		fallthrough
+	case "HS512":
+		return []byte(privateKey), nil
+	case "RS256":
+		fallthrough
+	case "RS383":
+		fallthrough
+	case "RS512":
+		return jwt.ParseRSAPublicKeyFromPEM([]byte(publicKey))
+	case "ES256":
+		fallthrough
+	case "ES384":
+		fallthrough
+	case "ES512":
+		return jwt.ParseECPublicKeyFromPEM([]byte(publicKey))
+	case "PS256":
+		fallthrough
+	case "PS384":
+		fallthrough
+	case "PS512":
+		return jwt.ParseEdPublicKeyFromPEM([]byte(publicKey))
+	case "EdDSA":
+		return jwt.ParseECPublicKeyFromPEM([]byte(publicKey))
+	default:
+		return nil, fmt.Errorf("invalid algorithm")
+	}
+}
+
+func ParsePrivateKey(algorithm string, privateKey string) (interface{}, error) {
+	switch algorithm {
+	case "HS256":
+		fallthrough
+	case "HS384":
+		fallthrough
+	case "HS512":
+		return []byte(privateKey), nil
+	case "RS256":
+		fallthrough
+	case "RS383":
+		fallthrough
+	case "RS512":
+		return jwt.ParseRSAPrivateKeyFromPEM([]byte(privateKey))
+	case "ES256":
+		fallthrough
+	case "ES384":
+		fallthrough
+	case "ES512":
+		return jwt.ParseECPrivateKeyFromPEM([]byte(privateKey))
+	case "PS256":
+		fallthrough
+	case "PS384":
+		fallthrough
+	case "PS512":
+		return jwt.ParseEdPrivateKeyFromPEM([]byte(privateKey))
+	case "EdDSA":
+		return jwt.ParseECPrivateKeyFromPEM([]byte(privateKey))
+	default:
+		return nil, fmt.Errorf("invalid algorithm")
+	}
 }

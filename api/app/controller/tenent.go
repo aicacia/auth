@@ -4,8 +4,10 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/aicacia/auth/api/app/access"
+	"github.com/aicacia/auth/api/app/jwt"
 	"github.com/aicacia/auth/api/app/model"
 	"github.com/aicacia/auth/api/app/repository"
 	"github.com/aicacia/auth/api/app/util"
@@ -211,6 +213,40 @@ func PatchUpdateTenent(c *fiber.Ctx) error {
 	if err := c.BodyParser(&updateTenent); err != nil {
 		log.Printf("failed to parse body: %v\n", err)
 		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
+	}
+	currentTenent, err := repository.GetTenentById(int32(id))
+	if err != nil {
+		log.Printf("failed to find tenent: %v\n", err)
+		return model.NewError(http.StatusNotFound).AddError("id", "invalid")
+	}
+	if currentTenent == nil {
+		return model.NewError(http.StatusNotFound).AddError("id", "invalid")
+	}
+	errors := model.NewError(http.StatusBadRequest)
+	alg := currentTenent.Algorithm
+	if updateTenent.Algorithm != nil {
+		alg = *updateTenent.Algorithm
+	}
+	if updateTenent.PrivateKey != nil {
+		privateKey := strings.TrimSpace(*updateTenent.PrivateKey)
+		updateTenent.PrivateKey = &privateKey
+		_, err := jwt.ParsePrivateKey(alg, *updateTenent.PrivateKey)
+		if err != nil {
+			log.Printf("failed to parse private key: %v\n", err)
+			errors.AddError("privateKey", "invalid")
+		}
+	}
+	if updateTenent.PublicKey != nil {
+		publicKey := strings.TrimSpace(*updateTenent.PublicKey)
+		updateTenent.PublicKey = &publicKey
+		_, err := jwt.ParsePublicKey(alg, *updateTenent.PublicKey, *updateTenent.PrivateKey)
+		if err != nil {
+			log.Printf("failed to parse public key: %v\n", err)
+			errors.AddError("publicKey", "invalid")
+		}
+	}
+	if errors.HasErrors() {
+		return errors
 	}
 	tenent, err := repository.UpdateTenent(int32(id), updateTenent.UpdateTenentST)
 	if err != nil {

@@ -3,7 +3,10 @@
 <script lang="ts" context="module">
 	import { create, test, enforce, only } from 'vest';
 
-	export type TenentEditorForm = UpdateTenent;
+	export type TenentEditorForm = UpdateTenent & {
+    description: string;
+    uri: string;
+  };
 
 	const createSuite = (LL: TranslationFunctions) =>
 		create((data: Partial<TenentEditorForm> = {}, fields: string[]) => {

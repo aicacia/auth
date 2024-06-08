@@ -57,6 +57,14 @@ type RootTranslation = {
 			 * M​u​l​t​i​-​f​a​c​t​o​r​ ​A​u​t​h​o​r​i​z​a​t​i​o​n
 			 */
 			mfa: string
+			/**
+			 * P​u​b​l​i​c​ ​K​e​y
+			 */
+			publicKey: string
+			/**
+			 * P​r​i​v​a​t​e​ ​K​e​y
+			 */
+			privateKey: string
 		}
 		message: {
 			/**
@@ -504,6 +512,18 @@ type RootTranslation = {
 		 * R​B​A​C
 		 */
 		title: string
+		resources: {
+			/**
+			 * R​e​s​o​u​r​c​e​s
+			 */
+			title: string
+		}
+		roles: {
+			/**
+			 * R​o​l​e​s
+			 */
+			title: string
+		}
 	}
 	tenents: {
 		/**
@@ -708,30 +728,6 @@ type RootTranslation = {
 		 * R​S​A​S​S​A​-​P​K​C​S​1​-​v​1​_​5​ ​u​s​i​n​g​ ​S​H​A​-​5​1​2
 		 */
 		RS512: string
-		/**
-		 * E​C​D​S​A​ ​u​s​i​n​g​ ​P​-​2​5​6​ ​a​n​d​ ​S​H​A​-​2​5​6
-		 */
-		ES256: string
-		/**
-		 * E​C​D​S​A​ ​u​s​i​n​g​ ​P​-​3​8​4​ ​a​n​d​ ​S​H​A​-​3​8​4
-		 */
-		ES384: string
-		/**
-		 * E​C​D​S​A​ ​u​s​i​n​g​ ​P​-​5​2​1​ ​a​n​d​ ​S​H​A​-​5​1​2
-		 */
-		ES512: string
-		/**
-		 * R​S​A​S​S​A​-​P​S​S​ ​u​s​i​n​g​ ​S​H​A​-​2​5​6​ ​a​n​d​ ​M​G​F​1​ ​w​i​t​h​ ​S​H​A​-​2​5​6
-		 */
-		PS256: string
-		/**
-		 * R​S​A​S​S​A​-​P​S​S​ ​u​s​i​n​g​ ​S​H​A​-​3​8​4​ ​a​n​d​ ​M​G​F​1​ ​w​i​t​h​ ​S​H​A​-​3​8​4
-		 */
-		PS384: string
-		/**
-		 * R​S​A​S​S​A​-​P​S​S​ ​u​s​i​n​g​ ​S​H​A​-​5​1​2​ ​a​n​d​ ​M​G​F​1​ ​w​i​t​h​ ​S​H​A​-​5​1​2
-		 */
-		PS512: string
 	}
 }
 
@@ -778,6 +774,14 @@ export type TranslationFunctions = {
 			 * Multi-factor Authorization
 			 */
 			mfa: () => LocalizedString
+			/**
+			 * Public Key
+			 */
+			publicKey: () => LocalizedString
+			/**
+			 * Private Key
+			 */
+			privateKey: () => LocalizedString
 		}
 		message: {
 			/**
@@ -1219,6 +1223,18 @@ export type TranslationFunctions = {
 		 * RBAC
 		 */
 		title: () => LocalizedString
+		resources: {
+			/**
+			 * Resources
+			 */
+			title: () => LocalizedString
+		}
+		roles: {
+			/**
+			 * Roles
+			 */
+			title: () => LocalizedString
+		}
 	}
 	tenents: {
 		/**
@@ -1421,30 +1437,6 @@ export type TranslationFunctions = {
 		 * RSASSA-PKCS1-v1_5 using SHA-512
 		 */
 		RS512: () => LocalizedString
-		/**
-		 * ECDSA using P-256 and SHA-256
-		 */
-		ES256: () => LocalizedString
-		/**
-		 * ECDSA using P-384 and SHA-384
-		 */
-		ES384: () => LocalizedString
-		/**
-		 * ECDSA using P-521 and SHA-512
-		 */
-		ES512: () => LocalizedString
-		/**
-		 * RSASSA-PSS using SHA-256 and MGF1 with SHA-256
-		 */
-		PS256: () => LocalizedString
-		/**
-		 * RSASSA-PSS using SHA-384 and MGF1 with SHA-384
-		 */
-		PS384: () => LocalizedString
-		/**
-		 * RSASSA-PSS using SHA-512 and MGF1 with SHA-512
-		 */
-		PS512: () => LocalizedString
 	}
 }
 

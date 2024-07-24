@@ -23,7 +23,7 @@
 			creating = true;
 			const newTOTP = await currentUserApi.createTotp(tenent.id);
 			totp = newTOTP;
-			secretUrl = `otpauth://totp/${encodeURIComponent('Aicacia Auth')}:${user.username}@${location.host}?secret=${newTOTP.secret}&issuer=${encodeURIComponent('Aicacia Auth')}`;
+			secretUrl = `otpauth://totp/${encodeURIComponent(tenent.description)}:${encodeURIComponent(user.username)}?secret=${encodeURIComponent(newTOTP.secret)}&issuer=${encodeURIComponent(tenent.description)}&algorithm=SHA1&digits=6&period=30`;
 			secretDataUrl = await QRCode.toDataURL(secretUrl);
 			onUpdate(newTOTP);
 		} finally {
@@ -70,12 +70,12 @@
 	{#if totp}
 		<div>
 			<label for="{totp.id}-enabled"
-				>{#if totp?.enabled}{$LL.profile.mfa.enabled()}{:else}{$LL.profile.mfa.disabled()}{/if}</label
+				>{#if totp.enabled}{$LL.profile.mfa.enabled()}{:else}{$LL.profile.mfa.disabled()}{/if}</label
 			>
 			<input
 				name="{totp.id}-enabled"
 				type="checkbox"
-				checked={totp?.enabled}
+				checked={totp.enabled}
 				disabled={toggingEnabled}
 				on:change={onToggleEnabled}
 			/>

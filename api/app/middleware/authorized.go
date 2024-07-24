@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"log"
+	"log/slog"
 	"net/http"
 	"slices"
 
@@ -22,7 +22,7 @@ func AuthorizedMiddleware() fiber.Handler {
 		_, tokenString := GetAuthorizationFromContext(c)
 		unvalidatedClaims, err := jwt.ParseClaimsFromTokenNoValidation(tokenString)
 		if err != nil {
-			log.Printf("failed to get authorization header: %v", err)
+			slog.Error("failed to get authorization header", "error", err)
 			return model.NewError(http.StatusUnauthorized).AddError("authorization", "invalid")
 		}
 		if unvalidatedClaims.Type != jwt.BearerTokenType {
@@ -30,17 +30,17 @@ func AuthorizedMiddleware() fiber.Handler {
 		}
 		tenent, err := repository.GetTenentByClientId(unvalidatedClaims.ClientId)
 		if err != nil {
-			log.Printf("failed to fetch application tenent: %v", err)
+			slog.Error("failed to fetch application tenent", "error", err)
 			return model.NewError(http.StatusUnauthorized).AddError("authorization", "invalid")
 		}
 		claims, err := jwt.ParseClaimsFromToken[jwt.Claims](tokenString, tenent)
 		if err != nil {
-			log.Printf("failed to parse claims from token: %v", err)
+			slog.Error("failed to parse claims from token", "error", err)
 			return model.NewError(http.StatusUnauthorized).AddError("authorization", "invalid")
 		}
 		application, err := repository.GetApplicationById(tenent.ApplicationId)
 		if err != nil {
-			log.Printf("failed to fetch application: %v", err)
+			slog.Error("failed to fetch application", "error", err)
 			return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 		}
 		c.Locals(applicationLocalKey, application)
@@ -51,12 +51,12 @@ func AuthorizedMiddleware() fiber.Handler {
 		case jwt.UserSubject:
 			user, err := repository.GetUserById(application.Id, claims.Subject)
 			if err != nil {
-				log.Printf("failed to fetch user: %v", err)
+				slog.Error("failed to fetch user", "error", err)
 				return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 			}
 			permissions, err := repository.GetUserPermissions(user.Id)
 			if err != nil {
-				log.Printf("failed to fetch user permissions: %v", err)
+				slog.Error("failed to fetch user permissions", "error", err)
 				return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 			}
 			c.Locals(permissionsLocalKey, permissions)
@@ -65,12 +65,12 @@ func AuthorizedMiddleware() fiber.Handler {
 		case jwt.ServiceAccountSubject:
 			serviceAccount, err := repository.GetServiceAccountById(claims.Subject)
 			if err != nil {
-				log.Printf("failed to fetch service account: %v", err)
+				slog.Error("failed to fetch service account", "error", err)
 				return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 			}
 			permissions, err := repository.GetServiceAccountPermissions(serviceAccount.Id)
 			if err != nil {
-				log.Printf("failed to fetch user permissions: %v", err)
+				slog.Error("failed to fetch user permissions", "error", err)
 				return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 			}
 			c.Locals(permissionsLocalKey, permissions)

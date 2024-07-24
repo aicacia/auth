@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"log"
+	"log/slog"
 	"net/http"
 	"strconv"
 	"strings"
@@ -40,7 +40,7 @@ func PatchCurrentUserPhoneNumberSendConfirmation(c *fiber.Ctx) error {
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	// TODO: send to phone_number
-	log.Printf("userId=%d, emailId=%d, token=%s\n", user.Id, id, confirmationToken)
+	slog.Info("sending text", "userId", user.Id, "phoneNumberId", id, "token", confirmationToken)
 	_, err = repository.SetPhoneNumberConfirmation(user.Id, int32(id), confirmationToken)
 	if err != nil {
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
@@ -74,7 +74,7 @@ func PatchCurrentUserPhoneNumberConfirm(c *fiber.Ctx) error {
 	}
 	var confirmPhoneNumber model.ConfirmPhoneNumberST
 	if err := c.BodyParser(&confirmPhoneNumber); err != nil {
-		log.Printf("invalid request body: %v\n", err)
+		slog.Error("invalid request body", "error", err)
 		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	phone_number, err := repository.ConfirmPhoneNumber(user.Id, int32(id), strings.ToLower(strings.TrimSpace(confirmPhoneNumber.Token)))
@@ -133,7 +133,7 @@ func PatchCurrentUserPhoneNumberSetPrimary(c *fiber.Ctx) error {
 func PostCurrentUserCreatePhoneNumber(c *fiber.Ctx) error {
 	var createPhoneNumber model.CreatePhoneNumberST
 	if err := c.BodyParser(&createPhoneNumber); err != nil {
-		log.Printf("invalid request body: %v\n", err)
+		slog.Error("invalid request body", "error", err)
 		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	phoneNumber := util.NumericRegex.ReplaceAllString(createPhoneNumber.PhoneNumber, "")
@@ -150,11 +150,11 @@ func PostCurrentUserCreatePhoneNumber(c *fiber.Ctx) error {
 	}
 	phoneNumberRow, err := repository.CreatePhoneNumber(user.ApplicationId, user.Id, phoneNumber, confirmationToken)
 	if err != nil {
-		log.Printf("failed to create phone_number: %v\n", err)
+		slog.Error("failed to create phone_number", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	// TODO: send to phone number
-	log.Printf("userId=%d, emailId=%d, token=%s\n", user.Id, phoneNumberRow.Id, strings.ToUpper(*phoneNumberRow.ConfirmationToken))
+	slog.Info("send text", "userId", user.Id, "phoneNumberId", phoneNumberRow.Id, "token", strings.ToUpper(*phoneNumberRow.ConfirmationToken))
 	c.Status(http.StatusCreated)
 	return c.JSON(model.PhoneNumberFromRow(phoneNumberRow))
 }
@@ -183,7 +183,7 @@ func DeleteCurrentUserPhoneNumber(c *fiber.Ctx) error {
 	}
 	deleted, err := repository.DeletePhoneNumber(user.Id, int32(id))
 	if err != nil {
-		log.Printf("failed to delete phone_number: %v\n", err)
+		slog.Error("failed to delete phone_number", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	if !deleted {

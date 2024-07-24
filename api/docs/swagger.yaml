@@ -2523,8 +2523,16 @@ securityDefinitions:
     in: header
     name: Authorization
     type: apiKey
+  Locale:
+    in: header
+    name: X-Locale
+    type: apiKey
   TenentId:
     in: header
     name: Tenent-Id
+    type: apiKey
+  Timezone:
+    in: header
+    name: X-Timezone
     type: apiKey
 swagger: "2.0"

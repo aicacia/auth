@@ -3,6 +3,7 @@ package repository
 import (
 	"fmt"
 	"log"
+	"log/slog"
 	"time"
 
 	"github.com/aicacia/auth/api/app/env"
@@ -34,7 +35,7 @@ func CreateListener(channel string) (*pq.Listener, error) {
 
 func listenerEventCallback(event pq.ListenerEventType, err error) {
 	if err != nil {
-		log.Printf("ListenerEvent: %s\n", err)
+		slog.Error("ListenerEvent", "error", err)
 		return
 	}
 	switch event {

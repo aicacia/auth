@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"log"
+	"log/slog"
 	"net/http"
 	"strings"
 	"time"
@@ -32,7 +32,7 @@ import (
 func PostRequestPasswordReset(c *fiber.Ctx) error {
 	var requestPasswordReset model.RequestPasswordResetST
 	if err := c.BodyParser(&requestPasswordReset); err != nil {
-		log.Printf("invalid request body: %v\n", err)
+		slog.Error("invalid request body", "error", err)
 		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	email := strings.TrimSpace(requestPasswordReset.Email)
@@ -43,7 +43,7 @@ func PostRequestPasswordReset(c *fiber.Ctx) error {
 		var err error
 		user, err = repository.GetUserByEmail(application.Id, email)
 		if err != nil {
-			log.Printf("error fetching user by email: %v\n", err)
+			slog.Error("error fetching user by email", "error", err)
 			return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 		}
 	}
@@ -51,7 +51,7 @@ func PostRequestPasswordReset(c *fiber.Ctx) error {
 		var err error
 		user, err = repository.GetUserByPhoneNumber(application.Id, phoneNumber)
 		if err != nil {
-			log.Printf("error fetching user by email: %v\n", err)
+			slog.Error("error fetching user by email", "error", err)
 			return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 		}
 	}
@@ -71,11 +71,11 @@ func PostRequestPasswordReset(c *fiber.Ctx) error {
 	}
 	passwordResetToken, err := jwt.CreateToken(&claims, tenent)
 	if err != nil {
-		log.Printf("failed to create access token: %v\n", err)
+		slog.Error("failed to create access token", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	// TODO: send password reset email/phone number
-	log.Printf("password reset token: %v\n", passwordResetToken)
+	slog.Info("password reset token", "token", passwordResetToken)
 	c.Status(http.StatusNoContent)
 	return c.Send(nil)
 }
@@ -97,7 +97,7 @@ func PostRequestPasswordReset(c *fiber.Ctx) error {
 func PostPasswordReset(c *fiber.Ctx) error {
 	var passwordReset model.PasswordResetST
 	if err := c.BodyParser(&passwordReset); err != nil {
-		log.Printf("invalid request body: %v\n", err)
+		slog.Error("invalid request body", "error", err)
 		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	password := strings.TrimSpace(passwordReset.Password)
@@ -115,17 +115,17 @@ func PostPasswordReset(c *fiber.Ctx) error {
 	tenent := middleware.GetTenent(c)
 	claims, err := jwt.ParseClaimsFromToken[jwt.Claims](passwordReset.Token, tenent)
 	if err != nil {
-		log.Printf("invalid password reset token: %v\n", err)
+		slog.Error("invalid password reset token", "error", err)
 		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	if claims.Type != jwt.PasswordResetTokenType {
-		log.Printf("invalid password reset token: %v\n", err)
+		slog.Error("invalid password reset token", "error", err)
 		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	application := middleware.GetApplication(c)
 	user, err := repository.UpdateUserPassword(application.Id, claims.Subject, passwordReset.Password)
 	if err != nil {
-		log.Printf("error setting user reset password token: %v\n", err)
+		slog.Error("error setting user reset password token", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	return sendToken(c, sendTokenST{

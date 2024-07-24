@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"log"
+	"log/slog"
 	"net/http"
 	"strings"
 
@@ -34,7 +34,7 @@ func PostRegistration(c *fiber.Ctx) error {
 	}
 	var registrationRequest model.RegistrationRequestST
 	if err := c.BodyParser(&registrationRequest); err != nil {
-		log.Printf("failed to parse body: %v\n", err)
+		slog.Error("failed to parse body", "error", err)
 		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	username := strings.TrimSpace(registrationRequest.Username)
@@ -53,12 +53,12 @@ func PostRegistration(c *fiber.Ctx) error {
 	application := middleware.GetApplication(c)
 	createResult, err := repository.CreateUserWithPassword(application.Id, registrationRequest.Username, password)
 	if err != nil {
-		log.Printf("failed to create user: %v\n", err)
+		slog.Error("failed to create user", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	_, err = repository.AddUserToApplication(application.Id, createResult.User.Id)
 	if err != nil {
-		log.Printf("failed to add user to application: %v\n", err)
+		slog.Error("failed to add user to application", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	return sendToken(c, sendTokenST{

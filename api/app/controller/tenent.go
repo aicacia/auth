@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"log"
+	"log/slog"
 	"net/http"
 	"strconv"
 	"strings"
@@ -37,17 +37,17 @@ func GetTenents(c *fiber.Ctx) error {
 	}
 	applicationId, err := strconv.Atoi(c.Params("applicationId"))
 	if err != nil {
-		log.Printf("failed to parse applicationId: %v\n", err)
+		slog.Error("failed to parse applicationId", "error", err)
 		return model.NewError(http.StatusBadRequest).AddError("applicationId", "invalid")
 	}
 	var offsetAndLimit model.OffsetAndLimitQueryST
 	if err := c.QueryParser(&offsetAndLimit); err != nil {
-		log.Printf("failed to parse query: %v\n", err)
+		slog.Error("failed to parse query", "error", err)
 		return model.NewError(http.StatusBadRequest).AddError("query", "invalid")
 	}
 	tenents, err := repository.GetTenents(int32(applicationId), offsetAndLimit.Limit, offsetAndLimit.Offset)
 	if err != nil {
-		log.Printf("failed to get applications: %v\n", err)
+		slog.Error("failed to get applications", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	hasMore := false
@@ -91,7 +91,7 @@ func GetTenentById(c *fiber.Ctx) error {
 	}
 	tenent, err := repository.GetTenentById(int32(id))
 	if err != nil {
-		log.Printf("failed to get tenent: %v\n", err)
+		slog.Error("failed to get tenent", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	if tenent == nil {
@@ -131,7 +131,7 @@ func GetTenentPrivateKeyById(c *fiber.Ctx) error {
 	}
 	tenent, err := repository.GetTenentById(int32(id))
 	if err != nil {
-		log.Printf("failed to get tenent: %v\n", err)
+		slog.Error("failed to get tenent", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	if tenent == nil {
@@ -167,12 +167,12 @@ func PostCreateTenent(c *fiber.Ctx) error {
 	}
 	var createTenent model.CreateTenentST
 	if err := c.BodyParser(&createTenent); err != nil {
-		log.Printf("failed to parse body: %v\n", err)
+		slog.Error("failed to parse body", "error", err)
 		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	tenent, err := repository.CreateTenent(int32(applicationId), createTenent.CreateTenentST)
 	if err != nil {
-		log.Printf("failed to create tenent: %v\n", err)
+		slog.Error("failed to create tenent", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	c.Status(http.StatusCreated)
@@ -211,12 +211,12 @@ func PatchUpdateTenent(c *fiber.Ctx) error {
 	}
 	var updateTenent model.UpdateTenentST
 	if err := c.BodyParser(&updateTenent); err != nil {
-		log.Printf("failed to parse body: %v\n", err)
+		slog.Error("failed to parse body", "error", err)
 		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	currentTenent, err := repository.GetTenentById(int32(id))
 	if err != nil {
-		log.Printf("failed to find tenent: %v\n", err)
+		slog.Error("failed to find tenent", "error", err)
 		return model.NewError(http.StatusNotFound).AddError("id", "invalid")
 	}
 	if currentTenent == nil {
@@ -232,7 +232,7 @@ func PatchUpdateTenent(c *fiber.Ctx) error {
 		updateTenent.PrivateKey = &privateKey
 		_, err := jwt.ParsePrivateKey(alg, *updateTenent.PrivateKey)
 		if err != nil {
-			log.Printf("failed to parse private key: %v\n", err)
+			slog.Error("failed to parse private key", "error", err)
 			errors.AddError("privateKey", "invalid")
 		}
 	}
@@ -241,7 +241,7 @@ func PatchUpdateTenent(c *fiber.Ctx) error {
 		updateTenent.PublicKey = &publicKey
 		_, err := jwt.ParsePublicKey(alg, *updateTenent.PublicKey, *updateTenent.PrivateKey)
 		if err != nil {
-			log.Printf("failed to parse public key: %v\n", err)
+			slog.Error("failed to parse public key", "error", err)
 			errors.AddError("publicKey", "invalid")
 		}
 	}
@@ -250,7 +250,7 @@ func PatchUpdateTenent(c *fiber.Ctx) error {
 	}
 	tenent, err := repository.UpdateTenent(int32(id), updateTenent.UpdateTenentST)
 	if err != nil {
-		log.Printf("failed to update tenent: %v\n", err)
+		slog.Error("failed to update tenent", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	if tenent == nil {
@@ -290,7 +290,7 @@ func DeleteTenent(c *fiber.Ctx) error {
 	}
 	deleted, err := repository.DeleteTenent(int32(id))
 	if err != nil {
-		log.Printf("failed to delete tenent: %v\n", err)
+		slog.Error("failed to delete tenent", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	if !deleted {

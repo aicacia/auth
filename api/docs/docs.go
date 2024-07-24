@@ -3863,9 +3863,19 @@ const docTemplate = `{
             "name": "Authorization",
             "in": "header"
         },
+        "Locale": {
+            "type": "apiKey",
+            "name": "X-Locale",
+            "in": "header"
+        },
         "TenentId": {
             "type": "apiKey",
             "name": "Tenent-Id",
+            "in": "header"
+        },
+        "Timezone": {
+            "type": "apiKey",
+            "name": "X-Timezone",
             "in": "header"
         }
     }

@@ -27,7 +27,7 @@ tasks:
     cmds:
       - sqlx migrate revert
 
-  deps:
+  install:
     cmds:
       - go install github.com/swaggo/swag/cmd/swag@latest
       - go install github.com/mitranim/gow@latest

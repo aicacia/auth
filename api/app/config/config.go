@@ -2,7 +2,7 @@ package config
 
 import (
 	"encoding/json"
-	"log"
+	"log/slog"
 	"strings"
 
 	"github.com/aicacia/auth/api/app/repository"
@@ -39,7 +39,7 @@ func InitConfig() error {
 		var value interface{}
 		err := json.Unmarshal([]byte(config.Value), &value)
 		if err != nil {
-			log.Printf("invalid json %s: %v", config.Key, err)
+			slog.Error("invalid json", "key", config.Key, "error", err)
 			continue
 		}
 		setKeyValue(configJSON, config.Key, value)
@@ -76,8 +76,8 @@ var configListenerSignal = make(chan bool, 1)
 
 func configListener(listener *pq.Listener) {
 	defer func() {
-		if r := recover(); r != nil {
-			log.Printf("Recovered in configListener: %v\n", r)
+		if err := recover(); err != nil {
+			slog.Error("Recovered in configListener", "error", err)
 		}
 	}()
 	for {
@@ -85,17 +85,17 @@ func configListener(listener *pq.Listener) {
 		case <-configListenerSignal:
 			err := listener.Close()
 			if err != nil {
-				log.Printf("error closing config listener: %v\n", err)
+				slog.Error("error closing config listener", "error", err)
 				return
 			} else {
-				log.Printf("config listener closed\n")
+				slog.Error("config listener closed\n")
 			}
 			return
 		case notification := <-listener.Notify:
 			var extra ExtraST
 			err := json.Unmarshal([]byte(notification.Extra), &extra)
 			if err != nil {
-				log.Printf("invalid json %s: %v", notification.Extra, err)
+				slog.Error("invalid json", "extra", notification.Extra, "error", err)
 			} else {
 				updateConfig(extra.Key, extra.Value)
 			}
@@ -145,5 +145,5 @@ func setKeyValue(parent map[string]interface{}, key string, value interface{}) {
 	}
 	k := path[len(path)-1]
 	entry[k] = value
-	log.Printf("%s = %v\n", key, value)
+	slog.Debug("set config", "key", key, "value", value)
 }

@@ -2,21 +2,13 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"net/url"
+	"log/slog"
 	"os"
 	"time"
 
 	"github.com/aicacia/auth/api/app"
 	"github.com/aicacia/auth/api/app/config"
-	"github.com/aicacia/auth/api/app/repository"
 	"github.com/aicacia/auth/api/app/router"
-	"github.com/aicacia/auth/api/docs"
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/logger"
-	"github.com/gofiber/fiber/v2/middleware/monitor"
-	fiberRecover "github.com/gofiber/fiber/v2/middleware/recover"
-	"github.com/joho/godotenv"
 )
 
 var (
@@ -38,70 +30,33 @@ var (
 // @securityDefinitions.apikey TenentId
 // @in header
 // @name Tenent-Id
+// @securityDefinitions.apikey Locale
+// @in header
+// @name X-Locale
+// @securityDefinitions.apikey Timezone
+// @in header
+// @name X-Timezone
 func main() {
 	defer func() {
-		rec := recover()
-		if rec != nil {
-			log.Fatalf("application panic: %v\n", rec)
+		if err := recover(); err != nil {
+			slog.Error("application panic", "error", err)
 		}
 	}()
-	var envs []string
-	env := os.Getenv("APP_ENV")
-	if env != "" {
-		envs = append(envs, ".env."+env)
-	}
-	envs = append(envs, ".env")
-	err := godotenv.Load(envs...)
-	log.Printf("error loading .env file: %v\n", err)
-	err = repository.InitDB()
-	if err != nil {
-		log.Fatalf("error initializing database: %v\n", err)
-	}
-	defer repository.CloseDB()
-	err = config.InitConfig()
-	if err != nil {
-		log.Fatalf("error initializing config: %v\n", err)
-	}
-	defer config.CloseConfigListener()
-
-	app.Version.Version = Version
-	app.Version.Build = Build
-
-	docs.SwaggerInfo.Version = Version
-	uri, err := url.Parse(config.Get().URL)
-	if err != nil {
-		log.Fatalf("error parsing URI: %v\n", err)
-	}
-	docs.SwaggerInfo.Host = uri.Host
-
-	logWriter := os.Stdout
-	log.SetOutput(logWriter)
-	log.SetFlags(log.Lshortfile | log.Ldate | log.Ltime | log.LUTC)
-
-	// https://docs.gofiber.io/api/fiber#config
-	fiberApp := fiber.New(fiber.Config{
-		Prefork:       false,
-		Network:       "",
-		CaseSensitive: true,
-		StrictRouting: true,
-		ServerHeader:  "",
-		AppName:       "",
-		ErrorHandler:  router.ErrorHandler,
+	fiberApp := app.InitApp(app.AppConfigST{
+		Version: Version,
+		Build:   Build,
 	})
-	fiberApp.Use(fiberRecover.New())
-	fiberApp.Use(logger.New(logger.Config{
-		Output:     logWriter,
-		TimeZone:   "UTC",
-		TimeFormat: "2006/01/02 15:04:05",
-		Format:     "${time} ${status} - ${ip} ${latency} ${method} ${path}\n",
-	}))
-	if config.Get().Dashboard.Enabled {
-		fiberApp.Use("/dashboard", monitor.New())
+	if fiberApp == nil {
+		slog.Error("failed to initialize app")
+		os.Exit(1)
 	}
 	router.InstallRouter(fiberApp)
 
 	addr := fmt.Sprintf("%s:%d", config.Get().Host, config.Get().Port)
-	log.Printf("Listening on %s\n", addr)
+	slog.Info("Listening", "addr", addr)
 
-	log.Fatal(fiberApp.Listen(addr))
+	if err := fiberApp.Listen(addr); err != nil {
+		slog.Error("failed to start server", "error", err)
+		os.Exit(1)
+	}
 }

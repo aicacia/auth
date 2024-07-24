@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"log"
+	"log/slog"
 	"net/http"
 	"strconv"
 
@@ -31,7 +31,7 @@ func GetCurrentUserTOTPs(c *fiber.Ctx) error {
 	user := middleware.GetUser(c)
 	totps, err := repository.GetTOTPsByUserId(user.Id)
 	if err != nil {
-		log.Printf("failed to create TOTP: %v\n", err)
+		slog.Error("failed to create TOTP", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	c.Status(http.StatusCreated)
@@ -62,7 +62,12 @@ func PostCurrentUserCreateTOTP(c *fiber.Ctx) error {
 	user := middleware.GetUser(c)
 	totp, err := repository.CreateTOTP(user.Id, int32(tenentId))
 	if err != nil {
-		log.Printf("failed to create TOTP: %v\n", err)
+		slog.Error("failed to create TOTP", "error", err)
+		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
+	}
+	_, err = repository.UpsertMFA(user.Id, totp.Id, "totp")
+	if err != nil {
+		slog.Error("failed to enable MFA for TOTP", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	c.Status(http.StatusCreated)
@@ -93,15 +98,15 @@ func PatchCurrentUserEnableTOTP(c *fiber.Ctx) error {
 	user := middleware.GetUser(c)
 	totp, err := repository.GetTOTPsByUserIdAndTenentId(user.Id, int32(tenentId))
 	if err != nil {
-		log.Printf("failed to find TOTP: %v\n", err)
+		slog.Error("failed to find TOTP", "error", err)
 		return model.NewError(http.StatusNotFound).AddError("tenentId", "invalid")
 	}
 	if totp == nil {
 		return model.NewError(http.StatusNotFound).AddError("tenentId", "invalid")
 	}
-	_, err = repository.UpsertMFA(user.Id, int32(tenentId), "totp")
+	_, err = repository.UpsertMFA(user.Id, totp.Id, "totp")
 	if err != nil {
-		log.Printf("failed to enable MFA for TOTP: %v\n", err)
+		slog.Error("failed to enable MFA for TOTP", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	totp.Enabled = true
@@ -133,7 +138,7 @@ func DeleteCurrentUserDisableTOTP(c *fiber.Ctx) error {
 	user := middleware.GetUser(c)
 	totp, err := repository.GetTOTPsByUserIdAndTenentId(user.Id, int32(tenentId))
 	if err != nil {
-		log.Printf("failed to find TOTP: %v\n", err)
+		slog.Error("failed to find TOTP", "error", err)
 		return model.NewError(http.StatusNotFound).AddError("tenentId", "invalid")
 	}
 	if totp == nil {
@@ -141,7 +146,7 @@ func DeleteCurrentUserDisableTOTP(c *fiber.Ctx) error {
 	}
 	_, err = repository.DeleteMFA(user.Id)
 	if err != nil {
-		log.Printf("failed to disable MFA for TOTP: %v\n", err)
+		slog.Error("failed to disable MFA for TOTP", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	totp.Enabled = false
@@ -173,7 +178,7 @@ func DeleteCurrentUserTOTP(c *fiber.Ctx) error {
 	}
 	deleted, err := repository.DeleteTOTP(user.Id, int32(tenentId))
 	if err != nil {
-		log.Printf("failed to delete totp: %v\n", err)
+		slog.Error("failed to delete totp", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	if !deleted {

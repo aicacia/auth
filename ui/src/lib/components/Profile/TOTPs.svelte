@@ -1,7 +1,7 @@
 <svelte:options immutable />
 
 <script lang="ts">
-	import type { User, TOTP, Tenent, TOTPWithSecret } from '$lib/openapi/auth';
+	import type { User, TOTP, Tenent } from '$lib/openapi/auth';
 	import TOTPComponent from './TOTP.svelte';
 
 	export let user: User;

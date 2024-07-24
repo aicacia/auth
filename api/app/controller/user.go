@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"log"
+	"log/slog"
 	"net/http"
 	"strconv"
 
@@ -35,7 +35,7 @@ func GetUsers(c *fiber.Ctx) error {
 	}
 	var offsetAndLimit model.OffsetAndLimitQueryST
 	if err := c.QueryParser(&offsetAndLimit); err != nil {
-		log.Printf("failed to parse query: %v\n", err)
+		slog.Error("failed to parse query", "error", err)
 		return model.NewError(http.StatusBadRequest).AddError("query", "invalid")
 	}
 	applicationId, err := strconv.Atoi(c.Params("applicationId"))
@@ -44,12 +44,12 @@ func GetUsers(c *fiber.Ctx) error {
 	}
 	userRows, err := repository.GetUsers(int32(applicationId), offsetAndLimit.Limit, offsetAndLimit.Offset)
 	if err != nil {
-		log.Printf("failed to get users: %v\n", err)
+		slog.Error("failed to get users", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	emails, err := repository.GetUsersEmails(int32(applicationId), offsetAndLimit.Limit, offsetAndLimit.Offset)
 	if err != nil {
-		log.Printf("failed to get users emails: %v\n", err)
+		slog.Error("failed to get users emails", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	emailsByUserId := make(map[int32][]repository.EmailRowST, len(emails))
@@ -58,7 +58,7 @@ func GetUsers(c *fiber.Ctx) error {
 	}
 	phoneNumbers, err := repository.GetUsersPhoneNumbers(int32(applicationId), offsetAndLimit.Limit, offsetAndLimit.Offset)
 	if err != nil {
-		log.Printf("failed to get users phone numbers: %v\n", err)
+		slog.Error("failed to get users phone numbers", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	phoneNumbersByUserId := make(map[int32][]repository.PhoneNumberRowST, len(phoneNumbers))
@@ -107,7 +107,7 @@ func GetUserById(c *fiber.Ctx) error {
 	application := middleware.GetApplication(c)
 	user, emails, phoneNumbers, err := getUserById(application.Id, int32(id))
 	if err != nil {
-		log.Printf("failed to get user: %v\n", err)
+		slog.Error("failed to get user", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	return c.JSON(model.UserFromRow(*user, emails, phoneNumbers))
@@ -144,12 +144,12 @@ func PostCreateUser(c *fiber.Ctx) error {
 	}
 	result, err := repository.CreateUserFromUsername(int32(applicationId), createUser.Username)
 	if err != nil {
-		log.Printf("failed to create user: %v\n", err)
+		slog.Error("failed to create user", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	emails, phoneNumbers, err := getUserEmailsAndPhoneNumbersById(result.User.Id)
 	if err != nil {
-		log.Printf("failed to get user emails and phone numbers: %v\n", err)
+		slog.Error("failed to get user emails and phone numbers", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	return c.JSON(model.UserFromRow(result.User, emails, phoneNumbers))
@@ -188,7 +188,7 @@ func PatchUpdateUserById(c *fiber.Ctx) error {
 	application := middleware.GetApplication(c)
 	user, err := repository.UpdateUsername(application.Id, int32(id), updateUser.Username)
 	if err != nil {
-		log.Printf("failed to create user: %v\n", err)
+		slog.Error("failed to create user", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	if user == nil {
@@ -196,7 +196,7 @@ func PatchUpdateUserById(c *fiber.Ctx) error {
 	}
 	emails, phoneNumbers, err := getUserEmailsAndPhoneNumbersById(user.Id)
 	if err != nil {
-		log.Printf("failed to get user emails and phone numbers: %v\n", err)
+		slog.Error("failed to get user emails and phone numbers", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	return c.JSON(model.UserFromRow(*user, emails, phoneNumbers))
@@ -230,7 +230,7 @@ func DeleteUserById(c *fiber.Ctx) error {
 	application := middleware.GetApplication(c)
 	deleted, err := repository.DeleteUserById(application.Id, int32(id))
 	if err != nil {
-		log.Printf("failed to create user: %v\n", err)
+		slog.Error("failed to create user", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	if !deleted {
@@ -268,7 +268,7 @@ func GetUserInfo(c *fiber.Ctx) error {
 	application := middleware.GetApplication(c)
 	user, err := repository.GetUserById(application.Id, int32(id))
 	if err != nil {
-		log.Printf("failed to get user: %v\n", err)
+		slog.Error("failed to get user", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	if user == nil {
@@ -276,7 +276,7 @@ func GetUserInfo(c *fiber.Ctx) error {
 	}
 	userInfoRow, err := repository.GetUserInfoByUserId(int32(id))
 	if err != nil {
-		log.Printf("failed to fetch user info: %v\n", err)
+		slog.Error("failed to fetch user info", "error", err)
 		return model.NewError(http.StatusInternalServerError)
 	}
 	userInfo := model.UserInfoFromRow(user, userInfoRow)
@@ -304,7 +304,7 @@ func GetUserInfo(c *fiber.Ctx) error {
 func PatchUserInfo(c *fiber.Ctx) error {
 	var userinfoUpdates model.UpdateUserInfoRequestST
 	if err := c.BodyParser(&userinfoUpdates); err != nil {
-		log.Printf("invalid request body: %v\n", err)
+		slog.Error("invalid request body", "error", err)
 		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	id, err := strconv.Atoi(c.Params("id"))
@@ -317,7 +317,7 @@ func PatchUserInfo(c *fiber.Ctx) error {
 	application := middleware.GetApplication(c)
 	user, err := repository.GetUserById(application.Id, int32(id))
 	if err != nil {
-		log.Printf("failed to get user: %v\n", err)
+		slog.Error("failed to get user", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	if user == nil {
@@ -346,7 +346,7 @@ func PatchUserInfo(c *fiber.Ctx) error {
 	}
 	userInfoRow, err := repository.UpdateUserInfoByUserId(user.Id, updates)
 	if err != nil {
-		log.Printf("failed to fetch user info: %v\n", err)
+		slog.Error("failed to fetch user info", "error", err)
 		return model.NewError(http.StatusInternalServerError)
 	}
 	userInfo := model.UserInfoFromRow(user, userInfoRow)

@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"log"
+	"log/slog"
 	"net/http"
 	"strconv"
 
@@ -34,12 +34,12 @@ func GetApplications(c *fiber.Ctx) error {
 	}
 	var offsetAndLimit model.OffsetAndLimitQueryST
 	if err := c.QueryParser(&offsetAndLimit); err != nil {
-		log.Printf("failed to parse query: %v\n", err)
+		slog.Error("failed to parse query", "error", err)
 		return model.NewError(http.StatusBadRequest).AddError("query", "invalid")
 	}
 	applications, err := repository.GetApplications(offsetAndLimit.Limit, offsetAndLimit.Offset)
 	if err != nil {
-		log.Printf("failed to get applications: %v\n", err)
+		slog.Error("failed to get applications", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	hasMore := false
@@ -78,7 +78,7 @@ func GetApplicationById(c *fiber.Ctx) error {
 	}
 	application, err := repository.GetApplicationById(int32(id))
 	if err != nil {
-		log.Printf("failed to get application: %v\n", err)
+		slog.Error("failed to get application", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	if application == nil {
@@ -109,12 +109,12 @@ func PostCreateApplication(c *fiber.Ctx) error {
 	}
 	var createApplication model.CreateApplicationST
 	if err := c.BodyParser(&createApplication); err != nil {
-		log.Printf("failed to parse body: %v\n", err)
+		slog.Error("failed to parse body", "error", err)
 		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	application, err := repository.CreateApplication(createApplication.CreateApplicationST)
 	if err != nil {
-		log.Printf("failed to create application: %v\n", err)
+		slog.Error("failed to create application", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	c.Status(http.StatusCreated)
@@ -148,12 +148,12 @@ func PatchUpdateApplication(c *fiber.Ctx) error {
 	}
 	var updateApplication model.UpdateApplicationST
 	if err := c.BodyParser(&updateApplication); err != nil {
-		log.Printf("failed to parse body: %v\n", err)
+		slog.Error("failed to parse body", "error", err)
 		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	application, err := repository.UpdateApplication(int32(id), updateApplication.UpdateApplicationST)
 	if err != nil {
-		log.Printf("failed to update application: %v\n", err)
+		slog.Error("failed to update application", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	if application == nil {
@@ -188,7 +188,7 @@ func DeleteApplication(c *fiber.Ctx) error {
 	}
 	application, err := repository.GetApplicationById(int32(id))
 	if err != nil {
-		log.Printf("failed to get application: %v\n", err)
+		slog.Error("failed to get application", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	if application == nil {
@@ -199,7 +199,7 @@ func DeleteApplication(c *fiber.Ctx) error {
 	}
 	deleted, err := repository.DeleteApplication(int32(id))
 	if err != nil {
-		log.Printf("failed to delete application: %v\n", err)
+		slog.Error("failed to delete application", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	if !deleted {

@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"log"
+	"log/slog"
 	"net/http"
 	"strings"
 
@@ -34,16 +34,16 @@ func PostValidateMFA(c *fiber.Ctx) error {
 	user := middleware.GetUser(c)
 	mfa, err := repository.GetMFA(user.Id)
 	if err != nil {
-		log.Printf("failed to find MFA: %v\n", err)
+		slog.Error("failed to find MFA", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	if mfa == nil || !mfa.Enabled {
-		log.Printf("MFA is not enabled\n")
+		slog.Error("MFA is not enabled")
 		return model.NewError(http.StatusForbidden).AddError("mfa", "disabled")
 	}
 	var body model.ValidateMFAST
 	if err := c.BodyParser(&body); err != nil {
-		log.Printf("failed to parse body: %v\n", err)
+		slog.Error("failed to parse body", "error", err)
 		return model.NewError(http.StatusBadRequest).AddError("invalid", "body")
 	}
 	tenent := middleware.GetTenent(c)
@@ -52,20 +52,20 @@ func PostValidateMFA(c *fiber.Ctx) error {
 		{
 			totp, err := repository.GetTOTPsByUserIdAndTenentId(user.Id, tenent.Id)
 			if err != nil {
-				log.Printf("failed to find TOTP: %v\n", err)
+				slog.Error("failed to find TOTP", "error", err)
 				return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 			}
 			if totp == nil {
-				log.Printf("TOTP is not enabled\n")
+				slog.Error("TOTP is not enabled")
 				return model.NewError(http.StatusForbidden).AddError("mfa", "disabled")
 			}
 			if gotp.NewDefaultTOTP(totp.Secret).Now() != body.Code {
-				log.Printf("failed to validate MFA: %v\n", err)
+				slog.Error("failed to validate MFA", "error", err)
 				return model.NewError(http.StatusForbidden).AddError("mfa", "invalid")
 			}
 		}
 	default:
-		log.Printf("unknown MFA type: %v\n", mfa.Type)
+		slog.Error("unknown MFA type", "type", mfa.Type)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	claims := middleware.GetClaims[jwt.MFAClaims](c)

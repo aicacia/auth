@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"log"
+	"log/slog"
 	"net/http"
 
 	"github.com/aicacia/auth/api/app/model"
@@ -18,25 +18,25 @@ func TenentMiddleware() fiber.Handler {
 		tenentIdString := c.Get("Tenent-Id")
 		tenentId, err := uuid.Parse(tenentIdString)
 		if err != nil {
-			log.Printf("invalid tenent id %s: %v\n", tenentIdString, err)
+			slog.Error("invalid tenent id", "tenentId", tenentIdString, "error", err)
 			return model.NewError(http.StatusBadRequest).AddError("Tenent-Id", "invalid")
 		}
 		tenent, err := repository.GetTenentByClientId(tenentId)
 		if err != nil {
-			log.Printf("failed to fetch application tenent: %v\n", err)
+			slog.Error("failed to fetch application tenent", "error", err)
 			return model.NewError(http.StatusNotFound).AddError("Tenent-Id", "invalid")
 		}
 		if tenent == nil {
-			log.Printf("tenent not found: %v\n", err)
+			slog.Error("tenent not found", "error", err)
 			return model.NewError(http.StatusNotFound).AddError("Tenent-Id", "invalid")
 		}
 		application, err := repository.GetApplicationById(tenent.ApplicationId)
 		if err != nil {
-			log.Printf("failed to fetch application: %v\n", err)
+			slog.Error("failed to fetch application", "error", err)
 			return model.NewError(http.StatusBadRequest).AddError("Tenent-Id", "invalid")
 		}
 		if application == nil {
-			log.Printf("application not found: %v\n", err)
+			slog.Error("application not found", "error", err)
 			return model.NewError(http.StatusBadRequest).AddError("Tenent-Id", "invalid")
 		}
 		c.Locals(applicationLocalKey, application)

@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"log"
+	"log/slog"
 	"net/http"
 	"strings"
 
@@ -30,12 +30,12 @@ func GetCurrentUser(c *fiber.Ctx) error {
 	user := middleware.GetUser(c)
 	emails, phoneNumbers, err := getUserEmailsAndPhoneNumbersById(user.Id)
 	if err != nil {
-		log.Printf("failed to get user emails and phone numbers: %v\n", err)
+		slog.Error("failed to get user emails and phone numbers", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	permissionRows, err := repository.GetUserPermissions(user.Id)
 	if err != nil {
-		log.Printf("failed to get user permissions: %v\n", err)
+		slog.Error("failed to get user permissions", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	userWithPermissions := model.UserWithPermissionsST{
@@ -64,7 +64,7 @@ func GetCurrentUser(c *fiber.Ctx) error {
 func PatchResetPassword(c *fiber.Ctx) error {
 	var resetPassword model.ResetPasswordST
 	if err := c.BodyParser(&resetPassword); err != nil {
-		log.Printf("failed to parse reset password: %v\n", err)
+		slog.Error("failed to parse reset password", "error", err)
 		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	password := strings.TrimSpace(resetPassword.Password)
@@ -79,7 +79,7 @@ func PatchResetPassword(c *fiber.Ctx) error {
 	user := middleware.GetUser(c)
 	_, err := repository.UpdateUserPassword(user.ApplicationId, user.Id, password)
 	if err != nil {
-		log.Printf("failed to update user password: %v\n", err)
+		slog.Error("failed to update user password", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	c.Status(http.StatusNoContent)
@@ -110,7 +110,7 @@ func PatchUpdateCurrentUser(c *fiber.Ctx) error {
 	user := middleware.GetUser(c)
 	user, err := repository.UpdateUsername(user.ApplicationId, user.Id, updateUser.Username)
 	if err != nil {
-		log.Printf("failed to create user: %v\n", err)
+		slog.Error("failed to create user", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	if user == nil {
@@ -139,7 +139,7 @@ func GetCurrentUserInfo(c *fiber.Ctx) error {
 	user := middleware.GetUser(c)
 	userInfoRow, err := repository.GetUserInfoByUserId(user.Id)
 	if err != nil {
-		log.Printf("failed to fetch user info: %v\n", err)
+		slog.Error("failed to fetch user info", "error", err)
 		return model.NewError(http.StatusInternalServerError)
 	}
 	userInfo := model.UserInfoFromRow(user, userInfoRow)
@@ -165,7 +165,7 @@ func GetCurrentUserInfo(c *fiber.Ctx) error {
 func PatchCurrentUserInfo(c *fiber.Ctx) error {
 	var userinfoUpdates model.UpdateUserInfoRequestST
 	if err := c.BodyParser(&userinfoUpdates); err != nil {
-		log.Printf("invalid request body: %v\n", err)
+		slog.Error("invalid request body", "error", err)
 		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	updates := repository.UpdateUserInfoST{
@@ -192,7 +192,7 @@ func PatchCurrentUserInfo(c *fiber.Ctx) error {
 	user := middleware.GetUser(c)
 	userInfoRow, err := repository.UpdateUserInfoByUserId(user.Id, updates)
 	if err != nil {
-		log.Printf("failed to fetch user info: %v\n", err)
+		slog.Error("failed to fetch user info", "error", err)
 		return model.NewError(http.StatusInternalServerError)
 	}
 	userInfo := model.UserInfoFromRow(user, userInfoRow)

@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"log"
+	"log/slog"
 	"net/http"
 	"strconv"
 	"strings"
@@ -40,7 +40,7 @@ func PatchCurrentUserEmailSendConfirmation(c *fiber.Ctx) error {
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	// TODO: send to email
-	log.Printf("userId=%d, emailId=%d, token=%s\n", user.Id, id, confirmationToken)
+	slog.Info("sending email", "userId", user.Id, "emailId", id, "token", confirmationToken)
 	_, err = repository.SetEmailConfirmation(user.Id, int32(id), confirmationToken)
 	if err != nil {
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
@@ -74,7 +74,7 @@ func PatchCurrentUserEmailConfirm(c *fiber.Ctx) error {
 	}
 	var confirmEmail model.ConfirmEmailST
 	if err := c.BodyParser(&confirmEmail); err != nil {
-		log.Printf("invalid request body: %v\n", err)
+		slog.Error("invalid request body", "error", err)
 		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	email, err := repository.ConfirmEmail(user.Id, int32(id), strings.ToLower(strings.TrimSpace(confirmEmail.Token)))
@@ -133,7 +133,7 @@ func PatchCurrentUserEmailSetPrimary(c *fiber.Ctx) error {
 func PostCurrentUserCreateEmail(c *fiber.Ctx) error {
 	var createEmail model.CreateEmailST
 	if err := c.BodyParser(&createEmail); err != nil {
-		log.Printf("invalid request body: %v\n", err)
+		slog.Error("invalid request body", "error", err)
 		return model.NewError(http.StatusBadRequest).AddError("request", "invalid")
 	}
 	user := middleware.GetUser(c)
@@ -147,11 +147,11 @@ func PostCurrentUserCreateEmail(c *fiber.Ctx) error {
 	}
 	emailRow, err := repository.CreateEmail(user.ApplicationId, user.Id, email, confirmationToken)
 	if err != nil {
-		log.Printf("failed to create email: %v\n", err)
+		slog.Error("failed to create email", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	// TODO: send to email
-	log.Printf("userId=%d, emailId=%d, token=%s\n", user.Id, emailRow.Id, strings.ToUpper(*emailRow.ConfirmationToken))
+	slog.Info("sending email", "userId", user.Id, "emailId", emailRow.Id, "token", strings.ToUpper(*emailRow.ConfirmationToken))
 	c.Status(http.StatusCreated)
 	return c.JSON(model.EmailFromRow(emailRow))
 }
@@ -180,7 +180,7 @@ func DeleteCurrentUserEmail(c *fiber.Ctx) error {
 	}
 	deleted, err := repository.DeleteEmail(user.Id, int32(id))
 	if err != nil {
-		log.Printf("failed to delete email: %v\n", err)
+		slog.Error("failed to delete email", "error", err)
 		return model.NewError(http.StatusInternalServerError).AddError("internal", "application")
 	}
 	if !deleted {

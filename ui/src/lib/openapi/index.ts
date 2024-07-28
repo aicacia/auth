@@ -7,8 +7,9 @@ import {
 	type ConfigurationParameters,
 	ApplicationApi,
 	RegistrationApi,
+	PasskeyApi,
 	type Token,
-  TenentApi
+	TenentApi
 } from './auth';
 import { env } from '$env/dynamic/public';
 
@@ -17,7 +18,7 @@ let authToken: Token | undefined;
 const defaultConfiguration: ConfigurationParameters = {
 	middleware: [
 		{
-			pre: async (context) => ({ ...context, init: { ...context.init, mode: 'cors' }})
+			pre: async (context) => ({ ...context, init: { ...context.init, mode: 'cors' } })
 		}
 	],
 	apiKey(name: string) {
@@ -49,6 +50,7 @@ export const tenentApi = new TenentApi(authConfiguration);
 export const registrationApi = new RegistrationApi(authConfiguration);
 export const applicationApi = new ApplicationApi(authConfiguration);
 export const wellKnownApi = new WellKnownApi(authConfiguration);
+export const passkeyApi = new PasskeyApi(authConfiguration);
 
 export function setAuthToken(newAuthToken?: Token) {
 	authToken = newAuthToken;

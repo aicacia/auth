@@ -4,6 +4,7 @@ var (
 	PasswordGrantType      = "password"
 	ServieAccountGrantType = "service-account"
 	RefreshTokenGrantType  = "refresh-token"
+	PassKeyGrantType       = "pass-key-token"
 )
 
 type TokenRequestST struct {

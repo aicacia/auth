@@ -6,11 +6,14 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install
 
+ARG PUBLIC_URL=https://auth.aicacia.com
+ENV PUBLIC_URL=${PUBLIC_URL}
 ARG PUBLIC_AUTH_API_URL=https://api.auth.aicacia.com
 ENV PUBLIC_AUTH_API_URL=${PUBLIC_AUTH_API_URL}
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
+RUN echo "PUBLIC_URL=${PUBLIC_URL}" >> .env
 RUN echo "PUBLIC_AUTH_API_URL=${PUBLIC_AUTH_API_URL}" >> .env
 
 COPY src ./src

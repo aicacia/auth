@@ -100,7 +100,7 @@
 				type="email"
 				name="email"
 				autocomplete="email"
-				placeholder="New Email"
+				placeholder={$LL.profile.emails.newPlaceholder()}
 				bind:value={email}
 				on:input={onChange}
 			/>

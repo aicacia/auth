@@ -61,7 +61,7 @@ tasks:
   api-openapi:
     dir: api
     cmds:
-      - swag init
+      - swag init --parseDependency
   api:
     dir: api
     deps: [api-openapi]

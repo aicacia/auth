@@ -1,3 +1,5 @@
+import { browser, building } from '$app/environment';
+import { PUBLIC_URL } from '$env/static/public';
 import { MAX_INT, random, fillBytes } from '@aicacia/rand';
 
 export function createInsecureID() {
@@ -44,4 +46,30 @@ export function generateRandomBase64String(size: number): string {
 		buffer.push(String.fromCharCode(bytes[i]));
 	}
 	return btoa(buffer.join(''));
+}
+
+export function base64URLToUint8Array(base64URL: string) {
+	const base64 = base64URL.replace(/-/g, '+').replace(/_/g, '/');
+	const padLength = (4 - (base64.length % 4)) % 4;
+	return Uint8Array.from(atob(base64.padEnd(base64.length + padLength, '=')), (c) =>
+		c.charCodeAt(0)
+	);
+}
+
+export function uint8ArrayToBase64URL(bytes: Uint8Array) {
+	const chars = [];
+	for (const b of bytes) {
+		chars.push(String.fromCharCode(b));
+	}
+	return btoa(chars.join('')).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+}
+
+export function getOrigin() {
+	if (browser) {
+		return window.location.origin;
+	}
+	if (building) {
+		return PUBLIC_URL;
+	}
+	return '';
 }

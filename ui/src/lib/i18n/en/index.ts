@@ -32,6 +32,7 @@ const en = {
 	auth: {
 		signIn: 'Sign in',
 		signUp: 'Sign up',
+		signInWithPassKey: 'Sign in with PassKey',
 		notAMember: 'Not a member?',
 		alreadyAMember: 'Already a member?',
 		backToSignIn: 'Back to sign in',
@@ -73,12 +74,14 @@ const en = {
 		updateUsername: 'Update Username',
 		submitUpdateUsername: 'Update',
 		updateUserInfo: 'Info',
+		updatePasskeys: 'PassKeys',
 		updateEmails: 'Emails',
 		updatePhoneNumbers: 'Phone Numbers',
 		updateTOTPs: 'Time-based one-time passwords',
 		emails: {
 			cancel: 'Cancel',
 			add: 'Add',
+			newPlaceholder: 'New Email',
 			sendConfirmation: 'Send Confirmation',
 			setAsPrimary: 'Set as Primary',
 			delete: 'Delete',
@@ -89,6 +92,7 @@ const en = {
 		phoneNumbers: {
 			cancel: 'Cancel',
 			add: 'Add',
+			newPlaceholder: 'New Phone Number',
 			sendConfirmation: 'Send Confirmation',
 			setAsPrimary: 'Set as Primary',
 			delete: 'Delete',

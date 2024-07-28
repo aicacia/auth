@@ -95,8 +95,8 @@
 				class="w-full {cn('phoneNumber')}"
 				type="phoneNumber"
 				name="phoneNumber"
-				autocomplete="phoneNumber"
-				placeholder="New PhoneNumber"
+				autocomplete="cc-number"
+				placeholder={$LL.profile.phoneNumbers.newPlaceholder()}
 				bind:value={phoneNumber}
 				on:input={onChange}
 			/>

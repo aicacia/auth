@@ -16,6 +16,7 @@
 	import Spinner from '../Spinner.svelte';
 	import PhoneNumbers from './PhoneNumbers.svelte';
 	import TOTPs from './TOTPs.svelte';
+	import PassKeys from './PassKeys.svelte';
 
 	export let user: User;
 
@@ -39,6 +40,11 @@
 	}
 
 	async function onPhoneNumberUpdate(user: User) {
+		updateCurrentUser(user);
+		await invalidateAll();
+	}
+
+	async function onPassKeyUpdate(user: User) {
 		updateCurrentUser(user);
 		await invalidateAll();
 	}
@@ -87,6 +93,16 @@
 		<div class="mb-2">
 			<h3 class="mb-1">{$LL.profile.updatePhoneNumbers()}</h3>
 			<PhoneNumbers bind:user onUpdate={onPhoneNumberUpdate} />
+		</div>
+	</div>
+</div>
+<div class="flex flex-col justify-end px-4 md:justify-start">
+	<div
+		class="mx-auto mb-4 flex w-full max-w-lg flex-shrink flex-col bg-white p-4 shadow dark:bg-gray-800"
+	>
+		<div class="mb-2">
+			<h3 class="mb-1">{$LL.profile.updatePasskeys()}</h3>
+			<PassKeys bind:user onUpdate={onPassKeyUpdate} />
 		</div>
 	</div>
 </div>

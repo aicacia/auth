@@ -98,6 +98,15 @@
 			loading = false;
 		}
 	}
+
+	let loadingPasskey = false;
+	async function onSignInWithPasskey() {
+		try {
+			loadingPasskey = true;
+		} finally {
+			loadingPasskey = false;
+		}
+	}
 </script>
 
 <svelte:head>
@@ -148,6 +157,18 @@
 					</button>
 				</div>
 			</form>
+			<hr class="my-4" />
+			<div class="flex flex-col">
+				<button
+					class="btn primary flex flex-shrink flex-row justify-center"
+					on:click={onSignInWithPasskey}
+				>
+					{#if loadingPasskey}<div class="mr-2 flex flex-row justify-center">
+							<div class="inline-block h-6 w-6"><Spinner /></div>
+						</div>{/if}
+					{$LL.auth.signInWithPassKey()}
+				</button>
+			</div>
 		</div>
 	</div>
 </div>

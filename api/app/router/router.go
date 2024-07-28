@@ -60,6 +60,10 @@ func InstallRouter(fiberApp *fiber.App) {
 	userPhoneNumbers.Post("", controller.PostCurrentUserCreatePhoneNumber)
 	userPhoneNumbers.Delete("/:id", controller.DeleteCurrentUserPhoneNumber)
 
+	userPassKeys := user.Group("/passkeys")
+	userPassKeys.Post("/begin-registration", controller.PostPassKeyBeginRegistration)
+	userPassKeys.Patch("/finish-registration", controller.PostPassKeyFinishRegistration)
+
 	userTOTP := user.Group("/totp")
 	userTOTP.Get("", controller.GetCurrentUserTOTPs)
 	userTOTP.Post("/:tenentId", controller.PostCurrentUserCreateTOTP)

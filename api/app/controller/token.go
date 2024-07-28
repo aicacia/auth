@@ -43,6 +43,8 @@ func PostToken(c *fiber.Ctx) error {
 	switch tokenRequest.GrantType {
 	case model.PasswordGrantType:
 		return passwordToken(c, tokenRequest)
+	case model.PassKeyGrantType:
+		return model.NewError(http.StatusBadRequest).AddError("grant_type", "invalid")
 	case model.ServieAccountGrantType:
 		return serviceAccountToken(c, tokenRequest)
 	case model.RefreshTokenGrantType:

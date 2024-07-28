@@ -15,6 +15,7 @@ type UserRowST struct {
 	PhoneNumberId     *int32    `db:"phone_number_id"`
 	Username          string    `db:"username"`
 	EncryptedPassword string    `db:"encrypted_password"`
+	Key               []byte    `db:"key"`
 	UpdatedAt         time.Time `db:"updated_at"`
 	CreatedAt         time.Time `db:"created_at"`
 }

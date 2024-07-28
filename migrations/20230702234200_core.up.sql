@@ -157,6 +157,7 @@ CREATE TABLE "users"(
 	"application_id" INT4 NOT NULL,
 	"username" VARCHAR(255) NOT NULL,
 	"encrypted_password" VARCHAR(255) NOT NULL,
+	"key" BYTEA NOT NULL DEFAULT gen_random_bytes(64),
 	"updated_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	"created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   	CONSTRAINT "users_application_id_fk" FOREIGN KEY("application_id") REFERENCES "applications"("id") ON DELETE CASCADE
@@ -238,6 +239,29 @@ CREATE TRIGGER "phone_numbers_updated_at_tgr" BEFORE UPDATE ON "phone_numbers" F
 ALTER TABLE "users" ADD COLUMN "phone_number_id" INT4;
 ALTER TABLE "users" ADD CONSTRAINT "users_phone_number_id_fk" FOREIGN KEY("phone_number_id") REFERENCES "phone_numbers"("id") ON DELETE CASCADE;
 CREATE UNIQUE INDEX "users_phone_number_id_unique_idx" ON "users" ("phone_number_id");
+
+
+CREATE TABLE "passkeys"(
+	"id" BYTEA PRIMARY KEY,
+	"user_id" INT4 NOT NULL,
+	"application_id" INT4 NOT NULL,
+	"public_key" BYTEA NOT NULL,
+	"attestation_type" VARCHAR(255) NOT NULL,
+	"transports" VARCHAR(255)[] NOT NULL,
+	"user_present" BOOL NOT NULL,
+	"user_verified" BOOL NOT NULL,
+	"backup_eligible" BOOL NOT NULL,
+	"backup_state" BOOL NOT NULL,
+	"aaguid" BYTEA NOT NULL,
+	"sign_count" INT4 NOT NULL,
+	"clone_warning" BOOL NOT NULL,
+	"attachment" VARCHAR(255) NOT NULL,
+	"updated_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT "passkeys_user_id_fk" FOREIGN KEY("user_id") REFERENCES "users"("id") ON DELETE CASCADE,
+  CONSTRAINT "passkeys_application_id_fk" FOREIGN KEY("application_id") REFERENCES "applications"("id") ON DELETE CASCADE
+);
+CREATE TRIGGER "passkeys_updated_at_tgr" BEFORE UPDATE ON "passkeys" FOR EACH ROW EXECUTE PROCEDURE "trigger_updated_at"();
 
 
 CREATE TABLE "totps"(

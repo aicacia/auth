@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS "user_roles" cascade;
 DROP TABLE IF EXISTS "users" cascade;
 DROP TABLE IF EXISTS "emails" cascade;
 DROP TABLE IF EXISTS "phone_numbers" cascade;
+DROP TABLE IF EXISTS "passkeys" cascade;
 DROP TABLE IF EXISTS "totps" cascade;
 DROP TABLE IF EXISTS "user_infos" cascade;
 

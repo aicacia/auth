@@ -119,6 +119,10 @@ type RootTranslation = {
 		 */
 		signUp: string
 		/**
+		 * S​i​g​n​ ​i​n​ ​w​i​t​h​ ​P​a​s​s​K​e​y
+		 */
+		signInWithPassKey: string
+		/**
 		 * N​o​t​ ​a​ ​m​e​m​b​e​r​?
 		 */
 		notAMember: string
@@ -242,6 +246,10 @@ type RootTranslation = {
 		 */
 		updateUserInfo: string
 		/**
+		 * P​a​s​s​K​e​y​s
+		 */
+		updatePasskeys: string
+		/**
 		 * E​m​a​i​l​s
 		 */
 		updateEmails: string
@@ -262,6 +270,10 @@ type RootTranslation = {
 			 * A​d​d
 			 */
 			add: string
+			/**
+			 * N​e​w​ ​E​m​a​i​l
+			 */
+			newPlaceholder: string
 			/**
 			 * S​e​n​d​ ​C​o​n​f​i​r​m​a​t​i​o​n
 			 */
@@ -297,6 +309,10 @@ type RootTranslation = {
 			 * A​d​d
 			 */
 			add: string
+			/**
+			 * N​e​w​ ​P​h​o​n​e​ ​N​u​m​b​e​r
+			 */
+			newPlaceholder: string
 			/**
 			 * S​e​n​d​ ​C​o​n​f​i​r​m​a​t​i​o​n
 			 */
@@ -836,6 +852,10 @@ export type TranslationFunctions = {
 		 */
 		signUp: () => LocalizedString
 		/**
+		 * Sign in with PassKey
+		 */
+		signInWithPassKey: () => LocalizedString
+		/**
 		 * Not a member?
 		 */
 		notAMember: () => LocalizedString
@@ -958,6 +978,10 @@ export type TranslationFunctions = {
 		 */
 		updateUserInfo: () => LocalizedString
 		/**
+		 * PassKeys
+		 */
+		updatePasskeys: () => LocalizedString
+		/**
 		 * Emails
 		 */
 		updateEmails: () => LocalizedString
@@ -978,6 +1002,10 @@ export type TranslationFunctions = {
 			 * Add
 			 */
 			add: () => LocalizedString
+			/**
+			 * New Email
+			 */
+			newPlaceholder: () => LocalizedString
 			/**
 			 * Send Confirmation
 			 */
@@ -1012,6 +1040,10 @@ export type TranslationFunctions = {
 			 * Add
 			 */
 			add: () => LocalizedString
+			/**
+			 * New Phone Number
+			 */
+			newPlaceholder: () => LocalizedString
 			/**
 			 * Send Confirmation
 			 */
